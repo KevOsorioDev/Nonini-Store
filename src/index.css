@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+:root{
+  --persian-plum-50: #fdf3f3;
+  --persian-plum-50-50: #fdf3f39c;
+  --persian-plum-100: #fbe5e5;
+  --persian-plum-200: #f8d0d0;
+  --persian-plum-300: #f3aeae;
+  --persian-plum-400: #e98080;
+  --persian-plum-500: #dd5656;
+  --persian-plum-600: #c83a3a;
+  --persian-plum-700: #a82d2d;
+  --persian-plum-800: #8b2929;
+  --persian-plum-900: #612121;
+  --persian-plum-950: #3f1010;
+}
+
+body {
+  margin: 0 0;
+  padding: 0;
+
+  background-color: var(--persian-plum-50);
+}

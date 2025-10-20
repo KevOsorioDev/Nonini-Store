@@ -1,5 +1,5 @@
 import './App.css'
-import { Navbar, DropDownButton, ButtonWithFunctions, Carrousel, Instrucciones, ProductosPopulares } from './components'
+import { Navbar, Carrousel, Instrucciones, ProductosPopulares, PorQueElegirnos } from './components'
 
 import Lenis from 'lenis'
 
@@ -20,6 +20,7 @@ function App() {
       <Carrousel></Carrousel>
       <Instrucciones></Instrucciones>
       <ProductosPopulares></ProductosPopulares>
+      <PorQueElegirnos></PorQueElegirnos>
     </>
   )
 }

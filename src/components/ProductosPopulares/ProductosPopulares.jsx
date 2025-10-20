@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-const productos = Array.from({ length: 16 }, (_, i) => ({
+const productos = Array.from({ length: 12 }, (_, i) => ({
   id: i,
   nombre: `Producto ${i + 1}`,
 }))
@@ -8,22 +8,12 @@ const productos = Array.from({ length: 16 }, (_, i) => ({
 export const ProductosPopulares = () => {
   const scrollRef = useRef(null)
 
-  // Scroll infinito simple: cuando llegas al final, vuelve al inicio
-  const handleScroll = () => {
-    const el = scrollRef.current
-    if (!el) return
-    if (el.scrollLeft + el.offsetWidth >= el.scrollWidth - 1) {
-      el.scrollLeft = 0
-    }
-    if (el.scrollLeft === 0) {
-      el.scrollLeft = el.scrollWidth - el.offsetWidth
-    }
-  }
+  // Eliminado el infinite scrolling
 
   return (
     <section className="
-      w-full max-w-[90vw] mx-auto mt-12
-      flex flex-col items-center
+      flex items-center justify-center flex-col mt-60
+      w-full max-w-[85vw] mx-auto pb-10
     ">
       <h3 className="
         text-3xl font-bold mb-8
@@ -33,7 +23,6 @@ export const ProductosPopulares = () => {
       </h3>
       <div
         ref={scrollRef}
-        onScroll={handleScroll}
         className="
           w-full
           overflow-x-auto
@@ -45,17 +34,13 @@ export const ProductosPopulares = () => {
       >
         {/* Primera fila */}
         <div className="flex gap-4 mb-4">
-          {productos.slice(0, 8).map(prod => (
+          {productos.slice(0, 6).map(prod => (
             <div
               key={prod.id}
               className="
-                w-[200px] h-[200px]
+                product-card
                 bg-[var(--persian-plum-300)]
-                rounded-xl
-                flex items-center justify-center
-                text-lg font-semibold
                 text-[var(--persian-plum-900)]
-                shrink-0
               "
             >
               {prod.nombre}
@@ -64,17 +49,13 @@ export const ProductosPopulares = () => {
         </div>
         {/* Segunda fila */}
         <div className="flex gap-4">
-          {productos.slice(8, 16).map(prod => (
+          {productos.slice(6, 12).map(prod => (
             <div
               key={prod.id}
               className="
-                w-[200px] h-[200px]
+                product-card
                 bg-[var(--persian-plum-400)]
-                rounded-xl
-                flex items-center justify-center
-                text-lg font-semibold
                 text-[var(--persian-plum-50)]
-                shrink-0
               "
             >
               {prod.nombre}

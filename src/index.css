@@ -21,3 +21,30 @@ body {
 
   background-color: var(--persian-plum-50);
 }
+
+/* Clases reutilizables sin @apply (compatibles con cualquier linter) */
+/* Tarjeta cuadrada grande (sección ¿Por qué elegirnos?) */
+.card-base {
+  width: 320px; /* w-[320px] */
+  height: 320px; /* h-[320px] */
+  border-radius: 0.75rem; /* rounded-xl */
+  display: flex;
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  text-align: center; /* text-center */
+  padding: 2rem; /* p-8 */
+  font-weight: 600; /* font-semibold */
+}
+
+/* Tarjeta de producto 250x250 (Productos Populares) */
+.product-card {
+  width: 250px; /* w-[250px] */
+  height: 250px; /* h-[250px] */
+  border-radius: 0.75rem; /* rounded-xl */
+  display: flex;
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600; /* font-semibold */
+  flex-shrink: 0; /* shrink-0 */
+}

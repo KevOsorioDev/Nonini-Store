@@ -1,0 +1,97 @@
+/* ==============================================
+   FOOTER - CSS Component
+   ============================================== */
+
+/* Contenedor principal del footer */
+.footer-container {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  gap: 2rem; /* 32px */
+  padding: 2rem; /* 32px */
+  padding-top: 4rem;
+}
+
+/* Columnas del footer */
+.footer-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem; /* 8px */
+  width: 33.333333%; /* w-[33%] */
+}
+
+.footer-column--centered {
+  justify-content: center;
+}
+
+/* Títulos de sección */
+.footer-title {
+  padding-bottom: 1rem; /* 16px */
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600; /* font-semibold */
+  color: var(--persian-plum-900);
+}
+
+/* Contenedor de contacto con ícono */
+.footer-contact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  font-size: 1.5rem; /* text-2xl */
+}
+
+/* Enlaces del footer */
+.footer-link {
+  color: var(--persian-plum-700);
+  text-decoration: none;
+  font-weight: 500; /* font-medium */
+  font-size: 1.25rem; /* text-xl */
+  margin-left: 1rem; /* ml-4 */
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--persian-plum-500);
+}
+
+/* Email link específico */
+.footer-email {
+  color: var(--persian-plum-300);
+  text-decoration: none;
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600; /* font-semibold */
+  transition: color 0.2s ease;
+}
+
+.footer-email:hover {
+  color: var(--persian-plum-500);
+}
+
+/* Responsive - Solo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  .footer-column {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-title {
+    font-size: 1.25rem; /* text-xl */
+  }
+  
+  .footer-link,
+  .footer-email {
+    font-size: 1rem; /* text-base */
+  }
+  
+  .footer-contact {
+    font-size: 1.125rem; /* text-lg */
+  }
+}

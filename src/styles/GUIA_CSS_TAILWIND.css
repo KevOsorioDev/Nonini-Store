@@ -1,0 +1,452 @@
+/* ==============================================
+   GUÍA COMPLETA: CSS + TAILWIND
+   Cómo combinar ambos profesionalmente
+   ============================================== */
+
+/*
+  📚 PRINCIPIOS PROFESIONALES 2025
+  
+  1. **Separation of Concerns**: Separa estilos estructurales de utilidades
+  2. **DRY (Don't Repeat Yourself)**: No repitas código innecesariamente
+  3. **Maintainability**: El código debe ser fácil de modificar
+  4. **Performance**: Minimiza el CSS generado
+  5. **Scalability**: El código debe crecer sin volverse caótico
+*/
+
+/* ==============================================
+   ❌ PROBLEMA: Código repetitivo en Tailwind
+   ============================================== */
+
+/*
+  ANTES (Tailwind puro - repetitivo y difícil de mantener):
+  
+  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+    Botón 1
+  </button>
+  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+    Botón 2
+  </button>
+  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+    Botón 3
+  </button>
+  
+  ❌ Problemas:
+  - Si cambias el estilo, debes cambiar 3 lugares
+  - El JSX se vuelve ilegible
+  - Difícil de hacer code review
+  - Propenso a inconsistencias
+*/
+
+/* ==============================================
+   ✅ SOLUCIÓN 1: Crear clases CSS personalizadas
+   Ideal para componentes complejos o muy repetidos
+   ============================================== */
+
+.btn-primary {
+  /* Estructura básica */
+  padding: 0.5rem 1rem;           /* px-4 py-2 */
+  border-radius: 0.5rem;          /* rounded-lg */
+  border: none;
+  cursor: pointer;
+  
+  /* Colores */
+  background-color: var(--color-primary);
+  color: white;
+  
+  /* Transiciones */
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* 
+  DESPUÉS (con CSS):
+  
+  <button className="btn-primary">Botón 1</button>
+  <button className="btn-primary">Botón 2</button>
+  <button className="btn-primary">Botón 3</button>
+  
+  ✅ Ventajas:
+  - Cambias una vez, afecta todos
+  - JSX limpio y legible
+  - Fácil de mantener
+  - Consistencia garantizada
+*/
+
+/* ==============================================
+   ✅ SOLUCIÓN 2: Variables CSS para valores repetidos
+   ============================================== */
+
+:root {
+  /* Colores */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #8b5cf6;
+  
+  /* Espaciados */
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  
+  /* Bordes */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 1rem;       /* 16px */
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Transiciones */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* Uso de variables: */
+.card {
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+/* ==============================================
+   ✅ SOLUCIÓN 3: Combinar CSS + Tailwind estratégicamente
+   ============================================== */
+
+/* 
+  CUÁNDO USAR CSS:
+  - Componentes complejos con múltiples estados (acordeones, modales)
+  - Estilos que se repiten 3+ veces
+  - Animaciones complejas
+  - Pseudo-elementos (:before, :after)
+  - Estados de input (checked, focus, etc.)
+  
+  CUÁNDO USAR TAILWIND:
+  - Ajustes únicos o específicos
+  - Layout (flex, grid, espaciado)
+  - Prototipos rápidos
+  - Variaciones simples (mx-2, p-4, text-lg)
+*/
+
+/* Ejemplo práctico: Navbar */
+.navbar {
+  /* Estilos base en CSS (complejos y repetidos) */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+}
+
+.navbar--scrolled {
+  box-shadow: var(--shadow-lg);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+/* 
+  En JSX, combinas CSS + Tailwind:
+  
+  <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''} flex items-center px-6 py-4`}>
+    ↑ CSS class          ↑ Estado           ↑ Tailwind para layout
+  </nav>
+*/
+
+/* ==============================================
+   ✅ SOLUCIÓN 4: Componentes reutilizables (React)
+   ============================================== */
+
+/*
+  Crear un componente en lugar de repetir clases:
+  
+  // Button.jsx
+  export const Button = ({ variant = 'primary', children, ...props }) => {
+    return (
+      <button className={`btn btn-${variant}`} {...props}>
+        {children}
+      </button>
+    );
+  };
+  
+  // Uso:
+  <Button variant="primary">Guardar</Button>
+  <Button variant="secondary">Cancelar</Button>
+*/
+
+/* ==============================================
+   ✅ SOLUCIÓN 5: Utility classes personalizadas
+   Para patrones muy comunes
+   ============================================== */
+
+/* Centrado flex (muy común) */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Truncar texto */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Scrollbar personalizado */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary) transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary);
+  border-radius: 4px;
+}
+
+/* ==============================================
+   📋 CHECKLIST DE DECISIÓN
+   ============================================== */
+
+/*
+  ❓ ¿Debo usar CSS o Tailwind para esto?
+  
+  Usa CSS si:
+  ✅ El patrón se repite 3+ veces
+  ✅ Tiene animaciones o transiciones complejas
+  ✅ Requiere pseudo-elementos o selectores avanzados
+  ✅ Es un componente con múltiples estados
+  ✅ Las clases de Tailwind hacen el JSX ilegible (>10 clases)
+  
+  Usa Tailwind si:
+  ✅ Es un ajuste único o específico
+  ✅ Necesitas prototipado rápido
+  ✅ Son utilidades simples (spacing, sizing, colors)
+  ✅ El JSX sigue siendo legible (<10 clases)
+  ✅ Es un layout (flex, grid, positioning)
+*/
+
+/* ==============================================
+   🎯 ESTRUCTURA DE ARCHIVOS RECOMENDADA
+   ============================================== */
+
+/*
+  src/
+  ├── styles/
+  │   ├── index.css              # Imports y config Tailwind
+  │   ├── variables.css          # Variables CSS globales
+  │   ├── utilities.css          # Utility classes personalizadas
+  │   └── base.css               # Reset y estilos base
+  │
+  ├── components/
+  │   ├── Button/
+  │   │   ├── Button.jsx         # Componente
+  │   │   └── Button.css         # Estilos específicos
+  │   │
+  │   ├── Navbar/
+  │   │   ├── Navbar.jsx
+  │   │   └── Navbar.css
+  │   │
+  │   └── Card/
+  │       ├── Card.jsx
+  │       └── Card.css
+*/
+
+/* ==============================================
+   💡 MEJORES PRÁCTICAS 2025
+   ============================================== */
+
+/*
+  1. **BEM para nombres de clases CSS**
+     .card {}
+     .card__header {}
+     .card__body {}
+     .card--featured {}
+  
+  2. **Mobile-first con media queries**
+     Diseña primero para móvil, luego escala
+  
+  3. **Variables CSS para theming**
+     Facilita dark mode y personalización
+  
+  4. **CSS Modules para proyectos grandes**
+     Evita conflictos de nombres
+  
+  5. **PostCSS para optimización**
+     Autoprefixer, minificación, etc.
+  
+  6. **Lazy loading de estilos**
+     Carga CSS solo cuando se necesita
+  
+  7. **Performance**
+     - Minimiza especificidad
+     - Evita !important
+     - Usa transform y opacity para animaciones
+     - Agrupa selectores similares
+*/
+
+/* ==============================================
+   🚀 EJEMPLO COMPLETO: Accordion Component
+   ============================================== */
+
+/* accordion.css */
+.accordion {
+  /* Estilos base */
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.accordion__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.accordion__item:last-child {
+  border-bottom: none;
+}
+
+.accordion__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--color-bg);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.accordion__header:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.accordion__icon {
+  transition: transform var(--transition-normal);
+}
+
+.accordion__input {
+  display: none;
+}
+
+.accordion__input:checked + .accordion__header .accordion__icon {
+  transform: rotate(180deg);
+}
+
+.accordion__content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-normal);
+}
+
+.accordion__input:checked ~ .accordion__content {
+  max-height: 500px;
+  padding: var(--spacing-md);
+}
+
+/* accordion.jsx */
+/*
+  export const Accordion = ({ items }) => {
+    return (
+      <div className="accordion">
+        {items.map((item, index) => (
+          <div key={index} className="accordion__item">
+            <input 
+              type="checkbox" 
+              id={`acc-${index}`} 
+              className="accordion__input" 
+            />
+            <label 
+              htmlFor={`acc-${index}`} 
+              className="accordion__header"
+            >
+              <span className="text-lg font-semibold">{item.title}</span>
+              <span className="accordion__icon">▼</span>
+            </label>
+            <div className="accordion__content">
+              {item.content}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+  
+  ✅ Fíjate cómo:
+  - CSS maneja estructura, estados y transiciones
+  - Tailwind maneja ajustes específicos (text-lg, font-semibold)
+  - El código es limpio, mantenible y escalable
+*/
+
+/* ==============================================
+   📊 COMPARACIÓN FINAL
+   ============================================== */
+
+/*
+  ❌ MAL (Solo Tailwind repetitivo):
+  <div className="flex justify-between items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+  <div className="flex justify-between items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+  <div className="flex justify-between items-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+  
+  ✅ BIEN (CSS + Tailwind estratégico):
+  .card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: white;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--transition-normal);
+  }
+  .card-row:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  <div className="card-row"></div>
+  <div className="card-row"></div>
+  <div className="card-row"></div>
+*/
+
+/* ==============================================
+   🎓 CONCLUSIÓN
+   ============================================== */
+
+/*
+  El secreto es EQUILIBRIO:
+  
+  🎨 CSS para:
+  - Componentes complejos
+  - Estilos repetidos
+  - Estados y animaciones
+  - Estructura base
+  
+  ⚡ Tailwind para:
+  - Ajustes rápidos
+  - Layout
+  - Prototipos
+  - Variaciones simples
+  
+  🏆 Resultado:
+  - Código mantenible
+  - JSX legible
+  - Performance óptimo
+  - Escalabilidad garantizada
+*/

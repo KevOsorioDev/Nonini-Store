@@ -1,0 +1,87 @@
+/* ==============================================
+   MODERN ACCORDION - CSS Component
+   ============================================== */
+
+/* Contenedor principal del acordeón */
+.accordion-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+/* Item individual del acordeón */
+.accordion-item {
+  margin-bottom: 0.5rem; /* 8px */
+  border-radius: 0.75rem; /* 12px - rounded-xl */
+  background-color: var(--persian-plum-100);
+  overflow: hidden;
+}
+
+/* Input checkbox oculto (controla el estado del acordeón) */
+.accordion-input {
+  display: none;
+}
+
+/* Label/Header clickeable */
+.accordion-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem; /* 8px */
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 0.75rem;
+  transition: background-color 0.2s ease;
+  border-bottom: none;
+}
+
+/* Cambio de color cuando está expandido */
+.accordion-input:checked + .accordion-label {
+  background-color: var(--persian-plum-200);
+}
+
+/* Título del acordeón */
+.accordion-title {
+  font-size: 1rem; /* text-base */
+  color: var(--persian-plum-300);
+}
+
+/* Contenedor del ícono de flecha */
+.accordion-icon {
+  display: flex;
+  align-items: center;
+  transition: transform 0.5s ease;
+}
+
+/* Rotación del ícono cuando está expandido */
+.accordion-input:checked + .accordion-label .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* Contenido del acordeón (colapsable) */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  background-color: var(--persian-plum-50);
+  transition: all 0.3s ease;
+  font-size: 0.875rem; /* text-sm */
+  border-radius: 0 0 0.75rem 0.75rem;
+  padding: 0;
+}
+
+/* Expansión del contenido cuando está checked */
+.accordion-input:checked + .accordion-label + .accordion-content {
+  max-height: 10rem; /* 160px - equivalente a max-h-40 */
+  padding: 1rem; /* 16px */
+}
+
+/* Responsive: ajustar ancho en pantallas pequeñas */
+@media (max-width: 768px) {
+  .accordion-container {
+    width: 100%;
+  }
+  
+  .accordion-title {
+    font-size: 0.875rem;
+  }
+}

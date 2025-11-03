@@ -1,6 +1,20 @@
 @import "tailwindcss";
 
+/* ==============================================
+   DESIGN TOKENS - Variables CSS Globales
+   ============================================== */
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
+}
+
 :root{
+  /* Paleta de colores Persian Plum */
   --persian-plum-50: #fdf3f3;
   --persian-plum-50-50: #fdf3f39c;
   --persian-plum-100: #fbe5e5;
@@ -13,38 +27,169 @@
   --persian-plum-800: #8b2929;
   --persian-plum-900: #612121;
   --persian-plum-950: #3f1010;
+
+  /* Espaciados comunes */
+  --spacing-xs: 0.5rem;   /* 8px */
+  --spacing-sm: 1rem;     /* 16px */
+  --spacing-md: 1.5rem;   /* 24px */
+  --spacing-lg: 2rem;     /* 32px */
+  --spacing-xl: 3rem;     /* 48px */
+
+  /* Border radius */
+  --radius-sm: 0.5rem;    /* 8px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
+/* ==============================================
+   RESET Y ESTILOS BASE
+   ============================================== */
 body {
-  margin: 0 0;
+  margin: 0;
   padding: 0;
-
   background-color: var(--persian-plum-50);
+  color: var(--persian-plum-900);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Clases reutilizables sin @apply (compatibles con cualquier linter) */
+/* ==============================================
+   UTILITY CLASSES - Componentes Reutilizables
+   ============================================== */
+
 /* Tarjeta cuadrada grande (sección ¿Por qué elegirnos?) */
 .card-base {
-  width: 320px; /* w-[320px] */
-  height: 320px; /* h-[320px] */
-  border-radius: 0.75rem; /* rounded-xl */
+  width: 320px;
+  height: 320px;
+  border-radius: var(--radius-md);
   display: flex;
-  align-items: center; /* items-center */
-  justify-content: center; /* justify-center */
-  text-align: center; /* text-center */
-  padding: 2rem; /* p-8 */
-  font-weight: 600; /* font-semibold */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-lg);
+  font-weight: 600;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
-/* Tarjeta de producto 250x250 (Productos Populares) */
+.card-base:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Tarjeta de producto (Productos Populares) */
 .product-card {
-  width: 250px; /* w-[250px] */
-  height: 250px; /* h-[250px] */
-  border-radius: 0.75rem; /* rounded-xl */
+  width: 24%;
+  height: 400px;
+  border-radius: var(--radius-md);
   display: flex;
-  align-items: center; /* items-center */
-  justify-content: center; /* justify-center */
-  font-size: 1.125rem; /* text-lg */
-  font-weight: 600; /* font-semibold */
-  flex-shrink: 0; /* shrink-0 */
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  /* flex-shrink: 0; */
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+
+/* Títulos de sección (consistencia en todo el sitio) */
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--persian-plum-900);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+/* Contenedor de sección estándar */
+.section-container {
+  width: 100%;
+  max-width: 85vw;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0;
+}
+
+/* Enlaces estándar */
+.link-base {
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.link-base:hover {
+  color: var(--persian-plum-500);
+}
+
+/* Botón base (si necesitas crear más botones) */
+.btn-base {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.btn-primary {
+  background-color: var(--persian-plum-700);
+  color: var(--persian-plum-50);
+}
+
+.btn-primary:hover {
+  background-color: var(--persian-plum-600);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--persian-plum-200);
+  color: var(--persian-plum-900);
+}
+
+.btn-secondary:hover {
+  background-color: var(--persian-plum-300);
+}
+
+/* ==============================================
+   RESPONSIVE UTILITIES
+   ============================================== */
+@media (max-width: 1024px) {
+  .card-base {
+    width: 280px;
+    height: 280px;
+  }
+
+  .product-card {
+    width: 48%;
+  }
+
+  .section-container {
+    max-width: 90vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .card-base {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .product-card {
+    width: 100%;
+    height: 300px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
 }

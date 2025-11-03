@@ -1,5 +1,6 @@
 import './App.css'
-import { Navbar, Carrousel, Instrucciones, ProductosPopulares, PorQueElegirnos } from './components'
+import { BrowserRouter ,Routes, Route } from "react-router-dom"
+import { MainPage, ProductPage } from './components/Pages/indexPages'
 
 import Lenis from 'lenis'
 
@@ -16,11 +17,12 @@ function App() {
 
   return (
     <>
-      <Navbar></Navbar>
-      <Carrousel></Carrousel>
-      <Instrucciones></Instrucciones>
-      <ProductosPopulares></ProductosPopulares>
-      <PorQueElegirnos></PorQueElegirnos>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<MainPage></MainPage>} />
+        <Route path='/producto' element={ <ProductPage></ProductPage> } />
+      </Routes>
+    </BrowserRouter>
     </>
   )
 }

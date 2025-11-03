@@ -5,12 +5,20 @@ export const useScrollEffect = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 0) {
+      // Si hay un modal abierto, usar el scroll guardado
+      const scrollY = document.body.dataset.scrollY 
+        ? parseInt(document.body.dataset.scrollY) 
+        : window.scrollY;
+      
+      if (scrollY > 0) {
         setTransformed(true);
       } else {
         setTransformed(false);
       }
     };
+
+    // Ejecutar inmediatamente para detectar el estado inicial
+    handleScroll();
 
     window.addEventListener('scroll', handleScroll);
     return () => {

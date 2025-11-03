@@ -1,0 +1,111 @@
+/* ================================================
+   POR QUÉ ELEGIRNOS
+   - CSS para estructura y variantes de tarjetas
+   - Tailwind para layout flex
+================================================ */
+
+/* Contenedor principal */
+.why-us {
+  width: 100%;
+  padding-block: 5rem;
+}
+
+/* Título */
+.why-us__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 3.5rem;
+  text-align: center;
+  color: var(--persian-plum-900);
+}
+
+/* Grid de tarjetas */
+.why-us__grid {
+  max-width: 90vw;
+  margin-inline: auto;
+}
+
+/* Tarjetas base - heredan de .card-base en index.css */
+.why-us__card {
+  /* Dimensiones y espaciado */
+  width: 350px;
+  min-height: 280px;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  
+  /* Texto */
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Transiciones heredadas de .card-base */
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Variantes de color */
+.why-us__card--primary {
+  background-color: var(--persian-plum-300);
+  color: var(--persian-plum-900);
+}
+
+.why-us__card--secondary {
+  background-color: var(--persian-plum-400);
+  color: var(--persian-plum-50);
+}
+
+.why-us__card--tertiary {
+  background-color: var(--persian-plum-200);
+  color: var(--persian-plum-900);
+}
+
+/* Hover effects - mejora los de .card-base */
+.why-us__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .why-us {
+    padding-block: 4rem;
+  }
+  
+  .why-us__title {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .why-us__card {
+    width: 280px;
+    min-height: 250px;
+    padding: 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .why-us {
+    padding-block: 3rem;
+  }
+  
+  .why-us__title {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  
+  .why-us__card {
+    width: 100%;
+    max-width: 320px;
+    min-height: 220px;
+    padding: 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .why-us__grid {
+    max-width: 95vw;
+  }
+}

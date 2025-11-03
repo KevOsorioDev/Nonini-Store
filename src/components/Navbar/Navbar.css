@@ -1,117 +1,115 @@
-/* @import "tailwindcss"; */
+/* ==============================================
+   NAVBAR COMPONENT - Balance CSS + Tailwind
+   CSS: Estructura, estados, transiciones complejas
+   Tailwind: Layout y spacing
+   ============================================== */
 
-
-
-/* @import '../../baseColors.css';
-
-.header {
+/* Contenedor principal del navbar */
+.navbar {
   position: fixed;
-  top: 0%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translateX(-50%);
+  z-index: 100;
+  border-radius: 50px;
+  
+  /* Transición personalizada */
+  transition-property: top, border-radius, width, background-color, padding, opacity, box-shadow;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.4, 1.5, 0.5, 1);
+}
+
+/* Estado cuando se hace scroll */
+.navbar--scrolled {
+  top: 1.5%;
+  opacity: 1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: var(--persian-plum-50);
+}
+
+/* Contenedor interno del nav */
+.navbar__content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: transparent;
+  
+  /* Transición del ancho */
+  transition-property: width, padding;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.4, 1.5, 0.5, 1);
+}
+
+/* Ancho por defecto */
+.navbar__content {
+  width: 97vw;
+  padding: 2vh 1.2vw;
+}
+
+/* Ancho cuando está scrolled */
+.navbar--scrolled .navbar__content {
+  width: 87vw;
+  padding: 2vh 2vw;
+}
+
+/* Logo container */
+.navbar__logo {
+  display: flex;
   justify-content: center;
-
-  border-radius: 40px;
-  border: 1px solid var(--navbar-border);
-
-  z-index: 100;
-
-  transition:
-    top 0.7s cubic-bezier(.4,1.5,.5,1),
-    border-radius 0.7s cubic-bezier(.4,1.5,.5,1),
-    width 0.7s cubic-bezier(.4,1.5,.5,1),
-    background-color 0.7s cubic-bezier(.4,1.5,.5,1),
-    padding 0.7s cubic-bezier(.4,1.5,.5,1);
-
-  .navbar {
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-
-    
-    width: 97vw;
-    padding: 2vh 0;
-
-    
-    font-size: 1.2rem;
-    font-weight: 600;
-
-    
-    background: none;
-
-    
-    transition:
-      top 0.7s cubic-bezier(.4,1.5,.5,1),
-      width 0.7s cubic-bezier(.4,1.5,.5,1),
-      justify-content 0.7s cubic-bezier(.4,1.5,.5,1),
-      padding 0.7s cubic-bezier(.4,1.5,.5,1),
-      background-color 0.5s cubic-bezier(.4,1.5,.5,1);
-
-    .left {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      img {
-        width: 3rem;
-        height: 3rem;
-        object-fit: cover;
-        -----------------------------
-      }
-    }
-
-    .center-items {
-      display: flex;
-    }
-
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-  }
+  align-items: center;
 }
 
-.header.transformed {
-  
-  top: 1%;
-  transform: translate(-50%, 0%);
-
-  
-  background-color: var(--navbar-bg-scrolled);
-
-  
-  transition:
-    top 0.7s cubic-bezier(.4,1.5,.5,1),
-    opacity 0.7s cubic-bezier(.4,1.5,.5,1),
-    border-radius 0.7s cubic-bezier(.4,1.5,.5,1),
-    box-shadow 0.7s cubic-bezier(.4,1.5,.5,1),
-    width 0.7s cubic-bezier(.4,1.5,.5,1),
-    background-color 0.7s cubic-bezier(.4,1.5,.5,1),
-    padding 0.7s cubic-bezier(.4,1.5,.5,1);
-
-  .navbar {
-    
-    width: 87vw;
-    padding: 2vh 2vw;
-
-    
-    transition:
-      top 0.7s cubic-bezier(.4,1.5,.5,1),
-      width 0.7s cubic-bezier(.4,1.5,.5,1),
-      justify-content 0.7s cubic-bezier(.4,1.5,.5,1),
-      padding 0.7s cubic-bezier(.4,1.5,.5,1),
-      background-color 0.7s cubic-bezier(.4,1.5,.5,1);
-  }
+.navbar__logo-img {
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
 }
 
-@media (max-width: 1000px) {
-  .header{
+/* Menú central (posicionamiento absoluto) */
+.navbar__center-menu {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 1vw;
+}
+
+/* Acciones de la derecha */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .navbar {
     top: 8%;
   }
+  
+  .navbar__content {
+    width: 95vw;
+  }
+  
+  .navbar--scrolled .navbar__content {
+    width: 90vw;
+  }
+  
+  .navbar__center-menu {
+    position: static;
+    transform: none;
+  }
 }
- */
+
+@media (max-width: 768px) {
+  .navbar__logo-img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .navbar__center-menu {
+    gap: 0.5rem;
+  }
+}

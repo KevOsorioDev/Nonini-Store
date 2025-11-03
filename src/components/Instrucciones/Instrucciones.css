@@ -1,0 +1,156 @@
+/* ==============================================
+   INSTRUCCIONES COMPONENT
+   Solo estilos de estructura y comportamiento
+   Layout y espaciado simple usa Tailwind
+   ============================================== */
+
+/* Contenedor principal */
+.instructions {
+  margin: 0 auto;
+  width: 85vw;
+  transition: all 0.7s ease;
+}
+
+.instructions--scrolled {
+  transform: translateY(150px) scale(1.1);
+}
+
+/* Header con título y estrellas */
+.instructions__title-container {
+  position: relative;
+  display: inline-block;
+}
+
+.instructions__title {
+  margin-top: 1.25rem;
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--persian-plum-800);
+  transition: all 0.7s ease;
+}
+
+/* Sistema de estrellas */
+.star {
+  position: absolute;
+  transition: opacity 0.3s ease;
+}
+
+/* Posiciones de estrellas - Lado izquierdo */
+.star--left-1 {
+  top: 50%;
+  left: -10%;
+  width: 2rem;
+  height: 2rem;
+  color: var(--persian-plum-400);
+}
+
+.star--left-2 {
+  top: 10%;
+  left: 0%;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--persian-plum-950);
+}
+
+.star--left-3 {
+  top: 105%;
+  left: -3%;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--persian-plum-700);
+}
+
+/* Posiciones de estrellas - Lado derecho */
+.star--right-1 {
+  top: 50%;
+  right: -10%;
+  width: 2rem;
+  height: 2rem;
+  color: var(--persian-plum-950);
+}
+
+.star--right-2 {
+  top: 10%;
+  right: 0%;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--persian-plum-700);
+}
+
+.star--right-3 {
+  top: 105%;
+  right: -3%;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--persian-plum-400);
+}
+
+/* Estados de parpadeo */
+.star--blink-on {
+  opacity: 1;
+}
+
+.star--blink-off {
+  opacity: 0.3;
+}
+
+/* Paso individual (se repite 4 veces) */
+.instructions__step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 250px;
+}
+
+.instructions__step-image {
+  width: 100%;
+  height: 200px;
+  background-color: var(--persian-plum-900);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.instructions__step-text {
+  margin-top: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--persian-plum-900);
+}
+
+/* Links (se repiten 2 veces) */
+.instructions__link {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--persian-plum-900);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--persian-plum-100);
+  }
+}
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .instructions__title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .instructions__title {
+    font-size: 2rem;
+  }
+
+  .instructions__step {
+    max-width: 100%;
+  }
+}

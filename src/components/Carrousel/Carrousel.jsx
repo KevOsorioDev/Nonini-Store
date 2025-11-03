@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-
-import '../../index.css'
+import './Carrousel.css'
 
 const displays = [
   { content: <div className="text-white text-3xl">Primer display</div> },
@@ -28,14 +27,13 @@ export const Carrousel = () => {
     return () => clearInterval(intervalRef.current)
   }, [])
 
-  // Función para cambio manual y reinicio de intervalo
   const manualChange = (newIndexFn) => {
     clearInterval(intervalRef.current)
     setFade(false)
     setTimeout(() => {
       setIndex(newIndexFn)
       setFade(true)
-      startInterval() // Reinicia el contador automático
+      startInterval()
     }, 700)
   }
 
@@ -47,41 +45,25 @@ export const Carrousel = () => {
     manualChange((prev) => (prev + 1) % displays.length)
   }
 
-  const buttonClass = `
-  group absolute top-1/2 -translate-y-1/2 px-6 py-5 rounded-full
-  text-[var(--persian-plum-400)] text-3xl font-black
-  bg-transparent shadow-lg
-  backdrop-blur-[16px] backdrop-saturate-[180%] opacity-70
-  hover:text-[var(--persian-plum-950)] hover:scale-[1.1] transition-all duration-200
-  `;
-
-  return(
-    <section className="relative mx-auto mt-[13vh]
-
-                        h-[75vh] w-[85vw] rounded-2xl
-
-                        bg-(--persian-plum-950)"
-    >
-      <button className={`left-[2%] ${buttonClass}
-                          ${fade ? "opacity-100" : "opacity-50"}`}
-              onClick={goToPrev}
+  return (
+    <section className="carousel bg-[var(--persian-plum-950)]">
+      
+      <button 
+        className={`carousel__button carousel__button--left ${fade ? '' : 'carousel__button--fading'}`}
+        onClick={goToPrev}
       >
-        <span className='inline-block transition-transform duration-200 group-hover:scale-[1.3]'>
-          &#8592;
-        </span>
+        <span className="carousel__arrow">←</span>
       </button>
-      <div
-        className={`transition-opacity duration-700 ${fade ? "opacity-100" : "opacity-0"}`}
-      >
+
+      <div className={`carousel__content ${fade ? 'carousel__content--visible' : 'carousel__content--hidden'}`}>
         {displays[index].content}
       </div>
-      <button className={`right-[2%] ${buttonClass}
-                          ${fade ? "opacity-100" : "opacity-50"}`}
+
+      <button 
+        className={`carousel__button carousel__button--right ${fade ? '' : 'carousel__button--fading'}`}
         onClick={goToNext}
       >
-        <span className='inline-block transition-transform duration-200 group-hover:scale-[1.3]'>
-          &#8594;
-        </span>
+        <span className="carousel__arrow">→</span>
       </button>
     </section>
   )

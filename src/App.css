@@ -1,0 +1,60 @@
+/* ==============================================
+   APP.CSS - Estilos globales y utilidades
+   ============================================== */
+
+/* Mejoras de scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimización para táctil */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevenir zoom en inputs en iOS */
+@media screen and (max-width: 480px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Animaciones suaves para todos los elementos */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mejoras en scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--persian-plum-50);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--persian-plum-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--persian-plum-600);
+}
+
+/* Utilidades de imagen responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevenir desbordamientos */
+body {
+  overflow-x: hidden;
+}

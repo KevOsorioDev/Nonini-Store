@@ -1,4 +1,3 @@
-// Modal.jsx (mejorada)
 import { useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -43,11 +42,12 @@ export const Modal = ({ isOpen, onClose, children, returnFocusRef }) => {
   }, [isOpen, onClose])
 
   // Devolver foco al elemento que abrió el modal
-  useEffect(() => {
-    if (!isOpen && returnFocusRef?.current) {
-      returnFocusRef.current.focus()
-    }
-  }, [isOpen, returnFocusRef])
+  // Comentado para evitar autofocus no deseado
+  // useEffect(() => {
+  //   if (!isOpen && returnFocusRef?.current) {
+  //     returnFocusRef.current.focus()
+  //   }
+  // }, [isOpen, returnFocusRef])
 
   if (!isOpen) return null
 
@@ -59,7 +59,7 @@ export const Modal = ({ isOpen, onClose, children, returnFocusRef }) => {
           ref={panelRef}
           role="dialog"
           aria-modal="true"
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[var(--persian-plum-50)] rounded-2xl shadow-2xl z-[9999] overflow-auto p-8"
+          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] md:w-[80vw] h-auto md:h-[80vh] max-h-[90vh] bg-[var(--persian-plum-50)] rounded-2xl shadow-2xl z-[9999] overflow-auto p-6 md:p-8"
           onClick={(e) => e.stopPropagation()}
         >
           <button

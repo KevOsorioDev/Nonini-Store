@@ -1,5 +1,6 @@
 // Componente que renderiza la imagen del producto con el logo bordado
 export const ProductPreview = ({ selectedImage, sideSelected, logoUrl, productConfig }) => {
+  if (!selectedImage) return null
   const isFirstSlide = selectedImage.id === 1
 
   // Si no hay configuración, usar valores por defecto
@@ -19,12 +20,12 @@ export const ProductPreview = ({ selectedImage, sideSelected, logoUrl, productCo
   const posicion = posiciones[sideSelected] || posiciones.centro
 
   return (
-    <div className="relative w-[100%] h-[75%] rounded-2xl overflow-hidden">
+    <div className="relative w-full aspect-[3/4] max-w-3xl mx-auto rounded-2xl overflow-hidden h-[60%] ">
       {/* Imagen principal del producto */}
       <img 
         src={selectedImage.url} 
         alt={selectedImage.alt}
-        className="absolute left-[50%] -translate-x-1/2 w-[50%] h-auto object-cover"
+        className="absolute left-1/2 -translate-x-1/2 w-3/4 max-w-xl h-auto object-contain"
       />
       
       {/* Logo bordado - solo visible en la primera diapositiva */}

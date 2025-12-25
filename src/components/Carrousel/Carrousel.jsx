@@ -2,9 +2,51 @@ import { useState, useEffect, useRef } from 'react'
 import './Carrousel.css'
 
 const displays = [
-  { content: <div className="text-white text-3xl">Primer display</div> },
-  { content: <div className="text-white text-3xl">Segundo display</div> },
-  { content: <div className="text-white text-3xl">Tercer display</div> }
+  { 
+    content: (
+      <div className="flex flex-col items-center justify-center h-full text-center px-4 md:px-8">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
+          Diseños únicos<br />a tu medida
+        </h1>
+        <p className="text-lg md:text-xl lg:text-2xl text-[var(--persian-plum-200)] max-w-2xl mb-6 md:mb-8">
+          Bordados personalizados en remeras, buzos y más
+        </p>
+        <button className="px-6 md:px-8 py-3 md:py-4 bg-[var(--persian-plum-400)] text-white rounded-full text-base md:text-lg font-semibold hover:bg-[var(--persian-plum-500)] transition-all hover:scale-105">
+          Explorá el catálogo
+        </button>
+      </div>
+    )
+  },
+  { 
+    content: (
+      <div className="flex flex-col items-center justify-center h-full text-center px-4 md:px-8">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
+          Tu estilo,<br />tu diseño
+        </h1>
+        <p className="text-lg md:text-xl lg:text-2xl text-[var(--persian-plum-200)] max-w-2xl mb-6 md:mb-8">
+          Personalizá cada prenda con el logo que elijas
+        </p>
+        <button className="px-6 md:px-8 py-3 md:py-4 bg-[var(--persian-plum-400)] text-white rounded-full text-base md:text-lg font-semibold hover:bg-[var(--persian-plum-500)] transition-all hover:scale-105">
+          Comenzar ahora
+        </button>
+      </div>
+    )
+  },
+  { 
+    content: (
+      <div className="flex flex-col items-center justify-center h-full text-center px-4 md:px-8">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6">
+          Calidad premium<br />envíos rápidos
+        </h1>
+        <p className="text-lg md:text-xl lg:text-2xl text-[var(--persian-plum-200)] max-w-2xl mb-6 md:mb-8">
+          Recibí tu pedido en tiempo récord
+        </p>
+        <button className="px-6 md:px-8 py-3 md:py-4 bg-[var(--persian-plum-400)] text-white rounded-full text-base md:text-lg font-semibold hover:bg-[var(--persian-plum-500)] transition-all hover:scale-105">
+          Ver más
+        </button>
+      </div>
+    )
+  }
 ]
 
 export const Carrousel = () => {

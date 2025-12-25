@@ -5,6 +5,7 @@ import './Instrucciones.css'
 
 import buzoFrente from '../../assets/images/buzo_frente.png'
 import remeraFrente from '../../assets/images/remera_frente.png'
+import remeraOver from '../../assets/images/remera_over.png'
 
 export const Instrucciones = () => {
   // Estado de scroll (para animaciones de estrellas)
@@ -53,13 +54,7 @@ export const Instrucciones = () => {
 
   // Detecta si el usuario ha hecho scroll
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden"
-
-    return () => {
-      document.body.style.overflow = ""
-    }
-  })
+  // El overflow se maneja desde el Modal; evitar bloquear el scroll globalmente aquí
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 0)
@@ -176,7 +171,7 @@ export const Instrucciones = () => {
           >
             
             {/* Vista 1: Elección de prenda */}
-            <div className="min-w-full min-h-[500px] flex flex-col gap-4">
+            <div className="min-w-full min-h-[380px] md:min-h-[500px] flex flex-col gap-4">
               <span className="text-center text-xl font-medium">
                 1. Elección de prenda
               </span>
@@ -208,6 +203,19 @@ export const Instrucciones = () => {
                 >
                   <img src={remeraFrente} alt="Remera" className='w-[50%] h-auto' />
                 </button>
+
+                <button 
+                className={
+                  `flex justify-center items-center w-[30%] h-[300px] border-2 border-[var(--persian-plum-300)] rounded-xl hover:border-[var(--persian-plum-500)] transition-colors cursor-pointer
+                  ${prendaEleccion === "Remera Oversize"
+                    ? "border-3 border-[var(--persian-plum-500)]"
+                    : ""
+                  }
+                `}
+                onClick={() => { setPrendaEleccion("Remera Oversize") }}
+                >
+                  <img src={remeraOver} alt="Remera Oversize" className='w-[50%] h-auto' />
+                </button>
               </div>
 
               {/* Botón Siguiente */}
@@ -220,7 +228,7 @@ export const Instrucciones = () => {
             </div>
 
             {/* Vista 2: Selección de colores y talles */}
-            <div className="min-w-full min-h-[500px] flex flex-col gap-6">
+            <div className="min-w-full min-h-[380px] md:min-h-[500px] flex flex-col gap-6">
               <span className="text-center text-xl font-medium">
                 2. Selección de color y talle
               </span>
@@ -290,7 +298,7 @@ export const Instrucciones = () => {
             </div>
 
             {/* Vista 3: Confirmación */}
-            <div className="min-w-full min-h-[500px] flex flex-col gap-4">
+            <div className="min-w-full min-h-[380px] md:min-h-[500px] flex flex-col gap-4">
               <span className="text-center text-xl font-medium">
                 3. ¡Envía tu diseño y confirma el pedido!
               </span>

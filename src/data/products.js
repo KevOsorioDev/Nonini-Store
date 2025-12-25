@@ -1,17 +1,13 @@
-// Simulación de data que vendría del backend
-// En producción, esto se obtendría de una API
 import logoScoty from '../assets/images/scoty.png'
-import logoNonini from '../assets/images/nonini_logo.png'
+import logoMarisol from '../assets/images/marisol-bordado.png'
 
 export const productsData = [
   {
     id: 1,
-    nombre: "Logo Scotty",
-    descripcion: "Diseño exclusivo de Scotty",
+    nombre: "Logo Scoty",
+    descripcion: "Diseño exclusivo de Scoty",
     precio: 7000,
-    imagen: logoScoty, // Import de Vite
-    
-    // Configuraciones específicas por tipo de prenda
+    imagen: logoScoty,
     configuraciones: {
       Remera: {
         tamaño: { width: '80px', height: '80px' },
@@ -31,56 +27,68 @@ export const productsData = [
       }
     },
     
-    // Colores disponibles para este diseño
-    // coloresDisponibles: [
-    //   { name: 'Persian Plum 400', class: 'bg-[var(--persian-plum-400)]' },
-    //   { name: 'Persian Plum 700', class: 'bg-[var(--persian-plum-700)]' }
-    // ],
-    
-    // Talles disponibles
     tallesDisponibles: ['S', 'M', 'L', 'XL']
   },
   {
     id: 2,
-    nombre: "Logo Nonini",
-    descripcion: "Diseño del logo de Nonini",
-    precio: 8500,
-    imagen: logoNonini, // Import de Vite
+    nombre: "Marisol Bordado",
+    descripcion: "Diseño exclusivo Marisol con bordado artesanal",
+    precio: 9500,
+    imagen: logoMarisol,
     
     configuraciones: {
       Remera: {
-        tamaño: { width: '90px', height: '90px' },
+        tamaño: { width: '70px', height: '70px' },
         posiciones: {
-          izquierda: { left: '18%', top: '28%' },
-          centro: { left: '50%', top: '28%' },
-          derecha: { left: '82%', top: '28%' }
+          izquierda: { left: '44.5%', top: '20%' },
+          centro: { left: '49.9%', top: '20%' },
+          derecha: { left: '55%', top: '20%' }
         }
       },
       Buzo: {
-        tamaño: { width: '110px', height: '110px' },
+        tamaño: { width: '80px', height: '105px' },
         posiciones: {
-          izquierda: { left: '22%', top: '32%' },
-          centro: { left: '50%', top: '32%' },
-          derecha: { left: '78%', top: '32%' }
+          izquierda: { left: '45%', top: '25%' },
+          centro: { left: '50.5%', top: '25%' },
+          derecha: { left: '56%', top: '25%' }
         }
       }
     },
     
-    coloresDisponibles: [
-      { name: 'Persian Plum 200', class: 'bg-[var(--persian-plum-200)]' },
-      { name: 'Persian Plum 900', class: 'bg-[var(--persian-plum-900)]' }
-    ],
-    
-    tallesDisponibles: ['M', 'L', 'XL']
-  }
+    tallesDisponibles: ['S', 'M', 'L', 'XL']
+  },
+  ...Array.from({ length: 8 }, (_, i) => ({
+    id: i + 3,
+    nombre: `Producto ${i + 3}`,
+    descripcion: `Próximamente - Diseño exclusivo ${i + 3}`,
+    precio: 7500,
+    imagen: logoScoty,
+    configuraciones: {
+      Remera: {
+        tamaño: { width: '80px', height: '80px' },
+        posiciones: {
+          izquierda: { left: '44%', top: '22%' },
+          centro: { left: '50%', top: '22%' },
+          derecha: { left: '55%', top: '22%' }
+        }
+      },
+      Buzo: {
+        tamaño: { width: '100px', height: '100px' },
+        posiciones: {
+          izquierda: { left: '46%', top: '25%' },
+          centro: { left: '51%', top: '25%' },
+          derecha: { left: '56%', top: '25%' }
+        }
+      }
+    },
+    tallesDisponibles: ['S', 'M', 'L', 'XL']
+  }))
 ]
 
-// Función helper para obtener un producto por ID
 export const getProductById = (id) => {
   return productsData.find(product => product.id === id)
 }
 
-// Función helper para obtener la configuración específica
 export const getProductConfig = (productId, tipoPrenda) => {
   const product = getProductById(productId)
   if (!product) return null

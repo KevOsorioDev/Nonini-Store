@@ -1,0 +1,333 @@
+{
+  "info": {
+    "name": "Nonini Store API",
+    "description": "Colección de endpoints para el backend de Nonini Store",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Registro",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\",\n  \"nombre\": \"Juan\",\n  \"apellido\": \"Pérez\",\n  \"telefono\": \"3512345678\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/registro",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "registro"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"usuario@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Perfil",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer TU_TOKEN_AQUI"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/auth/perfil",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "auth", "perfil"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "productos"]
+            }
+          }
+        },
+        {
+          "name": "Producto por ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/productos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear producto (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Admin-Password",
+                "value": "mollydraco"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Logo Nike Personalizado\",\n  \"descripcion\": \"Diseño exclusivo para remeras y buzos\",\n  \"precio\": 8500,\n  \"categoriaId\": 1,\n  \"talles\": [\n    {\"talle\": \"S\", \"stock\": 10},\n    {\"talle\": \"M\", \"stock\": 15},\n    {\"talle\": \"L\", \"stock\": 20}\n  ],\n  \"colores\": [1, 2, 3]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/productos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "productos"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar stock (ADMIN)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "X-Admin-Password",
+                "value": "mollydraco"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productoId\": 1,\n  \"talle\": \"M\",\n  \"stock\": 25\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/productos/stock",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "productos", "stock"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Categorías",
+      "item": [
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:5000/api/categorias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categorias"]
+            }
+          }
+        },
+        {
+          "name": "Crear categoría (ADMIN)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Admin-Password",
+                "value": "mollydraco"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nike\",\n  \"slug\": \"nike\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/categorias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "categorias"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes",
+      "item": [
+        {
+          "name": "Crear orden",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer TU_TOKEN_AQUI"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productoId\": 1,\n      \"prenda\": \"Remera\",\n      \"talle\": \"M\",\n      \"color\": \"Negro\",\n      \"cantidad\": 2\n    }\n  ],\n  \"metodoPago\": \"stripe\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ordenes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Mis órdenes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer TU_TOKEN_AQUI"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/ordenes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Todas las órdenes (ADMIN)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Admin-Password",
+                "value": "mollydraco"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:5000/api/ordenes/admin/todas",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ordenes", "admin", "todas"]
+            }
+          }
+        },
+        {
+          "name": "Crear pago Stripe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer TU_TOKEN_AQUI"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ordenId\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ordenes/pago/stripe",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ordenes", "pago", "stripe"]
+            }
+          }
+        },
+        {
+          "name": "Crear pago MercadoPago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer TU_TOKEN_AQUI"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ordenId\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5000/api/ordenes/pago/mercadopago",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "5000",
+              "path": ["api", "ordenes", "pago", "mercadopago"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

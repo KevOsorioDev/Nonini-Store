@@ -8,17 +8,18 @@
 .productos-populares {
   max-width: 85vw;
   margin-inline: auto;
-  padding-bottom: 2.5rem;
+  padding-bottom: 3.5rem;
   margin-top: 15rem;
 }
 
 /* Título de la sección */
 .productos-populares__title {
-  font-size: 1.875rem;
+  font-size: 2.25rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: center;
   color: var(--persian-plum-900);
+  line-height: 1.2;
 }
 
 /* Grid de productos - las filas están manejadas con Tailwind */
@@ -26,7 +27,6 @@
   width: 100%;
   max-width: 90vw;
   /* overflow-x: auto; */
-  white-space: nowrap;
   
   /* Scrollbar personalizada */
   scrollbar-width: thin;
@@ -52,18 +52,30 @@
   margin-bottom: 1rem;
 }
 
+/* Permitir wrapping en resoluciones medias para evitar overflow */
+@media (max-width: 1024px) {
+  .productos-populares__row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .productos-populares__card {
+    flex: 0 1 auto;
+  }
+}
+
 /* Tarjeta de producto - fila 1 */
 .productos-populares__card {
   /* Usa la clase .product-card de index.css para efectos hover */
   border-radius: var(--radius-lg);
-  padding: 3rem 2rem;
-  min-width: 250px;
-  height: 200px;
+  padding: 2rem;
+  min-width: 280px;
+  min-height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   text-align: center;
+  font-size: 1.125rem;
   
   /* Transiciones heredadas de .product-card */
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
@@ -79,6 +91,11 @@
   color: var(--persian-plum-50);
 }
 
+.productos-populares__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .productos-populares {
@@ -91,9 +108,9 @@
   }
   
   .productos-populares__card {
-    min-width: 200px;
-    height: 180px;
-    padding: 2rem 1.5rem;
+    min-width: 240px;
+    min-height: 280px;
+    padding: 1.75rem;
   }
 }
 
@@ -101,20 +118,47 @@
   .productos-populares {
     margin-top: 8rem;
     max-width: 95vw;
+    padding-bottom: 2.5rem;
   }
   
   .productos-populares__title {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
   }
   
   .productos-populares__card {
-    min-width: 150px;
-    height: 150px;
-    padding: 1.5rem 1rem;
-    font-size: 0.875rem;
+    min-width: 200px;
+    min-height: 260px;
+    padding: 1.5rem;
+    font-size: 1rem;
   }
   
   .productos-populares__row {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .productos-populares {
+    margin-top: 6rem;
+    padding-bottom: 2rem;
+  }
+
+  .productos-populares__title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .productos-populares__grid {
+    max-width: 100%;
+  }
+
+  .productos-populares__card {
+    min-width: 180px;
+    min-height: 220px;
+    padding: 1.25rem;
+    font-size: 0.95rem;
+    flex: 0 1 calc(50% - 0.75rem);
   }
 }

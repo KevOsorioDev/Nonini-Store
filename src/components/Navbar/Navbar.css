@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 2.5rem;
   background: transparent;
   
   /* Transición del ancho */
@@ -44,13 +44,13 @@
 /* Ancho por defecto */
 .navbar__content {
   width: 97vw;
-  padding: 2vh 1.2vw;
+  padding: 2.5vh 1.5vw;
 }
 
 /* Ancho cuando está scrolled */
 .navbar--scrolled .navbar__content {
   width: 87vw;
-  padding: 2vh 2vw;
+  padding: 2.5vh 2.5vw;
 }
 
 /* Logo container */
@@ -73,43 +73,193 @@
   top: 50%;
   transform: translate(-50%, -50%);
   display: flex;
-  gap: 1vw;
+  gap: 1.5vw;
 }
 
 /* Acciones de la derecha */
 .navbar__actions {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
 }
+
+/* Contenedor de grupos (menú + acciones) */
+.navbar__groups {
+  display: contents; /* en desktop mantener flujo original */
+}
+
+/* Por defecto esconder el burger en desktop */
+.navbar__burger { display: none; border: none; background: transparent; }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .navbar {
-    top: 8%;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    border-radius: 0;
+    transition: none;
   }
   
   .navbar__content {
-    width: 95vw;
+    width: 100%;
+    padding: 0 1rem;
+    position: relative; /* permite posicionamiento absoluto de logo/burger */
+    gap: 1rem;
   }
   
-  .navbar--scrolled .navbar__content {
-    width: 90vw;
-  }
+  /* Neutralizar efecto dinámico al hacer scroll en md */
+  .navbar--scrolled { top: 0; box-shadow: none; background-color: var(--persian-plum-50); }
+  .navbar--scrolled .navbar__content { width: 95vw; padding: 2vh 1.5vw; }
   
   .navbar__center-menu {
     position: static;
     transform: none;
+    gap: 0.75rem;
+    font-size: 1rem; /* reducir tamaño en resoluciones medias */
+  }
+
+  /* Botón hamburguesa visible en ≤1024px (izquierda) */
+  .navbar__burger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--persian-plum-100);
+    border: 1px solid var(--persian-plum-200);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    order: 1;
+    margin-right: 0.5rem;
+    margin-left: 0; /* asegurar pegado al borde interior */
+    position: absolute;
+    left: 12px; /* separación horizontal desde el borde */
+    top: 12px; /* misma altura para simetría vertical */
+    z-index: 95;
+  }
+  /* Alineación vertical consistente entre burger y logo */
+  .navbar__burger { align-items: center; justify-content: center; align-self: center; }
+  .navbar__logo { display: flex; align-items: center; align-self: center; }
+  .navbar__logo-img { display: block; width: auto; max-height: 40px; }
+  .navbar__burger:hover { background: var(--persian-plum-200); }
+  .navbar__burger-line {
+    width: 20px;
+    height: 2px;
+    background: var(--persian-plum-700);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .navbar__burger-line.open:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+  .navbar__burger-line.open:nth-child(2) { opacity: 0; }
+  .navbar__burger-line.open:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+  /* Ocultar grupos por defecto en ≤1024px */
+  .navbar__groups { display: none; }
+
+  /* Logo a la derecha en md/sm (posición absoluta para alineación exacta) */
+  .navbar__logo { order: 3; margin-left: auto; margin-right: 0; position: absolute; right: 12px; top: 12px; z-index: 95; }
+
+  /* Asegurar que burger y logo queden pegados a los bordes del viewport */
+  .navbar { left: 0; width: 100%; }
+  .navbar__content { max-width: 100%; }
+  .navbar__burger { margin-left: 0; }
+  .navbar__logo { margin-right: 0; }
+
+  /* Mostrar cuando el header tiene menu-open */
+  /* Panel moderno cuando el menú está abierto */
+  .menu-open .navbar__content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .menu-open .navbar__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 16px;
+    background: var(--persian-plum-50);
+    border: 1px solid var(--persian-plum-200);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  }
+  .menu-open .navbar__center-menu,
+  .menu-open .navbar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .menu-open .navbar__actions { justify-content: flex-start; }
+
+  /* Backdrop para enfoque (sin blur para evitar desenfoque de la página) */
+  .navbar__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.18);
+    z-index: 80;
+    transition: opacity 200ms ease;
+  }
+
+  /* Asegurar que el panel del menú esté por encima del backdrop */
+  .menu-open .navbar__groups {
+    z-index: 90;
+    position: relative;
   }
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    top: 0;
+    width: 100%;
+    left: 0;
+    transform: none;
+    border-radius: 0;
+    transition: none;
+  }
+
+  .navbar__content {
+    width: 100%;
+    padding: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  /* Neutralizar efecto dinámico al hacer scroll en sm */
+  .navbar--scrolled { top: 0; box-shadow: none; background-color: var(--persian-plum-50); }
+  .navbar--scrolled .navbar__content { width: 100%; padding: 1.25rem; }
+
   .navbar__logo-img {
     width: 2.5rem;
     height: 2.5rem;
   }
   
   .navbar__center-menu {
-    gap: 0.5rem;
+    position: static;
+    transform: none;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .navbar__actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  /* En móviles, ajustar aún más el tamaño y el flujo */
+  .navbar__center-menu { font-size: 0.95rem; }
+  .navbar__actions { gap: 0.75rem; }
+  .navbar__burger { width: 36px; height: 36px; }
+
+  .menu-open .navbar__groups {
+    padding: 0.75rem;
+    border-radius: 14px;
+    gap: 0.75rem;
   }
 }

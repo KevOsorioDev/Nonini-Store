@@ -11,16 +11,16 @@ export const AnimatedSearch = ({ open }) => {
     const iconContainer = iconContainerRef.current
 
     if (open) {
-      mainbox.classList.add('w-[230px]')
-      mainbox.classList.remove('w-[50px]')
-      searchInput.classList.add('w-[170px]', 'h-full')
+      mainbox.classList.add('w-[200px]', 'sm:w-[230px]')
+      mainbox.classList.remove('w-[40px]', 'w-[50px]', 'sm:w-[50px]')
+      searchInput.classList.add('w-[140px]', 'sm:w-[170px]', 'h-full')
       searchInput.classList.remove('w-0', 'h-0')
       iconContainer.classList.remove('pr-2')
     } else {
-      mainbox.classList.add('w-[50px]')
-      mainbox.classList.remove('w-[230px]')
+      mainbox.classList.add('w-[40px]', 'sm:w-[50px]')
+      mainbox.classList.remove('w-[200px]', 'w-[230px]', 'sm:w-[230px]')
       searchInput.classList.add('w-0', 'h-0')
-      searchInput.classList.remove('w-[170px]', 'h-full')
+      searchInput.classList.remove('w-[140px]', 'w-[170px]', 'sm:w-[170px]', 'h-full')
       iconContainer.classList.add('pr-2')
     }
   }, [open])
@@ -30,7 +30,7 @@ export const AnimatedSearch = ({ open }) => {
       <div
         ref={mainboxRef}
         className="
-          mainbox w-[50px] h-[50px]
+          mainbox w-[40px] sm:w-[50px] h-[40px] sm:h-[50px]
           flex flex-row-reverse items-center justify-center
           rounded-full
           bg-[var(--persian-plum-950)]
@@ -48,7 +48,7 @@ export const AnimatedSearch = ({ open }) => {
             height="1em"
             xmlns="http://www.w3.org/2000/svg"
             className="
-              search_icon fill-white text-[1.3em]
+              search_icon fill-white text-[1.1em] sm:text-[1.3em]
               box-border
             "
           >
@@ -61,7 +61,7 @@ export const AnimatedSearch = ({ open }) => {
             search_input w-0 h-0
             bg-transparent border-none outline-none
             pb-1 pl-2
-            text-base text-white
+            text-sm sm:text-base text-white
             transition-all duration-300 ease-in-out
             font-sans
           "

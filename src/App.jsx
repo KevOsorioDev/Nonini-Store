@@ -1,7 +1,8 @@
 import './App.css'
-import { BrowserRouter ,Routes, Route } from "react-router-dom"
-import { MainPage, ProductPage } from './components/Pages/indexPages'
-
+import { Outlet } from 'react-router-dom'
+import { Navbar, Footer } from './components/index.js'
+import { CartProvider } from './context/CartContext'
+import { Toaster } from 'react-hot-toast'
 import Lenis from 'lenis'
 
 const lenis = new Lenis()
@@ -13,17 +14,34 @@ function raf(time) {
 
 requestAnimationFrame(raf)
 
-function App() {
-
+const App = () => {
   return (
-    <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<MainPage></MainPage>} />
-        <Route path='/producto' element={ <ProductPage></ProductPage> } />
-      </Routes>
-    </BrowserRouter>
-    </>
+    <CartProvider>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#fff',
+            color: '#333',
+            padding: '16px',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+          },
+          success: {
+            iconTheme: {
+              primary: 'var(--persian-plum-600)',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
+      <Navbar />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </CartProvider>
   )
 }
 

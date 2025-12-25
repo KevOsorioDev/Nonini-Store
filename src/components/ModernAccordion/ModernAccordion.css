@@ -76,12 +76,45 @@
 }
 
 /* Responsive: ajustar ancho en pantallas pequeñas */
+@media (max-width: 1024px) {
+  .accordion-container {
+    width: 70%;
+  }
+}
+
 @media (max-width: 768px) {
   .accordion-container {
-    width: 100%;
+    width: 90%;
   }
   
   .accordion-title {
     font-size: 0.875rem;
+  }
+
+  .accordion-label {
+    padding: 0.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .accordion-container {
+    width: 100%;
+  }
+
+  .accordion-title {
+    font-size: 0.8rem;
+  }
+
+  .accordion-label {
+    padding: 0.5rem;
+  }
+
+  .accordion-content {
+    font-size: 0.8rem;
+  }
+
+  .accordion-input:checked + .accordion-label + .accordion-content {
+    max-height: 12rem;
+    padding: 0.75rem;
   }
 }

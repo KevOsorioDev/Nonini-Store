@@ -1,6 +1,6 @@
 import './WithFunctions.css'
 import { useState } from 'react'
-import { AnimatedSearch } from '../../icons/animatedSearch/AnimatedSearch.jsx'
+import { AnimatedSearch } from '../../icons/AnimatedSearch/AnimatedSearch.jsx'
 
 export const ButtonWithFunctions = ({ children, onClick, text, variant }) => {
   const isSearch = variant === 'search'

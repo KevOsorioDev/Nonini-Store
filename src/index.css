@@ -29,17 +29,18 @@ html, body {
   --persian-plum-950: #3f1010;
 
   /* Espaciados comunes */
-  --spacing-xs: 0.5rem;   /* 8px */
-  --spacing-sm: 1rem;     /* 16px */
-  --spacing-md: 1.5rem;   /* 24px */
-  --spacing-lg: 2rem;     /* 32px */
-  --spacing-xl: 3rem;     /* 48px */
+  --spacing-xs: 0.625rem;   /* 10px */
+  --spacing-sm: 1.25rem;    /* 20px */
+  --spacing-md: 2rem;       /* 32px */
+  --spacing-lg: 2.5rem;     /* 40px */
+  --spacing-xl: 4rem;       /* 64px */
 
   /* Border radius */
   --radius-sm: 0.5rem;    /* 8px */
   --radius-md: 0.75rem;   /* 12px */
   --radius-lg: 1rem;      /* 16px */
   --radius-xl: 1.5rem;    /* 24px */
+  --radius-full: 624.9375rem; /* Mantener para botón circular */
 
   /* Transiciones */
   --transition-fast: 0.2s ease;
@@ -104,11 +105,12 @@ body {
 
 /* Títulos de sección (consistencia en todo el sitio) */
 .section-title {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: bold;
   color: var(--persian-plum-900);
   margin-bottom: var(--spacing-lg);
   text-align: center;
+  line-height: 1.2;
 }
 
 /* Contenedor de sección estándar */
@@ -116,7 +118,7 @@ body {
   width: 100%;
   max-width: 85vw;
   margin: 0 auto;
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-xl) var(--spacing-md);
 }
 
 /* Enlaces estándar */
@@ -138,6 +140,15 @@ body {
   font-weight: 600;
   transition: all var(--transition-fast);
   outline: none;
+}
+
+/* Cursor pointer global para botones */
+button, .btn, [role="button"], input[type="submit"], input[type="button"] {
+  cursor: pointer;
+}
+
+button:disabled, .btn:disabled, [role="button"]:disabled {
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -174,6 +185,11 @@ body {
 
   .section-container {
     max-width: 90vw;
+    padding: var(--spacing-lg) var(--spacing-sm);
+  }
+
+  .section-title {
+    font-size: 2rem;
   }
 }
 
@@ -181,7 +197,8 @@ body {
   .card-base {
     width: 100%;
     height: auto;
-    min-height: 200px;
+    min-height: 220px;
+    padding: var(--spacing-md);
   }
 
   .product-card {
@@ -190,6 +207,52 @@ body {
   }
 
   .section-title {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-container {
+    max-width: 95vw;
+    padding: var(--spacing-md) var(--spacing-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
     font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .product-card {
+    height: 260px;
+  }
+
+  .section-container {
+    padding: var(--spacing-sm) var(--spacing-xs);
+  }
+}
+
+/* Responsive stack for admin tables: convert rows to cards on small screens */
+@media (max-width: 640px) {
+  .overflow-x-auto table thead {
+    display: none;
+  }
+  .overflow-x-auto table, .overflow-x-auto tbody, .overflow-x-auto tr, .overflow-x-auto td {
+    display: block;
+    width: 100%;
+  }
+  .overflow-x-auto tbody tr {
+    margin-bottom: 1rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.04);
+  }
+  .overflow-x-auto td {
+    padding: 0.5rem 0.25rem;
+    border: none;
+  }
+  .overflow-x-auto td .flex {
+    gap: 0.5rem;
   }
 }

@@ -1,0 +1,242 @@
+/* ================================================
+   DROPDOWN BUTTON
+   - CSS para estados complejos y transiciones
+   - Tailwind para layout flex
+================================================ */
+
+/* Contenedor del dropdown */
+.dropdown {
+  /* Posicionamiento */
+  position: relative;
+
+  /* Box-sizing y tamaño */
+  display: inline-block;
+}
+
+/* Botón principal */
+.dropdown__button {
+  /* Box-sizing y tamaño */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  /* Evitar que el contenido del botón haga wrap */
+  flex-wrap: nowrap;
+
+  /* Estilo */
+  border: none;
+  background: transparent;
+
+  /* Cursor */
+  cursor: pointer;
+
+  /* Tipografía */
+  /* font-size: 1.4rem; */
+  font-size: clamp(1rem, 1rem + 0.6vw, 1.4rem);
+  font-weight: 600;
+  color: var(--persian-plum-900);
+
+  /* Transiciones */
+  transition: color var(--transition-fast);
+}
+
+.dropdown__button:focus {
+  outline: none;
+}
+
+/* Estado activo del botón */
+.dropdown__button--active {
+  color: var(--persian-plum-400);
+}
+
+/* Hover en el botón */
+.dropdown__button:hover .dropdown__label,
+.dropdown__button:hover .dropdown__icon {
+  color: var(--persian-plum-500);
+}
+
+/* Label del botón */
+.dropdown__label {
+  margin-top: 2px;
+  font-size: clamp(1rem, 1rem + 0.4vw, 1.2rem);
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+}
+
+@media (min-width: 1500px) {
+  .dropdown__label {
+    font-size: clamp(1.1rem, 1.1rem + 0.5vw, 1.4rem);
+  }
+}
+
+/* Icono chevron */
+.dropdown__icon {
+  /* Espaciado */
+  margin-left: 0.25rem;
+  padding-top: 4px;
+
+  /* Tipografía - clamp proporcional al dropdown__label */
+  font-size: clamp(0.8rem, 0.8rem + 0.35vw, 0.95rem);
+
+  /* Color */
+  color: var(--persian-plum-950);
+
+  /* Transiciones */
+  transition: transform var(--transition-fast), color var(--transition-fast), scale var(--transition-fast);
+}
+
+/* Evitar que el icono comprima el label */
+.dropdown__icon {
+  flex-shrink: 0;
+}
+
+/* Icono cuando el menú está abierto */
+.dropdown__icon--open {
+  /* Transformaciones */
+  transform: rotate(180deg) translateY(-1px);
+  scale: 1.1;
+
+  /* Color */
+  color: var(--persian-plum-400);
+}
+
+/* Menú desplegable */
+.dropdown__menu {
+  /* Posicionamiento */
+  position: absolute;
+  left: 0;
+  top: 140%;
+
+  /* Box-sizing y tamaño */
+  min-width: 13rem;
+  width: max-content;
+  padding: 0.5rem 0.25rem;
+
+  /* Estilo glassmorphism */
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+  backdrop-filter: blur(24px) saturate(180%);
+
+  /* Transiciones */
+  transform-origin: top right;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+
+  /* Z-index */
+  z-index: 1000;
+}
+
+/* Estados del menú */
+.dropdown__menu--open {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.dropdown__menu--closed {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+/* Opciones del menú */
+.dropdown__option {
+  /* Box-sizing y tamaño */
+  width: 100%;
+  padding: 0.5rem 1.25rem;
+
+  /* Reset de estilos de botón */
+  border: none;
+  background: transparent;
+
+  /* Tipografía */
+  text-align: left;
+  /* font-size: 1.1rem; */
+  font-size: clamp(0.9rem, 0.9rem + 0.4vw, 1.1rem);
+  font-weight: 600;
+  color: var(--persian-plum-900);
+
+  /* Estilo */
+  border-radius: var(--radius-md);
+
+  /* Cursor */
+  cursor: pointer;
+
+  /* Transiciones */
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+/* Hover y focus en opciones */
+.dropdown__option:hover {
+  background-color: var(--persian-plum-50);
+  color: var(--persian-plum-500);
+}
+
+.dropdown__option:focus {
+  outline: none;
+  background-color: var(--persian-plum-100);
+  color: var(--persian-plum-500);
+}
+
+/* En pantallas muy grandes evitar que el dropdown haga wrap */
+@media (min-width: 1700px) {
+  .dropdown__button {
+    flex-wrap: nowrap;
+  }
+}
+
+
+/* ================================================
+   PANTALLAS <= 1000px - Dropdowns más compactos
+   ================================================ */
+@media (max-width: 1000px) {
+  .dropdown__button {
+    gap: 0.35rem;
+    font-size: clamp(0.85rem, 0.85rem + 0.4vw, 1.1rem);
+  }
+
+  .dropdown__label {
+    font-size: clamp(0.8rem, 0.8rem + 0.35vw, 1rem);
+  }
+
+  .dropdown__icon {
+    font-size: clamp(0.65rem, 0.65rem + 0.3vw, 0.8rem);
+    padding-top: 3px;
+  }
+
+  .dropdown__menu {
+    min-width: 10rem;
+    padding: 0.4rem 0.2rem;
+  }
+
+  .dropdown__option {
+    font-size: clamp(0.75rem, 0.75rem + 0.35vw, 0.95rem);
+    padding: 0.4rem 1rem;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dropdown__button {
+    /* font-size: 1.2rem; */
+    font-size: clamp(0.9rem, 0.9rem + 0.5vw, 1.2rem);
+  }
+  
+  .dropdown__label {
+    /* font-size: 0.9rem; */
+    font-size: clamp(0.75rem, 0.75rem + 0.3vw, 0.9rem);
+  }
+  
+  .dropdown__menu {
+    min-width: 11rem;
+    /* font-size: 0.95rem; */
+    font-size: clamp(0.8rem, 0.8rem + 0.3vw, 0.95rem);
+  }
+  
+  .dropdown__option {
+    /* font-size: 1rem; */
+    font-size: clamp(0.85rem, 0.85rem + 0.3vw, 1rem);
+    padding: 0.4rem 1rem;
+  }
+}

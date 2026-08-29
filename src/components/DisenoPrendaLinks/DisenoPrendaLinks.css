@@ -1,0 +1,46 @@
+.diseno-prenda-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.diseno-prenda-links__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+}
+
+.diseno-prenda-links__row {
+  display: flex;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.diseno-prenda-links__row a {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.4rem;
+  border-radius: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--persian-plum-800);
+  color: var(--persian-plum-50);
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.diseno-prenda-links__row a:hover {
+  background: var(--persian-plum-900);
+  transform: translateY(-1px);
+}
+
+.catalogo-card .diseno-prenda-links__row a,
+.productos-populares__card--light .diseno-prenda-links__row a {
+  background: var(--persian-plum-800);
+  color: var(--persian-plum-50);
+}

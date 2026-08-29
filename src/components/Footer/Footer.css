@@ -1,0 +1,171 @@
+/* ==============================================
+   FOOTER - CSS Component
+   ============================================== */
+
+/* Contenedor principal del footer */
+.footer-container {
+  /* Posicionamiento */
+  display: flex;
+  align-items: flex-start;
+
+  /* Modelado de caja */
+  width: 100%;
+  gap: 3rem;
+  padding: 2.5rem;
+  padding-top: 5rem;
+}
+
+/* Columnas del footer */
+.footer-column {
+  /* Posicionamiento */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  /* Modelado de caja */
+  gap: 0.75rem;
+  width: 33.333333%;
+}
+
+.footer-column--centered {
+  justify-content: center;
+}
+
+/* Titulos de seccion */
+.footer-title {
+  /* Texto */
+  font-size: 1.625rem;
+  font-weight: 600;
+
+  /* Colores */
+  color: var(--persian-plum-900);
+
+  /* Modelado de caja */
+  padding-bottom: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Contenedor de contacto con icono */
+.footer-contact {
+  /* Posicionamiento */
+  display: flex;
+  align-items: center;
+
+  /* Texto */
+  font-size: 1.5rem;
+
+  /* Modelado de caja */
+  gap: 0.75rem;
+}
+
+/* Enlaces del footer */
+.footer-link {
+  /* Texto */
+  font-size: 1.375rem;
+  font-weight: 500;
+
+  /* Colores */
+  color: var(--persian-plum-700);
+  text-decoration: none;
+
+  /* Modelado de caja */
+  margin-left: 1rem;
+  padding: 0.25rem 0;
+
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: var(--persian-plum-500);
+}
+
+/* Email link especifico */
+.footer-email {
+  /* Texto */
+  font-size: 1.5rem;
+  font-weight: 600;
+
+  /* Colores */
+  color: var(--persian-plum-700);
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.footer-email:hover {
+  color: var(--persian-plum-500);
+}
+
+/* ============================================== 
+   RESPONSIVE - De mayor a menor
+   ============================================== */
+@media (max-width: 1440px) {
+  .footer-container {
+    gap: 2.5rem;
+    padding: 2.25rem 2rem;
+  }
+
+  .footer-title {
+    font-size: 1.45rem;
+  }
+
+  .footer-link,
+  .footer-email {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    gap: 3rem;
+    padding: 2.5rem 2rem;
+    padding-top: 4rem;
+  }
+  
+  .footer-column {
+    width: 100%;
+    gap: 0.625rem;
+  }
+
+  .footer-title {
+    font-size: 1.375rem;
+    padding-bottom: 1rem;
+  }
+  
+  .footer-link,
+  .footer-email {
+    font-size: 1.125rem;
+  }
+  
+  .footer-contact {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    gap: 2.5rem;
+    padding: 2rem 1.25rem;
+    padding-top: 3.5rem;
+  }
+
+  .footer-column {
+    gap: 0.5rem;
+  }
+
+  .footer-title {
+    font-size: 1.2rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .footer-link,
+  .footer-email {
+    font-size: 1rem;
+  }
+
+  .footer-contact {
+    font-size: 1.125rem;
+  }
+}

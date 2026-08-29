@@ -1,0 +1,397 @@
+/* ================================================
+   HAMBURGER MENU - Menú responsive moderno
+   Drawer que se desliza de derecha a izquierda
+   ================================================ */
+
+/* ================================================
+   BOTÓN HAMBURGUESA MODERNO
+   ================================================ */
+.hamburger-btn {
+  /* Posicionamiento */
+  display: none; /* Oculto por defecto, visible en < 900px */
+  position: relative;
+  z-index: 100;
+
+  /* Box-sizing */
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+
+  /* Estilo */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  /* Layout interno */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+
+  /* Transiciones */
+  transition: background-color 0.3s ease;
+}
+
+.hamburger-btn:hover {
+  background-color: rgba(139, 69, 69, 0.1);
+}
+
+.hamburger-btn:focus {
+  outline: none;
+}
+
+/* Líneas del hamburger */
+.hamburger-btn__line {
+  display: block;
+  width: 24px;
+  height: 4px;
+  background-color: var(--persian-plum-900);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transform-origin: center;
+}
+
+/* Estado activo - Animación X */
+.hamburger-btn--active .hamburger-btn__line:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+
+.hamburger-btn--active .hamburger-btn__line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-btn--active .hamburger-btn__line:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+/* ================================================
+   OVERLAY OSCURO
+   ================================================ */
+.hamburger-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+  z-index: 999;
+}
+
+.hamburger-overlay--visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ================================================
+   DRAWER - Panel deslizante desde la derecha
+   ================================================ */
+.hamburger-drawer {
+  /* Posicionamiento */
+  position: fixed;
+  top: 0;
+  right: -85vw;
+  z-index: 1000;
+
+  /* Box-sizing */
+  width: 85vw;
+  max-width: 320px;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height para móviles */
+
+  /* Estilo */
+  background: linear-gradient(
+    180deg,
+    var(--persian-plum-50) 0%,
+    rgba(255, 255, 255, 0.98) 100%
+  );
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+
+  /* Transición fluida */
+  transition: right 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.hamburger-drawer--open {
+  right: 0;
+}
+
+/* Header del Drawer */
+.hamburger-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(139, 69, 69, 0.1);
+  background: var(--persian-plum-50);
+}
+
+.hamburger-drawer__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--persian-plum-900);
+  letter-spacing: -0.02em;
+}
+
+.hamburger-drawer__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--persian-plum-700);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hamburger-drawer__close:hover {
+  background-color: rgba(139, 69, 69, 0.1);
+  color: var(--persian-plum-900);
+}
+
+/* Contenido del Drawer */
+.hamburger-drawer__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0;
+
+  /* Scrollbar personalizada */
+  scrollbar-width: thin;
+  scrollbar-color: var(--persian-plum-300) transparent;
+}
+
+.hamburger-drawer__content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hamburger-drawer__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hamburger-drawer__content::-webkit-scrollbar-thumb {
+  background-color: var(--persian-plum-300);
+  border-radius: 4px;
+}
+
+/* ================================================
+   SECCIONES ACORDEÓN
+   ================================================ */
+.hamburger-section {
+  border-bottom: 1px solid rgba(139, 69, 69, 0.08);
+}
+
+.hamburger-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--persian-plum-900);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hamburger-section__header:hover {
+  background-color: rgba(139, 69, 69, 0.05);
+}
+
+.hamburger-section__header--active {
+  color: var(--persian-plum-600);
+}
+
+.hamburger-section__icon {
+  font-size: 0.75rem;
+  color: var(--persian-plum-500);
+  transition: transform 0.3s ease;
+}
+
+.hamburger-section__icon--rotated {
+  transform: rotate(180deg);
+}
+
+/* Contenido expandible */
+.hamburger-section__content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  background-color: rgba(139, 69, 69, 0.02);
+}
+
+.hamburger-section__content--open {
+  max-height: 300px;
+}
+
+.hamburger-section__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 2rem;
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--persian-plum-700);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hamburger-section__item:hover {
+  background-color: rgba(139, 69, 69, 0.08);
+  color: var(--persian-plum-900);
+  padding-left: 2.25rem;
+}
+
+.hamburger-section__item i {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* ================================================
+   SEPARADOR
+   ================================================ */
+.hamburger-divider {
+  height: 1px;
+  margin: 0.75rem 1.5rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 69, 69, 0.2),
+    transparent
+  );
+}
+
+/* ================================================
+   ACCIONES RÁPIDAS
+   ================================================ */
+.hamburger-actions {
+  padding: 0.5rem 0;
+}
+
+.hamburger-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--persian-plum-800);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.hamburger-action-btn:hover {
+  background-color: rgba(139, 69, 69, 0.08);
+  color: var(--persian-plum-900);
+}
+
+.hamburger-action-btn i {
+  font-size: 1rem;
+  width: 24px;
+  text-align: center;
+  color: var(--persian-plum-600);
+}
+
+.hamburger-action-btn__badge {
+  position: absolute;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  background-color: var(--persian-plum-600);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 11px;
+}
+
+/* Variantes de botones */
+.hamburger-action-btn--primary {
+  background: linear-gradient(135deg, var(--persian-plum-600), var(--persian-plum-700));
+  color: white;
+  margin: 0.5rem 1rem;
+  border-radius: 12px;
+  justify-content: center;
+}
+
+.hamburger-action-btn--primary i {
+  color: white;
+}
+
+.hamburger-action-btn--primary:hover {
+  background: linear-gradient(135deg, var(--persian-plum-700), var(--persian-plum-800));
+  color: white;
+}
+
+.hamburger-action-btn--logout {
+  color: var(--persian-plum-500);
+}
+
+.hamburger-action-btn--logout:hover {
+  color: var(--persian-plum-700);
+  background-color: rgba(139, 69, 69, 0.05);
+}
+
+/* ================================================
+   RESPONSIVE - Mostrar solo en < 900px
+   ================================================ */
+@media (max-width: 899px) {
+  .hamburger-btn {
+    display: flex;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 400px) {
+  .hamburger-drawer {
+    top: 0;
+    left: -100vw;
+    right: auto;
+    width: 100vw;
+    max-width: none;
+    transition: left 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .hamburger-drawer--open {
+    left: 0;
+  }
+
+  .hamburger-section__header {
+    padding: 0.875rem 1.25rem;
+    font-size: 0.95rem;
+  }
+
+  .hamburger-section__item {
+    padding: 0.625rem 1.75rem;
+    font-size: 0.85rem;
+  }
+
+  .hamburger-action-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}

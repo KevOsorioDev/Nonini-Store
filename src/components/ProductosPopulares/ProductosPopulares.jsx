@@ -1,65 +1,78 @@
-import { useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import { productsData } from '../../data/products'
+import { DisenoPrendaLinks } from '../DisenoPrendaLinks/DisenoPrendaLinks'
+import './ProductosPopulares.css'
 
-const productos = Array.from({ length: 12 }, (_, i) => ({
-  id: i,
-  nombre: `Producto ${i + 1}`,
-}))
+const productosMuestra = productsData.slice(0, 8)
 
 export const ProductosPopulares = () => {
-  const scrollRef = useRef(null)
+  const [isVisible, setIsVisible] = useState(false)
+  const sectionRef = useRef(null)
 
-  // Eliminado el infinite scrolling
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setIsVisible(true)
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (sectionRef.current) observer.observe(sectionRef.current)
+
+    const animar = () => {
+      const el = sectionRef.current
+      if (!el) return
+
+      const rect = el.getBoundingClientRect()
+      const vh = window.innerHeight
+      const prog = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.5)))
+      const anchoVw = 75 + 25 * prog
+
+      el.style.width = `${anchoVw}vw`
+      el.style.maxWidth = `${anchoVw}vw`
+      if (anchoVw >= 99.9) {
+        el.style.marginInline = '0'
+      } else {
+        el.style.marginInline = 'auto'
+      }
+    }
+
+    window.addEventListener('scroll', animar, { passive: true })
+    animar()
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', animar)
+    }
+  }, [])
 
   return (
-    <section className="
-      flex items-center justify-center flex-col mt-60
-      w-full max-w-[85vw] mx-auto pb-10
-    ">
-      <h3 className="
-        text-3xl font-bold mb-8
-        text-[var(--persian-plum-900)]
-      ">
-        Nuestros productos más populares
+    <section
+      ref={sectionRef}
+      style={{ marginBottom: '3.5rem' }}
+      className={`productos-populares ${isVisible ? 'visible' : ''}`}
+    >
+      <h3 className="productos-populares__title">
+        Nuestros diseños más populares
       </h3>
-      <div
-        ref={scrollRef}
-        className="
-          w-full
-          overflow-x-auto
-          whitespace-nowrap
-          scrollbar-thin scrollbar-thumb-[var(--persian-plum-400)]
-          flex flex-col gap-6
-        "
-        style={{ maxWidth: '90vw' }}
-      >
-        {/* Primera fila */}
-        <div className="flex gap-4 mb-4">
-          {productos.slice(0, 6).map(prod => (
-            <div
+
+      <div className="productos-populares__grid">
+        <div className="productos-populares__row">
+          {productosMuestra.slice(0, 5).map((prod) => (
+            <article
               key={prod.id}
-              className="
-                product-card
-                bg-[var(--persian-plum-300)]
-                text-[var(--persian-plum-900)]
-              "
+              className="productos-populares__card productos-populares__card--light"
             >
-              {prod.nombre}
-            </div>
-          ))}
-        </div>
-        {/* Segunda fila */}
-        <div className="flex gap-4">
-          {productos.slice(6, 12).map(prod => (
-            <div
-              key={prod.id}
-              className="
-                product-card
-                bg-[var(--persian-plum-400)]
-                text-[var(--persian-plum-50)]
-              "
-            >
-              {prod.nombre}
-            </div>
+              <Link to={`/producto/${prod.id}`} className="productos-populares__card-main">
+                <img src={prod.imagen} alt={prod.nombre} />
+                <h4>{prod.nombre}</h4>
+                <p>${prod.precio.toLocaleString()}</p>
+              </Link>
+              <DisenoPrendaLinks productId={prod.id} />
+            </article>
           ))}
         </div>
       </div>

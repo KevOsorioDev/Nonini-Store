@@ -1,0 +1,505 @@
+/* ============================================================
+   NONINI MASCOTA — Utilidades y animaciones de la mascota
+   ============================================================ */
+
+.nonini {
+  position: absolute;
+  top: -21.5%;
+  left: 25%;
+  z-index: -1;
+
+  width: 14vw;
+  min-width: 100px;
+  max-width: 180px;
+  height: auto;
+
+  transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &.first-appear {
+    animation: noniniPopAnim 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+}
+
+.nonini-hide {
+  pointer-events: none;
+
+  opacity: 0 !important;
+}
+
+/* Nonini Stars animado — ahora relativo al tercer box */
+.nonini-stars {
+  position: absolute;
+  top: -21.5%;
+  left: 25%;
+  z-index: -1;
+
+  width: 14vw;
+  min-width: 100px;
+  max-width: 180px;
+  height: auto;
+
+  pointer-events: none;
+  transition: opacity 0s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Estado oculto: desaparece repentinamente al terminar la subida */
+  &.stars-hidden {
+    transform: translateY(0px);
+
+    opacity: 0;
+    transition: opacity 0s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Estado visible: baja lentamente durante 5s */
+  &.stars-visible {
+    transform: translateY(40px);
+
+    opacity: 1;
+    transition: opacity 0s, transform 5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Estado volviendo: sube lentamente a posición original (~2s), luego stars-hidden la desvanece */
+  &.stars-returning {
+    transform: translateY(0px);
+
+    opacity: 1;
+    transition: opacity 0s, transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@keyframes noniniPopAnim {
+  0%   { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+.visible-nonini {
+  opacity: 1;
+}
+
+/* ============================================================
+   DIV PRUEBA — Tarjetas flotantes de demostración
+   ============================================================ */
+
+.div-prueba {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 50vw;
+  height: 60vh;
+  border-radius: 1rem;
+
+  background: var(--persian-plum-900, #eee);
+
+  opacity: 0;
+  transform: translate(80vw, -80vh) rotate(12deg) scale(0.85);
+  transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity  1s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.prueba-2 {
+    z-index: 20;
+
+    transform: translate(-5%, -40%) rotate(-2deg) scale(1);
+  }
+
+  &.prueba-3 {
+    position: relative;
+    z-index: 30;
+    isolation: isolate;
+
+    transform: translate(-105%, 20%) rotate(0deg) scale(1);
+  }
+  
+  /* Crear un pseudo-elemento para el background que esté por encima de Nonini */
+  &.prueba-3::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--persian-plum-900, #eee);
+    border-radius: 1rem;
+    z-index: 1;
+  }
+
+  &.visible {
+    opacity: 1;
+    transform: translate(-95%, -110%) rotate(2deg) scale(1);
+  }
+
+  &.visible-2 {
+    opacity: 1;
+    transform: translate(-5%, -40%) rotate(-2deg) scale(1);
+  }
+
+  &.visible-3 {
+    opacity: 1;
+    transform: translate(-103%, 20%) rotate(-2deg) scale(1);
+  }
+}
+
+/* ==============================================
+   INSTRUCCIONES COMPONENT
+   Estructura y animaciones; layout con Tailwind
+   ============================================== */
+
+/* Contenedor principal */
+.instructions {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 85vw;
+  max-width: 1200px;
+  height: 150vh;
+  margin: 10px auto 0;
+  padding-bottom: 15rem;
+
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Transiciones base para hijos animados */
+.instructions__title,
+.instructions__title-container,
+.star,
+.instructions__step {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              scale   0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado scroll — nesting seguro: descendiente dentro de modificador */
+.instructions--scrolled {
+
+  .instructions__title,
+  .instructions__title-container {
+    transform: scale(1.18) translateY(18%);
+  }
+
+  .star--left-1  { transform: scale(1.18) translate(-100%, 18%); }
+  .star--left-2  { transform: scale(1.18) translate(-120%, 18%); }
+  .star--left-3  { transform: scale(1.18) translate(-100%, 80%); }
+  .star--right-1 { transform: scale(1.18) translate(100%, 18%);  }
+  .star--right-2 { transform: scale(1.18) translate(120%, 18%);  }
+  .star--right-3 { transform: scale(1.18) translate(100%, 80%);  }
+
+  .instructions__step {
+    transform: scale(1.12) translateY(22%);
+  }
+}
+
+/* Título y su contenedor */
+.instructions__title-container {
+  position: relative;
+  display: inline-block;
+
+  transform: translateY(2%);
+}
+
+.instructions__title {
+  margin-top: 1.25rem;
+
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 1.3;
+
+  color: var(--persian-plum-800);
+
+  transition: all 0.7s ease;
+}
+
+/* Estrellas — base + variantes planas para evitar conflictos de especificidad */
+.star {
+  position: absolute;
+
+  transition: opacity   0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.star--left-1 {
+  top:  50%;
+  left: -10%;
+
+  width:  1.75rem;
+  height: 1.75rem;
+
+  color: var(--persian-plum-400);
+}
+
+.star--left-2 {
+  top:  10%;
+  left: 0;
+
+  width:  1rem;
+  height: 1rem;
+
+  color: var(--persian-plum-950);
+}
+
+.star--left-3 {
+  top:  105%;
+  left: -3%;
+
+  width:  1.25rem;
+  height: 1.25rem;
+
+  color: var(--persian-plum-700);
+}
+
+.star--right-1 {
+  top:   50%;
+  right: -10%;
+
+  width:  1.75rem;
+  height: 1.75rem;
+
+  color: var(--persian-plum-950);
+}
+
+.star--right-2 {
+  top:   10%;
+  right: 0;
+
+  width:  1rem;
+  height: 1rem;
+
+  color: var(--persian-plum-700);
+}
+
+.star--right-3 {
+  top:   105%;
+  right: -3%;
+
+  width:  1.25rem;
+  height: 1.25rem;
+
+  color: var(--persian-plum-400);
+}
+
+.star--blink-on  { opacity: 1;   }
+.star--blink-off { opacity: 0.3; }
+
+/* Contenedor interno */
+.instructions__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 150vh;
+  margin-top: 3rem;
+}
+
+/* Div de prueba vacío */
+.test-box {
+  width: 400px;
+  height: 300px;
+  border-radius: 1rem;
+
+  background-color: var(--persian-plum-900);
+
+  opacity: 0;
+  transform: translate(100vw, -50vh) rotate(15deg);
+  transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &.visible {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+/* ============================================== 
+   RESPONSIVE — De mayor a menor
+   ============================================== */
+
+@media (max-width: 1440px) {
+  .instructions {
+    width: 90vw;
+  }
+
+  .instructions__title {
+    font-size: 3rem;
+  }
+
+  .test-box {
+    width: 350px;
+    height: 260px;
+  }
+
+  .star--left-1,
+  .star--right-1 {
+    width:  2.1rem;
+    height: 2.1rem;
+  }
+
+  .star--left-2,
+  .star--right-2 {
+    width:  1.2rem;
+    height: 1.2rem;
+  }
+
+  .star--left-3,
+  .star--right-3 {
+    width:  1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .instructions__title {
+    margin-top: 4rem;
+
+    font-size: 3.5rem;
+  }
+
+  .star--right-1 {
+    top:   60%;
+    right: -15%;
+
+    width:  3rem;
+    height: auto;
+  }
+
+  .star--right-2 {
+    top:   25%;
+    right: -5%;
+
+    width:  2rem;
+    height: auto;
+
+    color: var(--persian-plum-700);
+  }
+
+  .star--right-3 {
+    top:   105%;
+    right: -5%;
+
+    width:  2.2rem;
+    height: auto;
+
+    color: var(--persian-plum-400);
+  }
+
+  .star--left-1 {
+    top: 60%;
+    left: -14%;
+
+    width: 3rem;
+    height: auto;
+  }
+
+  .star--left-2 {
+    top:   25%;
+    left: -2%;
+
+    width:  2rem;
+    height: auto;
+
+    color: var(--persian-plum-700);
+  }
+
+  .star--left-3 {
+    top:   108%;
+    left: -5%;
+
+    width:  2.2rem;
+    height: auto;
+
+    color: var(--persian-plum-400);
+  }
+
+  .div-prueba{
+    margin-top: 6rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .instructions__container {
+    height: 120vh;
+  }
+
+  /* .instructions__title {
+    font-size: 3rem;
+  } */
+
+  .test-box {
+    width: 300px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 900px) {
+  .instructions__container {
+    height: 100vh;
+  }
+
+  .test-box {
+    width: 280px;
+    height: 200px;
+  }
+}
+
+@media (min-width: 768px) {
+  .instructions > div:nth-child(2) {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .instructions {
+    width: 100vw;
+    max-width: 100vw;
+    padding: 0 2vw;
+  }
+
+  .instructions__title {
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+
+  .instructions__container {
+    height: 80vh;
+  }
+
+  .test-box {
+    width: 90vw;
+    max-width: 320px;
+    height: 200px;
+
+    transform: translate(60vw, -30vh) rotate(10deg);
+
+    &.visible {
+      transform: translate(0, 0) rotate(0deg);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .instructions__title {
+    font-size: 1.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .instructions__container {
+    height: 70vh;
+  }
+
+  .test-box {
+    height: 180px;
+  }
+
+  /* Ajuste de posición de Nonini en móviles */
+  .nonini,
+  .nonini-stars {
+    top: -15%;
+    left: -10%;
+    width: 25vw;
+    min-width: 80px;
+    max-width: 120px;
+  }
+}

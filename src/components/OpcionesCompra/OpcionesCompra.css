@@ -1,0 +1,411 @@
+﻿/* ==============================================
+   OPCIONES COMPRA - Overlay interactivo
+   ============================================== */
+
+/* Contenedor principal */
+.opciones-compra {
+  position: sticky;
+  top: 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-top: 8rem;
+  padding-bottom: 25rem;
+  background-color: var(--persian-plum-100);
+  border-radius: 60px 60px 0 0;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+  /* === BLOQUE ANIDADO COMENTADO - sintaxis incorrecta (&&, .visible sin &) - ver version plana abajo ===
+  .visible {
+    opacity: 1;
+    transform: translateY(0);
+
+    .curly-arrow {
+      opacity: 1;
+    }
+  }
+
+  &&__title {
+    margin-top: 3rem;
+    font-size: clamp(2.7rem, 6.7vw, 4.3rem);
+    font-weight: 700;
+    color: var(--persian-plum-900);
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;
+  }
+
+  .curly-arrow {
+    position: absolute;
+    width: 17vw;
+    height: auto;
+    top: 24%;
+    transform: translateY(-50%);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease-out 0.4s;
+  }
+
+  .arrow-left {
+    left: 36%;
+    margin-left: -200px;
+    transform: translateY(-50%) rotate(110deg);
+  }
+
+  .arrow-right {
+    right: 35%;
+    margin-right: -200px;
+    transform: translateY(-50%) rotate(-110deg) scaleX(-1);
+  }
+
+  .has-active {
+    .curly-arrow {
+      opacity: 0;
+    }
+  }
+
+  &&__options {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15rem;
+    width: 100%;
+    height: 600px;
+    margin-top: 3rem;
+    z-index: 10;
+    transition: margin 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &&__link {
+    display: block;
+    margin-bottom: 2.2rem;
+    padding: 16px 22px;
+    font-size: clamp(1.6rem, 3.5vw, 2rem);
+    font-weight: 600;
+    color: var(--persian-plum-100);
+    background-color: var(--persian-plum-900);
+    border-radius: 0.5rem;
+    cursor: default;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.6s ease-out 0.5s, transform 0.6s ease-out 0.5s;
+  }
+  === FIN BLOQUE ANIDADO === */
+
+
+/* === DUPLICADOS del primer bloque - mismas reglas existen en la versión plana abajo ===
+.opciones-compra.visible .opciones-compra__link {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.opciones-compra.has-active .opciones-compra__link {
+  opacity: 0;
+  display: none;
+}
+=== FIN DUPLICADOS === */
+
+/* === SELECTORES GENÉRICOS COMENTADOS - supersedidos por .opciones-compra__options .* abajo ===
+
+.hover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 105%;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.hover-overlay.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.left-overlay {
+  background-color: var(--persian-plum-200);
+  border-radius: 30px;
+}
+
+.right-overlay {
+  background-color: var(--persian-plum-900);
+  border-radius: 30px;
+}
+
+.opciones-compra__link.active:nth-child(1) ~ .left-overlay {
+  opacity: 1;
+}
+
+.opciones-compra__link.active:nth-child(2) ~ .right-overlay {
+  opacity: 1;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hover-overlay.active .overlay-text {
+  opacity: 1;
+}
+
+.right-overlay .overlay-text {
+  color: var(--persian-plum-100);
+}
+
+.opciones-compra__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  cursor: pointer;
+  z-index: 1;
+}
+=== FIN SELECTORES GENÉRICOS === */
+
+/* ============================================== 
+   RESPONSIVE - De mayor a menor
+   ============================================== */
+
+/* === DUPLICADOS COMENTADOS (backdrop y .opciones-compra repetidos) ===
+.opciones-compra__backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.opciones-compra {
+  position: sticky;
+  top: 14%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-top: 8rem;
+  padding-bottom: 25rem;
+
+  background-color: var(--persian-plum-100);
+  border-radius: 60px 60px 0px 0px;
+
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+=== FIN DUPLICADOS === */
+
+/* Estado visible para animación */
+.opciones-compra.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Título */
+.opciones-compra__title {
+  font-size: clamp(2.7rem, 6.7vw, 4.3rem);
+  font-weight: 700;
+  color: var(--persian-plum-900);
+  margin-top: 3rem;
+  /* margin-bottom: 1rem; */
+  
+  /* Animación inicial - quitar opacity: 0 para debug */
+  /* opacity: 0; */
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out 0.2s, transform 0.6s ease-out 0.2s;
+}
+
+.opciones-compra.visible .opciones-compra__title {
+  /* opacity: 1; */
+  transform: translateY(0);
+}
+
+/* Arrows con posicionamiento absoluto */
+
+.opciones-compra .curly-arrow {
+  position: absolute;
+  width: 17vw;
+  height: auto;
+  top: 24%;
+  transform: translateY(-50%);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.4,0,0.2,1) 0.1s;
+}
+
+.opciones-compra.visible .curly-arrow {
+  opacity: 1;
+  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1) 0.3s;
+}
+
+/* Flecha izquierda - apunta al botón izquierdo */
+.opciones-compra .arrow-left {
+  left: 36%;
+  margin-left: -200px;
+  /* top: 39%; */
+  transform: translateY(-50%) rotate(110deg);
+}
+
+/* Flecha derecha - apunta al botón derecho */
+.opciones-compra .arrow-right {
+  right: 35%;
+  margin-right: -200px;
+  /* top: 39%; */
+  transform: translateY(-50%) rotate(-110deg) scaleX(-1);
+}
+
+/* Contenedor de arrows (solo para mantener estructura, no afecta posición) */
+.opciones-compra__arrows {
+  display: none;
+}
+
+/* Contenedor de opciones */
+.opciones-compra__options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 15rem;
+  width: 100%;
+  position: relative;
+  height: 600px;
+  margin-top: 3rem;
+  border-radius: 60px 60px 100px 100px;
+  transition: margin 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  z-index: 10;
+}
+
+/* Estado activo del contenedor - empuja elementos cercanos */
+/* .opciones-compra__options.has-overlay-active {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+} */
+
+/* Links */
+
+.opciones-compra__link {
+  margin-bottom: 2.2rem;
+  font-size: clamp(1.6rem, 3.5vw, 2.0rem);
+  font-weight: 600;
+  color: var(--persian-plum-100);
+  text-decoration: none;
+  background-color: var(--persian-plum-900);
+  padding: 16px 22px;
+  border-radius: 0.5rem;
+  cursor: default;
+  opacity: 0;
+  display: block;
+  transform: scale(0.8);
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0.1s, transform 0.7s cubic-bezier(0.4,0,0.2,1) 0.1s;
+}
+
+.opciones-compra.visible .opciones-compra__link {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1) 0.3s, transform 0.6s cubic-bezier(0.4,0,0.2,1) 0.3s;
+}
+
+/* Ocultar flechas cuando hay un botón activo */
+.opciones-compra.has-active .curly-arrow {
+  opacity: 0;
+  transition: opacity 0.18s cubic-bezier(0.4,0,0.2,1) 0s;
+}
+
+/* Ocultar ambos links cuando hay uno activo */
+.opciones-compra.has-active .opciones-compra__link {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1) 0s;
+  /* display: none;  Se quita para permitir animación de salida */
+}
+
+/* Hover overlays */
+.opciones-compra__options .hover-overlay {
+  position: absolute;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  /* opacity: 0; */
+  transform: scale(0.8);
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: 20px;
+}
+
+/* Estado activo del overlay */
+.opciones-compra__options .hover-overlay.active {
+  opacity: 1;
+  scale: 1;
+  pointer-events: auto; /* Permite recibir eventos de mouse para el onMouseLeave */
+}
+
+.opciones-compra__options .left-overlay {
+  background-color: var(--persian-plum-200);
+  opacity: 0;
+  scale: 0;
+  transform-origin: 25% 65%;
+  transition: scale 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+}
+
+.opciones-compra__options .right-overlay {
+  background-color: var(--persian-plum-900);
+  opacity: 0;
+  scale: 0;
+  transform-origin: 75% 65%;
+  transition: scale 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+}
+
+.opciones-compra__link.active:nth-child(1) ~ .left-overlay {
+  opacity: 1;
+}
+
+.opciones-compra__link.active:nth-child(2) ~ .right-overlay {
+  opacity: 1;
+}
+
+/* Texto en el overlay */
+.opciones-compra__options .overlay-text {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  /* color: var(--persian-plum-900); */
+  text-align: center;  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Mostrar texto cuando el overlay está activo */
+.opciones-compra__options .hover-overlay.active .overlay-text {
+  opacity: 1;}
+
+/* Color específico para el texto en right-overlay */
+.opciones-compra__options .right-overlay .overlay-text {
+  color: var(--persian-plum-100);
+}

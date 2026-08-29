@@ -1,48 +1,50 @@
-import '../../../index.css'
-import { AnimatedSearch } from '../../icons/animatedSearch/AnimatedSearch.jsx'
+import './WithFunctions.css'
+import { useState, useEffect } from 'react'
+import { useInteraction } from '../../../context/InteractionContext'
 
 export const ButtonWithFunctions = ({ children, onClick, text, variant }) => {
-  const isSearch = variant === 'search';
+  const isSearch = variant === 'search'
+  const [open, setOpen] = useState(false)
+  const { setActive, clearActive, isActive } = useInteraction()
+
+  const searchId = 'search-input'
+
+  useEffect(() => {
+    if (!isActive(searchId) && open) {
+      setOpen(false)
+    }
+  }, [isActive, open, searchId])
+
+  const handleClick = (e) => {
+    if (isSearch) {
+      if (open) {
+        setOpen(false)
+        clearActive()
+      } else {
+        setActive(searchId)
+        setOpen(true)
+      }
+    }
+    if (onClick) onClick(e)
+  }
 
   return (
     <button
       type="button"
-      className={
-        [
-          // posicionamiento
-          'group flex flex-col items-center justify-center gap-1',
-          // modelaje de elemento
-          isSearch ? 'bg-transparent' : 'bg-[var(--persian-plum-950)]',
-          'px-3 py-2.5 rounded-3xl border-0 cursor-pointer',
-          // texto
-          isSearch ? '' : 'text-white',
-          // colores
-          isSearch
-            ? ''
-            : 'hover:bg-[var(--persian-plum-700)] hover:text-[var(--persian-plum-50)] active:bg-[var(--persian-plum-400)] active:text-[var(--persian-plum-950)]',
-          // miscelanea
-          'transition-colors duration-200 ease-in-out focus:outline-none'
-        ].join(' ')
-      }
-      onClick={onClick}
+      className={`btn ${isSearch ? 'btn--search' : 'btn--primary text-xl'}`}
+      onClick={handleClick}
     >
-      {isSearch ? <AnimatedSearch /> : (
+      {isSearch ? (
+        <i className="fa-solid fa-magnifying-glass text-[1.45rem]"></i>
+      ) : (
         children && (
-          <span className={
-            [
-              // texto
-              'text-xl transition-colors duration-200 ease-in-out',
-              isSearch
-                ? 'text-[var(--persian-plum-900)]'
-                : 'group-hover:text-[var(--persian-plum-50)] group-active:text-[var(--persian-plum-950)]'
-            ].join(' ')
-          }>
+          <span className="btn__icon">
             {children}
           </span>
         )
       )}
       {text && (
-        <span className="text-base font-semibold transition-colors duration-200 ease-in-out group-hover:text-[var(--persian-plum-50)] group-active:text-[var(--persian-plum-950)]">
+        <span className="btn__text">
           {text}
         </span>
       )}

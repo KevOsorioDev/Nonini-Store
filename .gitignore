@@ -12,12 +12,24 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.production
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
+
+# Database
+*.db
+*.db-journal
+*.sqlite
+server/uploads/*
+!server/uploads/.gitkeep
 *.ntvs*
 *.njsproj
 *.sln

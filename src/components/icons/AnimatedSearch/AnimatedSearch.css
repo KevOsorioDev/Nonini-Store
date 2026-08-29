@@ -1,0 +1,155 @@
+/* ================================================
+   ANIMATED SEARCH - Estilos para dropdown
+   Animación tipo dropdown para pantallas < 1500px
+   ================================================ */
+
+/* Contenedor principal - posición relativa para el dropdown */
+.animated-search-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* ================================================
+   DROPDOWN DEL INPUT DE BÚSQUEDA
+   Similar a la animación de .dropdown__menu
+   ================================================ */
+.search-dropdown {
+  /* Posicionamiento */
+  position: absolute;
+  right: 0;
+  top: 100%;
+
+  /* Box-sizing y tamaño */
+  min-width: 200px;
+  width: max-content;
+  padding: 0.5rem;
+
+  /* Estilo glassmorphism (igual que dropdown__menu) */
+  background: rgba(255, 255, 255);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  /* backdrop-filter: blur(24px) saturate(180%); */
+
+  /* Transiciones (igual que dropdown__menu) */
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  /* Z-index */
+  z-index: 1000;
+}
+
+/* Estado abierto del dropdown */
+.search-dropdown--open {
+  opacity: 1;
+  transform: scale(1) translateY(5px);
+  pointer-events: auto;
+}
+
+/* Estado cerrado del dropdown */
+.search-dropdown--closed {
+  opacity: 0;
+  transform: scale(0.95) translateY(-5px);
+  pointer-events: none;
+}
+
+/* Input dentro del dropdown */
+.search-dropdown__input {
+  /* Box-sizing y tamaño */
+  width: 100%;
+  min-width: 180px;
+  padding: 0.6rem 1rem;
+
+  /* Tipografía */
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--persian-plum-900, #4a1515);
+  font-family: inherit;
+
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(250, 250, 250, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.05);
+  backdrop-filter: blur(24px) saturate(180%);
+
+  /* Transiciones */
+  transform-origin: top right;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.search-dropdown__input::placeholder {
+  color: var(--persian-plum-400, #b87070);
+  font-weight: 400;
+}
+
+.search-dropdown__input:focus {
+  border-color: var(--persian-plum-500, #8b4545);
+  box-shadow: 0 0 0 3px rgba(139, 69, 69, 0.15);
+  outline: none;
+}
+
+/* ================================================
+   OCULTAR DROPDOWN EN PANTALLAS >= 1500px
+   En pantallas grandes, usamos la animación original
+   ================================================ */
+@media (min-width: 1500px) {
+  .search-dropdown {
+    display: none !important;
+  }
+}
+
+/* ================================================
+   REDUCIR TAMAÑO EN PANTALLAS < 1500px
+   Para que coincida con el tamaño de los dropdowns
+   ================================================ */
+@media (max-width: 1499px) {
+  .animated-search-container .mainbox {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .animated-search-container .search_icon {
+    font-size: 1em !important;
+  }
+}
+
+/* ================================================
+   PANTALLAS <= 1000px - Búsqueda más compacta
+   ================================================ */
+@media (max-width: 1000px) {
+  .animated-search-container .mainbox {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .animated-search-container .search_icon {
+    font-size: 0.85em !important;
+  }
+
+  .search-dropdown {
+    min-width: 170px;
+    padding: 0.4rem;
+  }
+
+  .search-dropdown__input {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.85rem;
+    min-width: 150px;
+  }
+}
+
+/* ================================================
+   RESPONSIVE - Ajustes para móviles
+   ================================================ */
+@media (max-width: 640px) {
+  .search-dropdown {
+    min-width: 180px;
+    right: 0;
+  }
+
+  .search-dropdown__input {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    min-width: 160px;
+  }
+}

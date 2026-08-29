@@ -1,117 +1,186 @@
-/* @import "tailwindcss"; */
+/* ==============================================
+   NAVBAR COMPONENT - Balance CSS + Tailwind
+   CSS: estructura, estados, transiciones
+   Tailwind: layout y spacing
+   ============================================== */
 
-
-
-/* @import '../../baseColors.css';
-
-.header {
+/* Base navbar */
+.main-navbar {
   position: fixed;
-  top: 0%;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, 0%);
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 100vw;
+  border-radius: 0;
+  transition-property: top, border-radius, width, background-color, padding, opacity, box-shadow;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.4, 1.5, 0.5, 1);
+}
+
+.main-navbar.main-navbar--scrolled {
+  top: 2.5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 87vw;
+  border-radius: 50px;
+  opacity: 1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  background-color: var(--persian-plum-50);
+}
+
+.main-navbar__content {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 
-  border-radius: 40px;
-  border: 1px solid var(--navbar-border);
+  gap: 3rem;
+  padding: 3vh 2vw;
+  width: 100%;
 
-  z-index: 100;
+  background: transparent;
 
-  transition:
-    top 0.7s cubic-bezier(.4,1.5,.5,1),
-    border-radius 0.7s cubic-bezier(.4,1.5,.5,1),
-    width 0.7s cubic-bezier(.4,1.5,.5,1),
-    background-color 0.7s cubic-bezier(.4,1.5,.5,1),
-    padding 0.7s cubic-bezier(.4,1.5,.5,1);
+  transition-property: width, padding;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.4, 1.5, 0.5, 1);
+}
 
-  .navbar {
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
+.main-navbar.main-navbar--scrolled .main-navbar__content {
+  width: 100%;
+  /* padding: 2vh 3vw; */
+}
 
-    
+.main-navbar__logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.main-navbar__logo-img {
+  width: clamp(2.75rem, 3rem, 3rem);
+  height: clamp(2.75rem, 3rem, 3rem);
+  object-fit: cover;
+}
+
+.main-navbar__center-menu {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  gap: 1.5vw;
+}
+
+.main-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+/* Ajustes especificos de actions */
+.main-navbar__actions .dropdown,
+.main-navbar__actions .dropdown__button {
+  min-width: auto;
+}
+
+.main-navbar__actions .dropdown {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.main-navbar__actions .dropdown__button {
+  padding: 0.35rem 0.5rem;
+  font-size: clamp(0.75rem, 0.75rem + 0.3vw, 0.9rem);
+}
+
+.main-navbar__actions .relative {
+  min-width: auto;
+  padding: 0 1px;
+}
+
+.main-navbar__actions .dropdown__menu {
+  min-width: 9rem;
+}
+
+/* Boton de carrito reducido */
+.main-navbar__actions .relative > .btn {
+  padding: 0.35rem 0.5rem;
+  min-width: 2.4rem;
+}
+
+/* ============================================== 
+   RESPONSIVE - De mayor a menor
+   ============================================== */
+
+@media (max-width: 1024px) {
+  .main-navbar.main-navbar--scrolled {
+    width: 95vw;
+  }
+}
+
+@media (max-width: 899px) {
+  .main-navbar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    border-radius: 0;
+    background-color: var(--persian-plum-50);
+    transition-property: top, border-radius, width, background-color, box-shadow;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0.4, 0.8, 0.5, 1);
+  }
+
+  .main-navbar.main-navbar--scrolled {
+    top: 1.5%;
     width: 97vw;
-    padding: 2vh 0;
+    border-radius: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    background-color: var(--persian-plum-50);
+  }
 
-    
-    font-size: 1.2rem;
-    font-weight: 600;
+  .main-navbar__content {
+    padding: 0.75rem 1rem;
+    gap: 1rem;
+    transition: padding 0.5s cubic-bezier(0.4, 0.8, 0.5, 1);
+  }
 
-    
-    background: none;
+  .main-navbar.main-navbar--scrolled .main-navbar__content {
+    padding: 0.6rem 1.25rem;
+  }
 
-    
-    transition:
-      top 0.7s cubic-bezier(.4,1.5,.5,1),
-      width 0.7s cubic-bezier(.4,1.5,.5,1),
-      justify-content 0.7s cubic-bezier(.4,1.5,.5,1),
-      padding 0.7s cubic-bezier(.4,1.5,.5,1),
-      background-color 0.5s cubic-bezier(.4,1.5,.5,1);
+  .main-navbar__groups,
+  .main-navbar__center-menu,
+  .main-navbar__actions {
+    display: none !important;
+  }
 
-    .left {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+  .main-navbar__logo {
+    flex: 1;
+  }
 
-      img {
-        width: 3rem;
-        height: 3rem;
-        object-fit: cover;
-        -----------------------------
-      }
-    }
-
-    .center-items {
-      display: flex;
-    }
-
-    .right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+  .main-navbar__logo-img {
+    width: 2.25rem;
+    height: 2.25rem;
   }
 }
 
-.header.transformed {
-  
-  top: 1%;
-  transform: translate(-50%, 0%);
+@media (max-width: 500px) {
+  .main-navbar.main-navbar--scrolled {
+    top: 0.5%;
+    width: 98vw;
+    border-radius: 25px;
+  }
 
-  
-  background-color: var(--navbar-bg-scrolled);
+  .main-navbar__content {
+    padding: 0.6rem 0.75rem;
+  }
 
-  
-  transition:
-    top 0.7s cubic-bezier(.4,1.5,.5,1),
-    opacity 0.7s cubic-bezier(.4,1.5,.5,1),
-    border-radius 0.7s cubic-bezier(.4,1.5,.5,1),
-    box-shadow 0.7s cubic-bezier(.4,1.5,.5,1),
-    width 0.7s cubic-bezier(.4,1.5,.5,1),
-    background-color 0.7s cubic-bezier(.4,1.5,.5,1),
-    padding 0.7s cubic-bezier(.4,1.5,.5,1);
-
-  .navbar {
-    
-    width: 87vw;
-    padding: 2vh 2vw;
-
-    
-    transition:
-      top 0.7s cubic-bezier(.4,1.5,.5,1),
-      width 0.7s cubic-bezier(.4,1.5,.5,1),
-      justify-content 0.7s cubic-bezier(.4,1.5,.5,1),
-      padding 0.7s cubic-bezier(.4,1.5,.5,1),
-      background-color 0.7s cubic-bezier(.4,1.5,.5,1);
+  .main-navbar__logo-img {
+    width: 2rem;
+    height: 2rem;
   }
 }
-
-@media (max-width: 1000px) {
-  .header{
-    top: 8%;
-  }
-}
- */

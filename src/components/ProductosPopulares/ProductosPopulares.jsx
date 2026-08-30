@@ -1,14 +1,22 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { productsData } from '../../data/products'
+import { productosService } from '../../services/api'
 import { DisenoPrendaLinks } from '../DisenoPrendaLinks/DisenoPrendaLinks'
 import './ProductosPopulares.css'
 
-const productosMuestra = productsData.slice(0, 8)
-
 export const ProductosPopulares = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const [productosMuestra, setProductosMuestra] = useState([])
   const sectionRef = useRef(null)
+
+  useEffect(() => {
+    productosService.obtenerTodos()
+      .then((lista) => {
+        const activos = (Array.isArray(lista) ? lista : []).filter((p) => p.activo !== false)
+        setProductosMuestra(activos.slice(0, 8))
+      })
+      .catch(() => setProductosMuestra([]))
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -67,7 +75,7 @@ export const ProductosPopulares = () => {
               className="productos-populares__card productos-populares__card--light"
             >
               <Link to={`/producto/${prod.id}`} className="productos-populares__card-main">
-                <img src={prod.imagen} alt={prod.nombre} />
+                <img src={prod.imagen || prod.imagenUrl || prod.disenoUrl} alt={prod.nombre} />
                 <h4>{prod.nombre}</h4>
                 <p>${prod.precio.toLocaleString()}</p>
               </Link>

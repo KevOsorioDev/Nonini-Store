@@ -83,14 +83,16 @@ const CategoriaPage = () => {
     .map((categoria) => ({
       ...categoria,
       productos: productos.filter((producto) =>
-        String(producto.categoriaId) === String(categoria.id) ||
-        String(producto.categoria?.id) === String(categoria.id)
+        producto.activo !== false && (
+          String(producto.categoriaId) === String(categoria.id) ||
+          String(producto.categoria?.id) === String(categoria.id)
+        )
       )
     }))
     .filter((seccion) => seccion.productos.length > 0)
 
   const sinCategoria = productos.filter((producto) =>
-    !producto.categoriaId && !producto.categoria?.id
+    producto.activo !== false && !producto.categoriaId && !producto.categoria?.id
   )
 
   const secciones = sinCategoria.length > 0

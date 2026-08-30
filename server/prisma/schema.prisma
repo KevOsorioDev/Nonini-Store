@@ -20,6 +20,29 @@ model Usuario {
   pedidos   Pedido[]
 }
 
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  nombre    String
+  slug      String     @unique
+  productos Producto[]
+}
+
+model Producto {
+  id           Int        @id @default(autoincrement())
+  nombre       String
+  descripcion  String?    @db.Text
+  precio       Float
+  activo       Boolean    @default(true)
+  imagenUrl    String?    @db.LongText
+  disenoUrl    String?    @db.LongText
+  disenoConfig Json?
+  talles       Json?
+  categoriaId  Int?
+  categoria    Categoria? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
 model Pedido {
   id                  Int      @id @default(autoincrement())
   codigo              String   @unique

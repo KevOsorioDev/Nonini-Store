@@ -28,7 +28,7 @@ app.use(cors({
     callback(null, false)
   }
 }))
-app.use(express.json())
+app.use(express.json({ limit: '8mb' }))
 app.use('/api', api)
 
 api.get('/salud', (_req, res) => {
@@ -50,9 +50,18 @@ export { app }
 
 export async function afterListen() {
   try {
-    const [{ default: authRoutes }, { default: pedidosRoutes }, { prisma }, bcryptMod] = await Promise.all([
+    const [
+      { default: authRoutes },
+      { default: pedidosRoutes },
+      { default: productosRoutes },
+      { default: categoriasRoutes },
+      { prisma },
+      bcryptMod
+    ] = await Promise.all([
       import('./routes/auth.js'),
       import('./routes/pedidos.js'),
+      import('./routes/productos.js'),
+      import('./routes/categorias.js'),
       import('./config/database.js'),
       import('bcryptjs')
     ])
@@ -60,7 +69,20 @@ export async function afterListen() {
 
     api.use('/auth', authRoutes)
     api.use('/pedidos', pedidosRoutes)
+    api.use('/productos', productosRoutes)
+    api.use('/categorias', categoriasRoutes)
     await prisma.$connect()
+
+    const hayCategorias = await prisma.categoria.count()
+    if (hayCategorias === 0) {
+      await prisma.categoria.createMany({
+        data: [
+          { nombre: 'Nike', slug: 'nike' },
+          { nombre: 'Mascotas', slug: 'mascotas' },
+          { nombre: 'Disney/Pixar', slug: 'disney-pixar' }
+        ]
+      })
+    }
 
     const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
     const password = process.env.ADMIN_PASSWORD || ''

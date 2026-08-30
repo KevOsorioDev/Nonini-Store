@@ -113,49 +113,52 @@ export const authService = {
 
 export const productosService = {
   obtenerTodos: async () => {
-    if (!API_ENABLED) return productsData.map(toCatalogProduct)
-    const response = await api.get('/productos')
-    return response.data
+    try {
+      const response = await api.get('/productos')
+      const data = response.data
+      return Array.isArray(data) ? data : data?.productos || []
+    } catch {
+      if (API_ENABLED) throw new Error('No se pudieron cargar los productos')
+      return productsData.map(toCatalogProduct)
+    }
   },
 
   buscar: async (query) => {
-    if (!API_ENABLED) return buscarProductosLocal(query)
-    const response = await api.get('/productos/buscar', {
-      params: { q: query }
-    })
-    return response.data
+    try {
+      const response = await api.get('/productos/buscar', { params: { q: query } })
+      return Array.isArray(response.data) ? response.data : []
+    } catch {
+      return buscarProductosLocal(query)
+    }
   },
 
   obtenerPorId: async (id) => {
-    if (!API_ENABLED) {
+    try {
+      const response = await api.get(`/productos/${id}`)
+      return response.data
+    } catch (error) {
       const local = getProductById(id)
-      if (!local) throw new Error('Producto no encontrado')
-      return toCatalogProduct(local)
+      if (local) return toCatalogProduct(local)
+      throw error
     }
-    const response = await api.get(`/productos/${id}`)
-    return response.data
   },
 
   crear: async (productoData) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.post('/productos', productoData)
     return response.data
   },
 
   actualizar: async (id, productoData) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.put(`/productos/${id}`, productoData)
     return response.data
   },
 
   eliminar: async (id) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.delete(`/productos/${id}`)
     return response.data
   },
 
   actualizarStock: async (id, talleData) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.patch(`/productos/${id}/stock`, talleData)
     return response.data
   }
@@ -165,40 +168,30 @@ export const productosService = {
 
 export const categoriasService = {
   obtenerTodas: async () => {
-    if (!API_ENABLED) return categoriasData
-    const response = await api.get('/categorias')
-    return response.data
+    try {
+      const response = await api.get('/categorias')
+      return Array.isArray(response.data) ? response.data : []
+    } catch {
+      return categoriasData
+    }
   },
 
   obtenerPorId: async (id) => {
-    if (!API_ENABLED) {
-      const categoria = categoriasData.find((cat) => String(cat.id) === String(id))
-      if (!categoria) throw new Error('Categoría no encontrada')
-      return {
-        ...categoria,
-        productos: productsData
-          .filter((product) => product.categoriaId === categoria.id)
-          .map(toCatalogProduct)
-      }
-    }
     const response = await api.get(`/categorias/${id}`)
     return response.data
   },
 
   crear: async (categoriaData) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.post('/categorias', categoriaData)
     return response.data
   },
 
   actualizar: async (id, categoriaData) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.put(`/categorias/${id}`, categoriaData)
     return response.data
   },
 
   eliminar: async (id) => {
-    if (!API_ENABLED) backendOffline()
     const response = await api.delete(`/categorias/${id}`)
     return response.data
   }

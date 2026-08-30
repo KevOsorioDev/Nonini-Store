@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
@@ -8,9 +7,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
-const prismaDir = path.join(root, 'server', 'prisma')
-fs.mkdirSync(prismaDir, { recursive: true })
-process.env.DATABASE_URL = `file:${path.join(prismaDir, 'dev.db')}`
 
 const run = (command, args) => {
   const result = spawnSync(command, args, {

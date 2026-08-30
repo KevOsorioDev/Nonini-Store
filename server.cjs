@@ -4,9 +4,6 @@ const path = require('path')
 
 const root = __dirname
 const distPath = path.join(root, 'dist')
-const prismaDir = path.join(root, 'server', 'prisma')
-fs.mkdirSync(prismaDir, { recursive: true })
-process.env.DATABASE_URL = `file:${path.join(prismaDir, 'dev.db')}`
 
 const PORT = Number(process.env.PORT) || 3000
 

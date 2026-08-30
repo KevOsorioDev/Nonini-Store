@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -31,11 +31,11 @@ model Pedido {
   clienteNombre       String
   clienteEmail        String
   clienteTelefono     String?
-  direccion           String?
+  direccion           String?  @db.VarChar(500)
   ciudad              String?
   provincia           String?
   codigoPostal        String?
-  notas               String?
+  notas               String?  @db.Text
   mpPreferenceId      String?
   mpPaymentId         String?
   emailClienteEnviado Boolean  @default(false)
@@ -55,5 +55,5 @@ model PedidoItem {
   color      String?
   cantidad   Int     @default(1)
   precio     Float
-  logoUrl    String?
+  logoUrl    String? @db.Text
 }

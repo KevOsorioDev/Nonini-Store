@@ -119,7 +119,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
     setFormData(prev => ({ ...prev, talles: newTalles }))
   }
 
-  const handleImagenChange = (e) => {
+  const handleImagenChange = async (e) => {
     const file = e.target.files[0]
     if (file) {
       // Validar tipo de archivo
@@ -135,12 +135,16 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       }
 
       // Crear preview
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImagenPreview(reader.result)
-        setFormData(prev => ({ ...prev, imagenUrl: reader.result }))
+      const localUrl = URL.createObjectURL(file)
+      setImagenPreview(localUrl)
+      try {
+        const url = await productosService.subirImagen(file)
+        setFormData((prev) => ({ ...prev, imagenUrl: url }))
+        setImagenPreview(url)
+      } catch {
+        toast.error('No se pudo subir la imagen')
+        setImagenPreview(null)
       }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -157,7 +161,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
     e.preventDefault()
   }
 
-  const handleDisenoChange = (e) => {
+  const handleDisenoChange = async (e) => {
     const file = e.target.files[0]
     if (file) {
       // Validar tipo de archivo
@@ -173,12 +177,16 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       }
 
       // Crear preview
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setDisenoPreview(reader.result)
-        setFormData(prev => ({ ...prev, disenoUrl: reader.result }))
+      const localUrl = URL.createObjectURL(file)
+      setDisenoPreview(localUrl)
+      try {
+        const url = await productosService.subirImagen(file)
+        setFormData((prev) => ({ ...prev, disenoUrl: url }))
+        setDisenoPreview(url)
+      } catch {
+        toast.error('No se pudo subir el diseño')
+        setDisenoPreview(null)
       }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -376,6 +384,11 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                   </option>
                 ))}
               </select>
+              {categorias.length === 0 && (
+                <p className="text-sm text-amber-700 mt-2">
+                  No hay categorías. Andá a la pestaña Categorías del admin y creá una (botón + Nueva Categoría).
+                </p>
+              )}
             </div>
 
             {/* Estado activo */}

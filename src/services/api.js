@@ -30,6 +30,9 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
+    }
     return config
   },
   (error) => {
@@ -161,6 +164,13 @@ export const productosService = {
   actualizarStock: async (id, talleData) => {
     const response = await api.patch(`/productos/${id}/stock`, talleData)
     return response.data
+  },
+
+  subirImagen: async (file) => {
+    const form = new FormData()
+    form.append('archivo', file)
+    const response = await api.post('/uploads', form)
+    return response.data.url
   }
 }
 
@@ -172,7 +182,7 @@ export const categoriasService = {
       const response = await api.get('/categorias')
       return Array.isArray(response.data) ? response.data : []
     } catch {
-      return categoriasData
+      return []
     }
   },
 

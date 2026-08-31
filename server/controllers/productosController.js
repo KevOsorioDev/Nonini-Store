@@ -104,6 +104,9 @@ export const crearProducto = async (req, res) => {
     })
     res.status(201).json(serializarProducto(producto))
   } catch (error) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({ error: 'Esa categoría no existe. Creala en Categorías.' })
+    }
     res.status(400).json({ error: error.message })
   }
 }

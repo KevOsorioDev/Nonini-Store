@@ -12,6 +12,15 @@ const slugify = (texto) =>
 
 export const listarCategorias = async (_req, res) => {
   try {
+    if ((await prisma.categoria.count()) === 0) {
+      await prisma.categoria.createMany({
+        data: [
+          { nombre: 'Nike', slug: 'nike' },
+          { nombre: 'Mascotas', slug: 'mascotas' },
+          { nombre: 'Disney/Pixar', slug: 'disney-pixar' }
+        ]
+      })
+    }
     const categorias = await prisma.categoria.findMany({
       orderBy: { nombre: 'asc' },
       include: { _count: { select: { productos: true } } }

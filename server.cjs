@@ -43,6 +43,16 @@ const sendFile = (res, filePath) => {
 const serveDist = (req, res) => {
   const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
 
+  if (urlPath.startsWith('/uploads/')) {
+    const filePath = path.normalize(path.join(root, 'server', urlPath))
+    if (!filePath.startsWith(path.join(root, 'server', 'uploads'))) {
+      send(res, 403, 'Forbidden', { 'Content-Type': 'text/plain; charset=utf-8' })
+      return
+    }
+    sendFile(res, filePath)
+    return
+  }
+
   if (urlPath === '/api/salud') {
     send(res, 200, JSON.stringify({ ok: true, servicio: 'nonini-store-backend' }), {
       'Content-Type': 'application/json; charset=utf-8'

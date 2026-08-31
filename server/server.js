@@ -11,6 +11,7 @@ const app = express()
 const api = express.Router()
 const enProduccion = process.env.NODE_ENV === 'production'
 const distPath = path.join(__dirname, '..', 'dist')
+const uploadsPath = path.join(__dirname, 'uploads')
 
 const origenesPermitidos = (process.env.FRONTEND_URL || 'http://localhost:5173')
   .split(',')
@@ -29,6 +30,7 @@ app.use(cors({
   }
 }))
 app.use(express.json({ limit: '8mb' }))
+app.use('/uploads', express.static(uploadsPath))
 app.use('/api', api)
 
 api.get('/salud', (_req, res) => {
@@ -55,6 +57,7 @@ export async function afterListen() {
       { default: pedidosRoutes },
       { default: productosRoutes },
       { default: categoriasRoutes },
+      { default: uploadsRoutes },
       { prisma },
       bcryptMod
     ] = await Promise.all([
@@ -62,6 +65,7 @@ export async function afterListen() {
       import('./routes/pedidos.js'),
       import('./routes/productos.js'),
       import('./routes/categorias.js'),
+      import('./routes/uploads.js'),
       import('./config/database.js'),
       import('bcryptjs')
     ])
@@ -71,6 +75,7 @@ export async function afterListen() {
     api.use('/pedidos', pedidosRoutes)
     api.use('/productos', productosRoutes)
     api.use('/categorias', categoriasRoutes)
+    api.use('/uploads', uploadsRoutes)
     await prisma.$connect()
 
     const hayCategorias = await prisma.categoria.count()

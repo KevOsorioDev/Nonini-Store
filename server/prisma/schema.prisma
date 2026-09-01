@@ -20,6 +20,14 @@ model Usuario {
   pedidos   Pedido[]
 }
 
+model Archivo {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  mime      String
+  datos     Bytes
+  createdAt DateTime @default(now())
+}
+
 model Categoria {
   id        Int        @id @default(autoincrement())
   nombre    String

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { productosService, categoriasService } from '../services/api'
 import { DisenoPrendaLinks } from '../components/DisenoPrendaLinks/DisenoPrendaLinks'
-import { lenis } from '../App.jsx'
+import { lenis } from '../lenis.js'
 import './CategoriaPage.css'
 
 const DESKTOP_MQ = '(min-width: 1024px)'

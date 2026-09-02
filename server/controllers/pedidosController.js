@@ -1,6 +1,7 @@
 import { prisma } from '../config/database.js'
 import { enviarAvisoPedido, enviarConfirmacionCliente } from '../config/email.js'
-import { crearPreferenciaPago, obtenerPagoMercadoPago } from '../config/mercadopago.js'
+import { crearPreferenciaPago, obtenerPagoMercadoPago, firmaWebhookValida } from '../config/mercadopago.js'
+import { nuevaClave } from '../utils/claves.js'
 
 const logoSeguro = (url) => {
   if (!url || typeof url !== 'string') return null
@@ -43,6 +44,14 @@ const serializarPedido = (pedido) => {
       }
     }))
   }
+}
+
+const puedeVerPedido = (req, pedido) => {
+  const token = String(req.query?.t || req.query?.token || req.body?.token || req.body?.accesoToken || '')
+  if (req.usuarioRol === 'admin') return true
+  if (req.usuarioId && pedido.usuarioId === req.usuarioId) return true
+  if (pedido.accesoToken && token && token === pedido.accesoToken) return true
+  return false
 }
 
 const buscarPedido = (codigoOId) => {
@@ -106,6 +115,7 @@ export const pagarMercadoPago = async (req, res) => {
     }
 
     const codigo = `NS-${Date.now().toString(36).toUpperCase()}`
+    const accesoToken = nuevaClave()
     const total = items.reduce(
       (sum, item) => sum + Number(item.precio || 0) * Number(item.cantidad || 1),
       0
@@ -114,6 +124,7 @@ export const pagarMercadoPago = async (req, res) => {
     const pedido = await prisma.pedido.create({
       data: {
         codigo,
+        accesoToken,
         usuarioId: req.usuarioId || null,
         estado: 'pendiente',
         total,
@@ -144,6 +155,7 @@ export const pagarMercadoPago = async (req, res) => {
 
     const preferencia = await crearPreferenciaPago({
       pedidoId: pedido.codigo,
+      accesoToken,
       items,
       cliente
     })
@@ -169,6 +181,7 @@ export const pagarMercadoPago = async (req, res) => {
     res.json({
       ok: true,
       pedidoId: pedido.codigo,
+      accesoToken,
       initPoint: preferencia.initPoint
     })
   } catch (error) {
@@ -207,6 +220,9 @@ const aplicarPagoMp = async (paymentId) => {
 
 export const webhookMercadoPago = async (req, res) => {
   try {
+    if (!firmaWebhookValida(req)) {
+      return res.sendStatus(401)
+    }
     const tipo = String(req.body?.type || req.query?.topic || req.body?.action || '')
     const paymentId = req.body?.data?.id || req.body?.id || (tipo.includes('merchant_order') ? null : req.query?.id)
     if (paymentId) {
@@ -224,7 +240,7 @@ export const confirmarPago = async (req, res) => {
     const { codigo } = req.params
     const paymentId = req.body?.paymentId || req.query?.payment_id || req.query?.collection_id
     const pedido = await buscarPedido(codigo)
-    if (!pedido) {
+    if (!pedido || !puedeVerPedido(req, pedido)) {
       return res.status(404).json({ error: 'Pedido no encontrado' })
     }
 
@@ -244,7 +260,7 @@ export const confirmarPago = async (req, res) => {
 export const obtenerPedido = async (req, res) => {
   try {
     const pedido = await buscarPedido(req.params.codigo)
-    if (!pedido) {
+    if (!pedido || !puedeVerPedido(req, pedido)) {
       return res.status(404).json({ error: 'Pedido no encontrado' })
     }
     res.json(serializarPedido(pedido))

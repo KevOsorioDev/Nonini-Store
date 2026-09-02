@@ -17,8 +17,8 @@ router.post('/webhook-mp', webhookMercadoPago)
 router.get('/webhook-mp', webhookMercadoPago)
 router.get('/mios', autenticar, obtenerMisPedidos)
 router.get('/admin', autenticarAdmin, obtenerPedidosAdmin)
-router.post('/:codigo/confirmar', confirmarPago)
+router.post('/:codigo/confirmar', autenticarOpcional, confirmarPago)
 router.patch('/:codigo/estado', autenticarAdmin, actualizarEstado)
-router.get('/:codigo', obtenerPedido)
+router.get('/:codigo', autenticarOpcional, obtenerPedido)
 
 export default router

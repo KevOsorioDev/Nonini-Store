@@ -2,6 +2,7 @@ import { Router } from 'express'
 import multer from 'multer'
 import { autenticarAdmin } from '../middleware/auth.js'
 import { prisma } from '../config/database.js'
+import { nuevaClave } from '../utils/claves.js'
 
 const router = Router()
 
@@ -19,8 +20,11 @@ const upload = multer({
 
 router.get('/:id', async (req, res) => {
   try {
-    const archivo = await prisma.archivo.findUnique({
-      where: { id: Number(req.params.id) }
+    const clave = String(req.params.id)
+    const archivo = await prisma.archivo.findFirst({
+      where: Number.isInteger(Number(clave)) && String(Number(clave)) === clave
+        ? { OR: [{ clave }, { id: Number(clave) }] }
+        : { clave }
     })
     if (!archivo) {
       return res.status(404).json({ error: 'Archivo no encontrado' })
@@ -44,12 +48,13 @@ router.post('/', autenticarAdmin, (req, res) => {
     try {
       const archivo = await prisma.archivo.create({
         data: {
+          clave: nuevaClave(),
           nombre: req.file.originalname || 'imagen',
           mime: req.file.mimetype || 'image/png',
           datos: req.file.buffer
         }
       })
-      res.json({ url: `/api/uploads/${archivo.id}` })
+      res.json({ url: `/api/uploads/${archivo.clave}` })
     } catch (err) {
       res.status(500).json({ error: err.message })
     }

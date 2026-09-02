@@ -65,10 +65,8 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       })
       setImagenPreview(producto.imagenUrl)
       setDisenoPreview(producto.disenoUrl)
-      
-      // Cargar configuración de diseño guardada
+
       if (disenoConfig) {
-        // Cargar valores para la prenda y preset actuales
         const currentCfg = disenoConfig[previewPrenda]?.[positionPreset] || disenoConfig.Buzo?.centro
         if (currentCfg) {
           setTempPos({ top: currentCfg.top, left: currentCfg.left })
@@ -86,7 +84,6 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       setTempPos({ top: cfg.top, left: cfg.left })
       setTempSize(cfg.size || 120)
     } else {
-      // Si no hay configuración guardada, usar valores por defecto según el preset
       const defaultPositions = {
         izquierda: { top: 15, left: 25, size: 120 },
         centro: { top: 15, left: 50, size: 120 },

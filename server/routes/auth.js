@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { autenticar } from '../middleware/auth.js'
+import { limitarIntentos } from '../middleware/limite.js'
 import {
   registro,
   login,
@@ -10,8 +11,8 @@ import {
 
 const router = Router()
 
-router.post('/registro', registro)
-router.post('/login', login)
+router.post('/registro', limitarIntentos(), registro)
+router.post('/login', limitarIntentos(), login)
 router.get('/perfil', autenticar, perfil)
 router.put('/perfil', autenticar, actualizarPerfil)
 router.put('/cambiar-password', autenticar, cambiarPassword)

@@ -91,7 +91,6 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`)
-  console.log(`dist existe: ${fs.existsSync(path.join(distPath, 'index.html'))}`)
 })
 
 setImmediate(() => {
@@ -99,7 +98,6 @@ setImmediate(() => {
     .then(({ app, afterListen }) => {
       if (typeof app === 'function') {
         handler = app
-        console.log('Express listo')
       }
       if (typeof afterListen === 'function') {
         return afterListen()

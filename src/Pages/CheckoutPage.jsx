@@ -195,7 +195,7 @@ export const CheckoutPage = () => {
 
     try {
       setPagando(true)
-      const { initPoint } = await pedidosService.pagarMercadoPago({
+      const { initPoint, pedidoId, accesoToken } = await pedidosService.pagarMercadoPago({
         items: cart.map((item) => ({
           productoId: item.id,
           nombre: item.nombre,
@@ -216,6 +216,10 @@ export const CheckoutPage = () => {
 
       if (!initPoint) {
         throw new Error('No se recibió el link de pago')
+      }
+
+      if (pedidoId && accesoToken) {
+        sessionStorage.setItem(`nonini-pedido-${pedidoId}`, accesoToken)
       }
 
       window.location.href = initPoint

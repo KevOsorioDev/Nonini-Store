@@ -1,23 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
-import Lenis from 'lenis'
 
 import { Navbar, Footer, InteractionProvider, HamburgerMenu } from './components/index.js'
 import { Carrito } from './components/Carrito/Carrito'
 import { CartProvider } from './context/CartContext'
 import { categoriasService } from './services/api'
+import './lenis.js'
 
 import './App.css'
-
-export const lenis = new Lenis()
-
-function raf(time) {
-  lenis.raf(time)
-  requestAnimationFrame(raf)
-}
-
-requestAnimationFrame(raf)
 
 const App = () => {
   const [categorias, setCategorias] = useState([])

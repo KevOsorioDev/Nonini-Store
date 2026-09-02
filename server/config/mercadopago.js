@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago'
 
 const accessToken = process.env.MP_ACCESS_TOKEN || ''
@@ -7,15 +8,16 @@ const client = new MercadoPagoConfig({
   accessToken
 })
 
-export const crearPreferenciaPago = async ({ pedidoId, items, cliente }) => {
+export const crearPreferenciaPago = async ({ pedidoId, items, cliente, accesoToken }) => {
   const frontend = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '')
   const preference = new Preference(client)
   const esLocal = frontend.includes('localhost') || frontend.includes('127.0.0.1')
+  const tokenQuery = accesoToken ? `?t=${encodeURIComponent(accesoToken)}` : ''
 
   const backUrls = {
-    success: `${frontend}/orden/${pedidoId}/exito`,
-    failure: `${frontend}/orden/${pedidoId}/fallo`,
-    pending: `${frontend}/orden/${pedidoId}/exito`
+    success: `${frontend}/orden/${pedidoId}/exito${tokenQuery}`,
+    failure: `${frontend}/orden/${pedidoId}/fallo${tokenQuery}`,
+    pending: `${frontend}/orden/${pedidoId}/exito${tokenQuery}`
   }
 
   const body = {
@@ -61,4 +63,20 @@ export const crearPreferenciaPago = async ({ pedidoId, items, cliente }) => {
 export const obtenerPagoMercadoPago = async (paymentId) => {
   const payment = new Payment(client)
   return payment.get({ id: paymentId })
+}
+
+export const firmaWebhookValida = (req) => {
+  const secreto = process.env.MP_WEBHOOK_SECRET
+  if (!secreto) return true
+
+  const xSignature = String(req.headers['x-signature'] || '')
+  const xRequestId = String(req.headers['x-request-id'] || '')
+  const dataId = String(req.query['data.id'] || req.body?.data?.id || '')
+  const ts = xSignature.split(',').find((parte) => parte.trim().startsWith('ts='))?.split('=')[1]
+  const v1 = xSignature.split(',').find((parte) => parte.trim().startsWith('v1='))?.split('=')[1]
+  if (!ts || !v1 || !dataId) return false
+
+  const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`
+  const calculada = crypto.createHmac('sha256', secreto).update(manifest).digest('hex')
+  return calculada === v1
 }

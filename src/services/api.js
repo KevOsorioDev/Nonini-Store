@@ -1,7 +1,6 @@
 import axios from 'axios'
 import {
   productsData,
-  categoriasData,
   getProductById,
   toCatalogProduct,
   buscarProductosLocal
@@ -255,13 +254,20 @@ export const pedidosService = {
     return response.data
   },
 
+  tokenPedido: (codigo) => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('t') || sessionStorage.getItem(`nonini-pedido-${codigo}`) || ''
+  },
+
   obtenerPorCodigo: async (codigo) => {
-    const response = await api.get(`/pedidos/${codigo}`)
+    const token = pedidosService.tokenPedido(codigo)
+    const response = await api.get(`/pedidos/${codigo}`, { params: token ? { t: token } : {} })
     return response.data
   },
 
   confirmarPago: async (codigo, paymentId) => {
-    const response = await api.post(`/pedidos/${codigo}/confirmar`, { paymentId })
+    const token = pedidosService.tokenPedido(codigo)
+    const response = await api.post(`/pedidos/${codigo}/confirmar`, { paymentId, token })
     return response.data
   }
 }

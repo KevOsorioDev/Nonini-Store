@@ -64,12 +64,12 @@ export const login = async (req, res) => {
       where: { email: email.trim().toLowerCase() }
     })
     if (!usuario) {
-      return res.status(401).json({ error: 'No existe una cuenta con este email' })
+      return res.status(401).json({ error: 'Email o contraseña incorrectos' })
     }
 
     const ok = await bcrypt.compare(password, usuario.password)
     if (!ok) {
-      return res.status(401).json({ error: 'Contraseña incorrecta' })
+      return res.status(401).json({ error: 'Email o contraseña incorrectos' })
     }
 
     res.json({

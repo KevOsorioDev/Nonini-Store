@@ -38,7 +38,6 @@ export const PagoExitoPage = () => {
     }
 
     confirmar()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ordenId])
 
   if (loading) {

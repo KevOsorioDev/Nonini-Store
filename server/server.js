@@ -37,6 +37,29 @@ api.get('/salud', (_req, res) => {
   res.json({ ok: true, servicio: 'nonini-store-backend' })
 })
 
+let marcarApiLista
+const apiLista = new Promise((resolve) => {
+  marcarApiLista = resolve
+})
+
+api.use(async (req, res, next) => {
+  try {
+    await apiLista
+    const { conectarPrisma } = await import('./config/database.js')
+    await conectarPrisma()
+    next()
+  } catch (error) {
+    const { resumenErrorDb, ipSaliente } = await import('./config/database.js')
+    const resumen = resumenErrorDb(error)
+    console.error('Prisma no disponible:', resumen)
+    res.status(503).json({
+      error: 'Base de datos no disponible',
+      ...resumen,
+      ipSaliente: await ipSaliente()
+    })
+  }
+})
+
 if (enProduccion) {
   app.use(express.static(distPath))
   app.use((req, res) => {
@@ -58,7 +81,7 @@ export async function afterListen() {
       { default: productosRoutes },
       { default: categoriasRoutes },
       { default: uploadsRoutes },
-      { prisma },
+      { prisma, conectarPrisma },
       bcryptMod
     ] = await Promise.all([
       import('./routes/auth.js'),
@@ -76,7 +99,8 @@ export async function afterListen() {
     api.use('/productos', productosRoutes)
     api.use('/categorias', categoriasRoutes)
     api.use('/uploads', uploadsRoutes)
-    await prisma.$connect()
+    marcarApiLista()
+    await conectarPrisma()
 
     const hayCategorias = await prisma.categoria.count()
     if (hayCategorias === 0) {
@@ -113,5 +137,6 @@ export async function afterListen() {
     })
   } catch (error) {
     console.error('Prisma/admin después del listen:', error)
+    marcarApiLista()
   }
 }

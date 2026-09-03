@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { productosService, categoriasService } from '../../services/api'
-import { ProductPreview } from '../ProductPreview/ProductPreview'
 import buzoFrente from '../../assets/images/buzo_frente.png'
 import remeraFrente from '../../assets/images/remera_frente.png'
 import remeraOver from '../../assets/images/remera_over.png'
@@ -41,6 +40,8 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
   })
   const [categorias, setCategorias] = useState([])
   const [loading, setLoading] = useState(false)
+  const [subiendoImagen, setSubiendoImagen] = useState(false)
+  const [subiendoDiseno, setSubiendoDiseno] = useState(false)
   const [imagenPreview, setImagenPreview] = useState(null)
   const [disenoPreview, setDisenoPreview] = useState(null)
   const [previewPrenda, setPreviewPrenda] = useState('Buzo')
@@ -134,13 +135,17 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       // Crear preview
       const localUrl = URL.createObjectURL(file)
       setImagenPreview(localUrl)
+      setSubiendoImagen(true)
       try {
         const url = await productosService.subirImagen(file)
         setFormData((prev) => ({ ...prev, imagenUrl: url }))
         setImagenPreview(url)
-      } catch {
-        toast.error('No se pudo subir la imagen')
+      } catch (error) {
+        toast.error(error.response?.data?.error || 'No se pudo subir la imagen')
         setImagenPreview(null)
+        setFormData((prev) => ({ ...prev, imagenUrl: '' }))
+      } finally {
+        setSubiendoImagen(false)
       }
     }
   }
@@ -176,13 +181,17 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
       // Crear preview
       const localUrl = URL.createObjectURL(file)
       setDisenoPreview(localUrl)
+      setSubiendoDiseno(true)
       try {
         const url = await productosService.subirImagen(file)
         setFormData((prev) => ({ ...prev, disenoUrl: url }))
         setDisenoPreview(url)
-      } catch {
-        toast.error('No se pudo subir el diseño')
+      } catch (error) {
+        toast.error(error.response?.data?.error || 'No se pudo subir el diseño')
         setDisenoPreview(null)
+        setFormData((prev) => ({ ...prev, disenoUrl: '' }))
+      } finally {
+        setSubiendoDiseno(false)
       }
     }
   }
@@ -229,6 +238,11 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (subiendoImagen || subiendoDiseno) {
+      toast.error('Esperá a que terminen de subir las imágenes')
+      return
+    }
 
     if (!formData.nombre || !formData.precio) {
       toast.error('Por favor completa nombre y precio')
@@ -306,7 +320,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
         </h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6">
+      <form onSubmit={handleSubmit} noValidate className="p-6">
         <div className="grid md:grid-cols-2 gap-6">
           {/* Columna izquierda */}
           <div className="space-y-4">
@@ -489,26 +503,9 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                 </div>
               )}
             </div>
-
-            {/* URL de imagen alternativa */}
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                O ingresa una URL de imagen
-              </label>
-              <input
-                type="url"
-                name="imagenUrl"
-                value={formData.imagenUrl}
-                onChange={(e) => {
-                  handleChange(e)
-                  if (e.target.value) {
-                    setImagenPreview(e.target.value)
-                  }
-                }}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--persian-plum-500)] focus:border-transparent"
-                placeholder="https://ejemplo.com/imagen.jpg"
-              />
-            </div>
+            {subiendoImagen && (
+              <p className="text-sm text-amber-700 mt-2">Subiendo imagen…</p>
+            )}
           </div>
         </div>
 
@@ -574,26 +571,9 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
               </div>
             )}
           </div>
-
-          {/* URL de diseño alternativa */}
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              O ingresa una URL del diseño
-            </label>
-            <input
-              type="url"
-              name="disenoUrl"
-              value={formData.disenoUrl}
-              onChange={(e) => {
-                handleChange(e)
-                if (e.target.value) {
-                  setDisenoPreview(e.target.value)
-                }
-              }}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--persian-plum-500)] focus:border-transparent"
-              placeholder="https://ejemplo.com/diseno.png"
-            />
-          </div>
+          {subiendoDiseno && (
+            <p className="text-sm text-amber-700 mt-2">Subiendo diseño…</p>
+          )}
           
           {/* Preview del diseño y controles - Layout similar a ProductPage */}
           <div className="mt-6 border-t border-gray-200 pt-6">
@@ -797,10 +777,10 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
           </button>
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || subiendoImagen || subiendoDiseno}
             className="flex-1 px-6 py-2 bg-[var(--persian-plum-600)] text-white rounded-lg hover:bg-[var(--persian-plum-700)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Guardando...' : producto ? 'Actualizar Producto' : 'Crear Producto'}
+            {loading ? 'Guardando...' : subiendoImagen || subiendoDiseno ? 'Subiendo imágenes...' : producto ? 'Actualizar Producto' : 'Crear Producto'}
           </button>
         </div>
       </form>

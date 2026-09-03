@@ -49,13 +49,13 @@ api.use(async (req, res, next) => {
     await conectarPrisma()
     next()
   } catch (error) {
-    const { resumenErrorDb, ipSaliente } = await import('./config/database.js')
+    const { resumenErrorDb } = await import('./config/database.js')
     const resumen = resumenErrorDb(error)
     console.error('Prisma no disponible:', resumen)
     res.status(503).json({
       error: 'Base de datos no disponible',
       ...resumen,
-      ipSaliente: await ipSaliente()
+      aviso: 'En hPanel poné DB_HOST=localhost y DATABASE_URL con host localhost. No uses srv801.hstgr.io desde Node.'
     })
   }
 })

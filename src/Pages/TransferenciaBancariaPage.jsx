@@ -8,7 +8,7 @@ const TransferenciaBancariaPage = () => {
   const [orden, setOrden] = useState(null)
   const [loading, setLoading] = useState(true)
   const [copiado, setCopiado] = useState(null)
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+  const API_URL = import.meta.env.PROD ? '' : 'http://localhost:5000'
 
   const datosBancarios = {
     banco: 'Banco Galicia',

@@ -232,12 +232,19 @@
     min-height: auto;
   }
 
+  .opciones-compra__choice {
+    gap: 0.6rem;
+    width: 100%;
+  }
+
   .opciones-compra .curly-arrow {
-    width: 7.5rem;
+    width: 6.5rem;
   }
 
   .opciones-compra__link {
+    width: min(100%, 22rem);
     max-width: 100%;
+    padding: 1.15rem 1.4rem;
   }
 
   .opciones-compra.has-active .opciones-compra__link {

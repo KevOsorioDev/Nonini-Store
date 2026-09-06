@@ -91,7 +91,7 @@
 
 @media (max-width: 1024px) {
   .productos-populares__row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

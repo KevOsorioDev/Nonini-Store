@@ -6,8 +6,9 @@ import {
   buscarProductosLocal
 } from '../data/products'
 
-const API_URL = import.meta.env.VITE_API_URL
-  || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api')
+const API_URL = import.meta.env.PROD
+  ? '/api'
+  : (import.meta.env.VITE_API_URL || 'http://localhost:5000/api')
 const API_ENABLED = import.meta.env.VITE_API_ENABLED === 'true'
 const API_ORIGIN = API_URL.replace(/\/api\/?$/, '')
 
@@ -127,8 +128,8 @@ export const productosService = {
   obtenerTodos: async () => {
     try {
       const response = await api.get('/productos')
-      const data = response.data
-      return Array.isArray(data) ? data : data?.productos || []
+      const data = Array.isArray(response.data) ? response.data : response.data?.productos || []
+      return data
     } catch {
       if (API_ENABLED) throw new Error('No se pudieron cargar los productos')
       return productsData.map(toCatalogProduct)

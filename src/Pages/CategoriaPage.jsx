@@ -172,6 +172,23 @@ const CategoriaPage = () => {
     }
 
     const onWheel = (event) => {
+      const row = rowRef.current
+      const overRow = row && (row === event.target || row.contains(event.target))
+
+      if (overRow && row.scrollWidth > row.clientWidth + 2) {
+        const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        const delta = horizontal ? event.deltaX : event.deltaY
+        const atStart = row.scrollLeft <= 0
+        const atEnd = row.scrollLeft + row.clientWidth >= row.scrollWidth - 2
+        const puedeMover = (delta < 0 && !atStart) || (delta > 0 && !atEnd) || horizontal
+        if (puedeMover) {
+          event.preventDefault()
+          event.stopPropagation()
+          row.scrollLeft += delta
+          return
+        }
+      }
+
       const list = seccionesRef.current
       const actual = seccionIndexRef.current
       const esUltima = actual >= list.length - 1
@@ -187,9 +204,34 @@ const CategoriaPage = () => {
       cambiarSeccion(siguiente, list)
     }
 
-    window.addEventListener('wheel', onWheel, { passive: false })
-    return () => window.removeEventListener('wheel', onWheel)
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true })
+    return () => window.removeEventListener('wheel', onWheel, { capture: true })
   }, [isDesktop, loading, secciones.length, searchQuery, setSearchParams])
+
+  useEffect(() => {
+    if (!isDesktop) return
+
+    const onMove = (event) => {
+      if (!dragRef.current.active || !rowRef.current) return
+      const dx = event.clientX - dragRef.current.startX
+      if (Math.abs(dx) <= 8) return
+      dragRef.current.moved = true
+      rowRef.current.scrollLeft = dragRef.current.startScroll - dx
+    }
+
+    const onUp = () => {
+      dragRef.current.active = false
+    }
+
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    window.addEventListener('pointercancel', onUp)
+    return () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+      window.removeEventListener('pointercancel', onUp)
+    }
+  }, [isDesktop, seccionIndex])
 
   useEffect(() => {
     if (loading || !categoriaId || isDesktop) return
@@ -210,32 +252,16 @@ const CategoriaPage = () => {
     }
   }
 
-  const onPointerMove = (event) => {
-    if (!dragRef.current.active || !rowRef.current) return
-    const dx = event.clientX - dragRef.current.startX
-    if (Math.abs(dx) > 12) {
-      if (!dragRef.current.moved) {
-        dragRef.current.moved = true
-        try {
-          rowRef.current.setPointerCapture(event.pointerId)
-        } catch {
-          dragRef.current.moved = true
-        }
-      }
-      rowRef.current.scrollLeft = dragRef.current.startScroll - dx
-    }
-  }
-
-  const onPointerUp = () => {
-    dragRef.current.active = false
-  }
-
   const onRowClickCapture = (event) => {
     if (dragRef.current.moved) {
       event.preventDefault()
       event.stopPropagation()
       dragRef.current.moved = false
     }
+  }
+
+  const onRowDragStart = (event) => {
+    event.preventDefault()
   }
 
   const seccionActual = secciones[seccionIndex] || secciones[0]
@@ -303,11 +329,10 @@ const CategoriaPage = () => {
             <div
               ref={rowRef}
               className="catalogo-row"
+              data-lenis-prevent
               onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              onPointerCancel={onPointerUp}
               onClickCapture={onRowClickCapture}
+              onDragStart={onRowDragStart}
             >
               {seccionActual.productos.map((producto) => (
                 <ProductoCard key={producto.id} producto={producto} />

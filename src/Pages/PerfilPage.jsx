@@ -114,7 +114,7 @@ const PerfilPage = () => {
 
   if (loading) {
     return (
-      <section className="w-[90vw] max-w-5xl mx-auto py-12">
+      <section className="w-[90vw] max-w-5xl mx-auto pt-28 pb-12">
         <p className="text-lg text-[var(--persian-plum-800)]">Cargando perfil...</p>
       </section>
     )
@@ -122,7 +122,7 @@ const PerfilPage = () => {
 
   if (error) {
     return (
-      <section className="w-[90vw] max-w-5xl mx-auto py-12">
+      <section className="w-[90vw] max-w-5xl mx-auto pt-28 pb-12">
         <p className="text-lg text-red-600">{error}</p>
       </section>
     )
@@ -134,11 +134,11 @@ const PerfilPage = () => {
   }
 
   return (
-    <section className="min-h-screen bg-gray-50 py-8">
+    <section className="min-h-screen bg-gray-50 pt-28 pb-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <h1 className="text-3xl font-bold text-[var(--persian-plum-900)]">Mi Perfil</h1>
               <p className="text-gray-600 mt-1">{perfil.email}</p>

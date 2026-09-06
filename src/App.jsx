@@ -24,12 +24,7 @@ const App = () => {
       const data = await categoriasService.obtenerTodas()
       setCategorias(data)
     } catch {
-      // Servidor no disponible - usar categorías por defecto
-      setCategorias([
-        { id: 1, nombre: 'Nike', slug: 'nike' },
-        { id: 2, nombre: 'Mascotas', slug: 'mascotas' },
-        { id: 3, nombre: 'Disney/Pixar', slug: 'disney-pixar' }
-      ])
+      setCategorias([])
     }
   }
 

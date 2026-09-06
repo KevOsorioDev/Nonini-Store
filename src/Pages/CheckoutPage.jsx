@@ -238,7 +238,7 @@ export const CheckoutPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--persian-plum-50)] py-10 sm:py-16 px-4">
+    <div className="min-h-screen bg-[var(--persian-plum-50)] pt-28 sm:pt-36 pb-10 sm:pb-16 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8 sm:mb-12">
           <img src={logo} alt="Nonini Store" className="h-14 sm:h-18 mx-auto mb-4 sm:mb-5" />

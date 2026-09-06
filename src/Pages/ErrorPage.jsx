@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useSitio } from '../context/SitioContext'
 
 export const ErrorPage = () => {
+  const { sitio } = useSitio()
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--persian-plum-50)] to-[var(--persian-plum-100)] px-4 py-8">
       <div className="text-center max-w-2xl">
@@ -62,13 +64,17 @@ export const ErrorPage = () => {
             >
               Productos
             </Link>
-            <span className="text-[var(--persian-plum-400)]">•</span>
-            <a
-              href="mailto:hola@nonini.com"
-              className="text-[var(--persian-plum-700)] hover:text-[var(--persian-plum-900)] hover:underline transition-colors"
-            >
-              Contacto
-            </a>
+            {sitio.email && (
+              <>
+                <span className="text-[var(--persian-plum-400)]">•</span>
+                <a
+                  href={`mailto:${sitio.email}`}
+                  className="text-[var(--persian-plum-700)] hover:text-[var(--persian-plum-900)] hover:underline transition-colors"
+                >
+                  Contacto
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

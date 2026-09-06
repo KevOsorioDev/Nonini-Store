@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { productosService } from '../../services/api'
+import { productosService, resolverUrl } from '../../services/api'
 import FormularioProducto from './FormularioProducto'
 
 const GestionProductos = () => {
@@ -157,7 +157,7 @@ const GestionProductos = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
                         <img
-                          src={producto.imagenUrl || '/images/placeholder.png'}
+                          src={resolverUrl(producto.imagenUrl) || '/images/placeholder.png'}
                           alt={producto.nombre}
                           className="w-12 h-12 object-contain rounded border border-gray-200"
                         />

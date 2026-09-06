@@ -1,3 +1,4 @@
+import { useSitio } from '../../context/SitioContext'
 import './ModernAccordion.css'
 
 const ChevronIcon = () => (
@@ -28,34 +29,19 @@ const AccordionItem = ({ id, title, content, isLast = false }) => (
   </div>
 )
 
-const accordionData = [
-  {
-    id: 'faq-diseno',
-    title: '¿Puedo mandar mi propio diseño?',
-    content: <p>Sí. Subís tu archivo, elegís prenda, talle y color, y nosotros lo bordamos.</p>
-  },
-  {
-    id: 'faq-envios',
-    title: '¿Cuánto tarda el envío?',
-    content: <p>Como cada prenda se hace a pedido, el tiempo habitual es de 3 a 5 días hábiles más el envío.</p>
-  },
-  {
-    id: 'faq-talles',
-    title: '¿Cómo elijo el talle?',
-    content: <p>Usamos talles S a XL. Si estás entre dos, te recomendamos ir al más holgado: las prendas son 100% algodón.</p>
-  }
-]
-
 export const ModernAccordion = () => {
+  const { sitio } = useSitio()
+  const faqs = sitio.faqs || []
+
   return (
     <div className="accordion-container">
-      {accordionData.map((item, index) => (
+      {faqs.map((item, index) => (
         <AccordionItem
-          key={item.id}
-          id={item.id}
-          title={item.title}
-          content={item.content}
-          isLast={index === accordionData.length - 1}
+          key={`${item.pregunta}-${index}`}
+          id={`faq-${index}`}
+          title={item.pregunta}
+          content={<p>{item.respuesta}</p>}
+          isLast={index === faqs.length - 1}
         />
       ))}
     </div>

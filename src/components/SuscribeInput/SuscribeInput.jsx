@@ -24,11 +24,12 @@ export const SuscribeInput = () => {
 
 const StyledWrapper = styled.div`
   .input-wrapper {
-    width: fit-content;
+    width: min(100%, 360px);
+    max-width: 100%;
     height: 45px;
     border-radius: 20px;
     padding: 5px;
-    box-sizing: content-box;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     background-color: var(--persian-plum-200);
@@ -41,12 +42,15 @@ const StyledWrapper = styled.div`
     transition: all 0.3s;
   }
   .input {
-    max-width: 300px;
+    flex: 1;
+    min-width: 0;
+    max-width: none;
     height: 100%;
     border: none;
     outline: none;
     padding-left: 15px;
     font-size: 1.05rem;
+    background: transparent;
   }
   .input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px var(--persian-plum-700) inset;

@@ -13,7 +13,8 @@ export const ProductPreview = ({
   selectedImage,
   sideSelected,
   logoUrl,
-  productConfig
+  productConfig,
+  logoPlaceholder = false
 }) => {
   if (!selectedImage) return null
   const isFirstSlide = selectedImage.id === 1
@@ -42,7 +43,7 @@ export const ProductPreview = ({
         className="absolute left-1/2 top-0 -translate-x-1/2 w-3/4 h-auto object-contain"
       />
 
-      {isFirstSlide && logoUrl && posicion && (
+      {isFirstSlide && posicion && logoUrl && (
         <img
           src={logoUrl}
           alt="Logo bordado"
@@ -57,6 +58,32 @@ export const ProductPreview = ({
             pointerEvents: 'none'
           }}
         />
+      )}
+      {isFirstSlide && posicion && !logoUrl && logoPlaceholder && (
+        <div
+          style={{
+            position: 'absolute',
+            top: posicion.top,
+            left: posicion.left,
+            transform: 'translateX(-50%)',
+            width: logoWidth,
+            aspectRatio: '1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0.4rem',
+            border: '2px dashed var(--persian-plum-700)',
+            background: 'rgba(253, 243, 243, 0.92)',
+            color: 'var(--persian-plum-900)',
+            fontSize: 'clamp(0.45rem, 1.4vw, 0.7rem)',
+            fontWeight: 700,
+            textAlign: 'center',
+            lineHeight: 1.25,
+            pointerEvents: 'none'
+          }}
+        >
+          acá va a estar tu diseño
+        </div>
       )}
     </div>
   )

@@ -4,8 +4,8 @@ export const CartItemPreview = ({ item, width = 96 }) => {
   const prendaUrl = item.prendaImagen || item.imagen
   const productConfig = {
     tamaño: {
-      width: `${item.logoSize ?? 80}px`,
-      height: `${item.logoSize ?? 80}px`
+      width: item.logoWidthPct || `${item.logoSize ?? 80}px`,
+      height: item.logoWidthPct || `${item.logoSize ?? 80}px`
     },
     posiciones: {
       custom: {

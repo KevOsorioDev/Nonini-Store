@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCart } from '../../context/useCart'
 import { authService } from '../../services/api'
+import { useSitio } from '../../context/SitioContext'
+import { linkWhatsapp } from '../../data/sitioDefaults'
 import './HamburgerMenu.css'
 
 export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
@@ -10,6 +12,8 @@ export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
   const { getCartCount } = useCart()
   const cartCount = getCartCount()
   const navigate = useNavigate()
+  const { sitio } = useSitio()
+  const whatsapp = linkWhatsapp(sitio.whatsapp)
 
   useEffect(() => {
     setUser(authService.getCurrentUser())
@@ -46,10 +50,12 @@ export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
     setExpandedSection(expandedSection === section ? null : section)
   }
 
-  const opcionesCategorias = categorias.map(cat => ({
-    label: cat.nombre,
-    onClick: () => handleNavigate(`/productos?categoria=${cat.id}`)
-  }))
+  const opcionesCategorias = (categorias || []).length > 0
+    ? categorias.map(cat => ({
+        label: cat.nombre,
+        onClick: () => handleNavigate(`/productos?categoria=${cat.id}`)
+      }))
+    : [{ label: 'Ver catálogo', onClick: () => handleNavigate('/productos') }]
 
   return (
     <>
@@ -107,18 +113,18 @@ export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
               <i className={`fa-solid fa-chevron-down hamburger-section__icon ${expandedSection === 'estilo' ? 'hamburger-section__icon--rotated' : ''}`}></i>
             </button>
             <div className={`hamburger-section__content ${expandedSection === 'estilo' ? 'hamburger-section__content--open' : ''}`}>
-              <button className="hamburger-section__item" onClick={() => handleNavigate('/producto/1')}>
+              <button className="hamburger-section__item" onClick={() => handleNavigate('/personalizar?prenda=Remera')}>
                 Remeras
               </button>
-              <button className="hamburger-section__item" onClick={() => handleNavigate('/producto/2')}>
+              <button className="hamburger-section__item" onClick={() => handleNavigate('/personalizar?prenda=Buzo')}>
                 Buzos
               </button>
             </div>
           </div>
 
-          {/* Sección: Contactanos */}
+          {(sitio.instagram || sitio.facebook || whatsapp || sitio.email) && (
           <div className="hamburger-section">
-            <button 
+            <button
               className={`hamburger-section__header ${expandedSection === 'contacto' ? 'hamburger-section__header--active' : ''}`}
               onClick={() => toggleSection('contacto')}
             >
@@ -126,14 +132,29 @@ export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
               <i className={`fa-solid fa-chevron-down hamburger-section__icon ${expandedSection === 'contacto' ? 'hamburger-section__icon--rotated' : ''}`}></i>
             </button>
             <div className={`hamburger-section__content ${expandedSection === 'contacto' ? 'hamburger-section__content--open' : ''}`}>
-              <button className="hamburger-section__item" onClick={() => handleExternalLink('https://instagram.com')}>
-                <i className="fa-brands fa-instagram"></i> Instagram
-              </button>
-              <button className="hamburger-section__item" onClick={() => handleExternalLink('https://facebook.com')}>
-                <i className="fa-brands fa-facebook"></i> Facebook
-              </button>
+              {sitio.instagram && (
+                <button className="hamburger-section__item" onClick={() => handleExternalLink(sitio.instagram)}>
+                  <i className="fa-brands fa-instagram"></i> Instagram
+                </button>
+              )}
+              {sitio.facebook && (
+                <button className="hamburger-section__item" onClick={() => handleExternalLink(sitio.facebook)}>
+                  <i className="fa-brands fa-facebook"></i> Facebook
+                </button>
+              )}
+              {whatsapp && (
+                <button className="hamburger-section__item" onClick={() => handleExternalLink(whatsapp)}>
+                  <i className="fa-brands fa-whatsapp"></i> WhatsApp
+                </button>
+              )}
+              {sitio.email && (
+                <button className="hamburger-section__item" onClick={() => { window.location.href = `mailto:${sitio.email}`; onClose() }}>
+                  <i className="fa-regular fa-envelope"></i> Email
+                </button>
+              )}
             </div>
           </div>
+          )}
 
           {/* Separador */}
           <div className="hamburger-divider"></div>

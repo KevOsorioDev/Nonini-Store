@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
-import { productosService, categoriasService } from '../services/api'
+import { productosService, categoriasService, resolverUrl } from '../services/api'
 import { DisenoPrendaLinks } from '../components/DisenoPrendaLinks/DisenoPrendaLinks'
 import { lenis } from '../lenis.js'
 import './CategoriaPage.css'
@@ -12,25 +12,34 @@ const ProductoCard = ({ producto }) => (
     <Link to={`/producto/${producto.id}`} className="catalogo-card__main">
       <div className="catalogo-card__img">
         <img
-          src={producto.imagenUrl || producto.imagen}
+          src={resolverUrl(producto.imagenUrl || producto.imagen)}
           alt={producto.nombre}
           draggable="false"
         />
       </div>
-      <h3 className="text-lg font-semibold text-[var(--persian-plum-900)] mb-1">
-        {producto.nombre}
-      </h3>
+      <h3 className="catalogo-card__nombre">{producto.nombre}</h3>
       {producto.descripcion && (
-        <p className="text-sm text-[var(--persian-plum-700)] mb-3 line-clamp-2">
-          {producto.descripcion}
-        </p>
+        <p className="catalogo-card__desc">{producto.descripcion}</p>
       )}
-      <p className="mt-auto text-xl font-bold text-[var(--persian-plum-800)]">
-        ${Number(producto.precio).toLocaleString()}
+      <p className="catalogo-card__precio">
+        ${Number(producto.precio).toLocaleString('es-AR')}
       </p>
     </Link>
     <DisenoPrendaLinks productId={producto.id} />
   </article>
+)
+
+const Vacio = ({ searchQuery }) => (
+  <div className="catalogo-vacio">
+    <p>
+      {searchQuery
+        ? 'No encontramos diseños con esa búsqueda.'
+        : 'Todavía no hay diseños en el catálogo. Mientras tanto podés crear el tuyo.'}
+    </p>
+    <Link to="/personalizar" className="catalogo-vacio__cta">
+      Crear mi diseño
+    </Link>
+  </div>
 )
 
 const CategoriaPage = () => {
@@ -210,7 +219,7 @@ const CategoriaPage = () => {
         try {
           rowRef.current.setPointerCapture(event.pointerId)
         } catch {
-          /* capture no disponible */
+          dragRef.current.moved = true
         }
       }
       rowRef.current.scrollLeft = dragRef.current.startScroll - dx
@@ -230,42 +239,39 @@ const CategoriaPage = () => {
   }
 
   const seccionActual = secciones[seccionIndex] || secciones[0]
+  const titulo = searchQuery ? `Resultados para “${searchQuery}”` : 'Nuestros diseños'
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[var(--persian-plum-50)] pt-32 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--persian-plum-900)]"></div>
+      <div className="catalogo-page catalogo-page--estado">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--persian-plum-900)]" />
       </div>
     )
   }
 
   if (secciones.length === 0) {
     return (
-      <div className="min-h-screen bg-[var(--persian-plum-50)] pt-32 px-4">
-        <p className="text-center text-[var(--persian-plum-700)] text-lg">
-          No hay productos para mostrar.
-        </p>
+      <div className="catalogo-page catalogo-page--estado">
+        <Vacio searchQuery={searchQuery} />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[var(--persian-plum-50)]">
-      <div className="lg:hidden pt-32 pb-16 px-4">
-        <h1 className="section-title">
-          {searchQuery ? `Resultados para "${searchQuery}"` : 'Nuestros diseños'}
-        </h1>
-        <div className="flex flex-col gap-16">
+    <div className="catalogo-page">
+      <div className="catalogo-mobile">
+        <header className="catalogo-page__header">
+          <h1 className="catalogo-page__titulo">{titulo}</h1>
+        </header>
+        <div className="catalogo-mobile__secciones">
           {secciones.map((seccion) => (
             <section
               key={seccion.id}
               id={`categoria-${seccion.id}`}
-              className="scroll-mt-32"
+              className="catalogo-mobile__seccion"
             >
-              <h2 className="text-2xl font-bold text-[var(--persian-plum-900)] mb-6">
-                {seccion.nombre}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <h2 className="catalogo-mobile__categoria">{seccion.nombre}</h2>
+              <div className="catalogo-grid">
                 {seccion.productos.map((producto) => (
                   <ProductoCard key={producto.id} producto={producto} />
                 ))}
@@ -275,11 +281,11 @@ const CategoriaPage = () => {
         </div>
       </div>
 
-      <div className="hidden lg:flex catalogo-desktop">
+      <div className="catalogo-desktop">
         {seccionActual && (
           <div className={`catalogo-desktop__viewport catalogo-seccion catalogo-seccion--${fase}`}>
             <h2 className="catalogo-desktop__titulo">
-              {seccionActual.nombre}
+              {searchQuery ? titulo : seccionActual.nombre}
             </h2>
             {secciones.length > 1 && (
               <div className="catalogo-progress" aria-hidden="true">

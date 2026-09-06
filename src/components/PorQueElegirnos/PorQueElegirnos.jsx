@@ -1,77 +1,37 @@
-import { useState, useEffect, useRef } from 'react'
 import './PorQueElegirnos.css'
+import fotoBordado from '../../assets/images/proceso-bordado.jpg'
+import fotoAlgodon from '../../assets/images/proceso-algodon.jpg'
+import fotoPedido from '../../assets/images/proceso-pedido.jpg'
+import { useSitio } from '../../context/SitioContext'
+import { resolverUrl } from '../../services/api'
 
-const reasons = [
-  {
-    id: 1,
-    text: '¡Diseñamos lo que más te guste! Al poder basarnos en los diseños que nos mandan los clientes, nos aseguramos de que tu prenda quede como vos la imagines.',
-    variant: 'primary'
-  },
-  {
-    id: 2,
-    text: 'Nuestras prendas utilizan materiales basados en 100% algodón, por lo que son de la mejor calidad.',
-    variant: 'secondary'
-  },
-  {
-    id: 3,
-    text: 'Cada prenda se trabaja a pedido. Cuidamos los detalles del bordado y te acompañamos en el proceso para que el resultado sea exactamente el que imaginaste.',
-    variant: 'tertiary'
-  }
-]
+const fallbacks = [fotoBordado, fotoAlgodon, fotoPedido]
 
 export const PorQueElegirnos = () => {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setIsVisible(true)
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    if (sectionRef.current) observer.observe(sectionRef.current)
-
-    const animar = () => {
-      const el = sectionRef.current
-      if (!el) return
-
-      const vh = window.innerHeight
-      const rectTop = el.getBoundingClientRect().top
-      const prog = Math.max(0, Math.min(1, (vh - rectTop) / (vh * 0.5)))
-      const anchoVw = 75 + 25 * prog
-
-      el.style.width = `${anchoVw}vw`
-      el.style.maxWidth = `${anchoVw}vw`
-    }
-
-    window.addEventListener('scroll', animar, { passive: true })
-    animar()
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('scroll', animar)
-    }
-  }, [])
+  const { sitio } = useSitio()
+  const reasons = (sitio.whyUs || []).map((reason, index) => ({
+    ...reason,
+    foto: resolverUrl(reason.imagenUrl) || fallbacks[index] || fallbacks[0]
+  }))
 
   return (
-    <section id="why-us" ref={sectionRef} className={`why-us flex flex-col items-center justify-center ${isVisible ? 'visible' : ''}`}>
-      <h3 className="why-us__title">
-        ¿Por qué elegirnos?
-      </h3>
-
-      <div className="why-us__grid flex gap-14 justify-center items-center">
-        {reasons.map(reason => (
-          <div 
-            key={reason.id}
-            className={`why-us__card why-us__card--${reason.variant}`}
-          >
-            {reason.text}
-          </div>
+    <section id="why-us" className="why-us home-stack__panel home-stack__panel--3">
+      <div className="home-stack__sheet">
+      <span className="home-stack__index">03</span>
+      <div className="home-stack__inner">
+      <h2 className="home-section-title">Por qué Nonini</h2>
+      <div className="why-us__grid">
+        {reasons.map((reason, index) => (
+          <article key={`${reason.titulo}-${index}`} className="why-us__card">
+            <div className="why-us__media">
+              <img src={reason.foto} alt="" />
+            </div>
+            <h3>{reason.titulo}</h3>
+            <p>{reason.texto}</p>
+          </article>
         ))}
+      </div>
+      </div>
       </div>
     </section>
   )

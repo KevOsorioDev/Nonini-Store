@@ -9,6 +9,16 @@ import {
 const API_URL = import.meta.env.VITE_API_URL
   || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api')
 const API_ENABLED = import.meta.env.VITE_API_ENABLED === 'true'
+const API_ORIGIN = API_URL.replace(/\/api\/?$/, '')
+
+export const resolverUrl = (url) => {
+  if (!url) return ''
+  if (/^(https?:|data:|blob:)/i.test(url)) return url
+  if (url.startsWith('/api/') && !import.meta.env.PROD) {
+    return `${API_ORIGIN}${url}`
+  }
+  return url
+}
 
 const backendOffline = () => {
   const error = new Error('Backend no disponible todavía')
@@ -244,6 +254,18 @@ export const ordenesService = {
   confirmarPagoTransferencia: async (ordenId) => {
     if (!API_ENABLED) backendOffline()
     const response = await api.post(`/ordenes/${ordenId}/confirmar-pago`)
+    return response.data
+  }
+}
+
+export const sitioService = {
+  obtener: async () => {
+    const response = await api.get('/sitio')
+    return response.data
+  },
+
+  guardar: async (datos) => {
+    const response = await api.put('/sitio', datos)
     return response.data
   }
 }

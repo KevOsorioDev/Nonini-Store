@@ -25,7 +25,7 @@
   width: 87vw;
   border-radius: 50px;
   opacity: 1;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
   background-color: var(--persian-plum-50);
 }
 
@@ -54,6 +54,20 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+}
+
+.main-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: var(--persian-plum-900);
+}
+
+.main-navbar__wordmark {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .main-navbar__logo-img {

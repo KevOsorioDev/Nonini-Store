@@ -16,6 +16,7 @@ import {
   PerfilPage,
   MisOrdenesPage,
   LegalPage,
+  PersonalizarPage,
 } from './Pages/indexPages.js'
 
 export const router = createBrowserRouter([
@@ -27,6 +28,7 @@ export const router = createBrowserRouter([
       { index: true, element: <MainPage /> },
       { path: "producto/:id", element: <ProductPage /> },
       { path: "productos", element: <CategoriaPage /> },
+      { path: "personalizar", element: <PersonalizarPage /> },
       { path: "terminos", element: <LegalPage /> },
       { path: "privacidad", element: <LegalPage /> },
       { path: "perfil", element: <PerfilPage /> },

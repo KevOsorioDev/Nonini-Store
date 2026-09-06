@@ -30,7 +30,7 @@ export const MisOrdenesPage = () => {
 
   if (loading) {
     return (
-      <section className="w-[90vw] max-w-5xl mx-auto py-12">
+      <section className="w-[90vw] max-w-5xl mx-auto pt-28 pb-12">
         <p className="text-lg text-[var(--persian-plum-800)]">Cargando órdenes...</p>
       </section>
     )
@@ -38,16 +38,16 @@ export const MisOrdenesPage = () => {
 
   if (error) {
     return (
-      <section className="w-[90vw] max-w-5xl mx-auto py-12">
+      <section className="w-[90vw] max-w-5xl mx-auto pt-28 pb-12">
         <p className="text-lg text-red-600">{error}</p>
       </section>
     )
   }
 
   return (
-    <section className="w-[90vw] max-w-6xl mx-auto py-12 flex flex-col gap-6">
-      <div className="flex items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-[var(--persian-plum-900)]">Mis órdenes</h1>
+    <section className="w-[90vw] max-w-6xl mx-auto pt-28 pb-12 flex flex-col gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[var(--persian-plum-900)]">Mis órdenes</h1>
         <button
           className="px-4 py-2 rounded-xl bg-[var(--persian-plum-500)] text-white text-sm font-semibold hover:bg-[var(--persian-plum-600)] transition-colors"
           onClick={() => navigate('/productos')}

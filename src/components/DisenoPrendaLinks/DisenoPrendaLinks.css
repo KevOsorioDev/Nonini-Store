@@ -36,11 +36,4 @@
 
 .diseno-prenda-links__row a:hover {
   background: var(--persian-plum-900);
-  transform: translateY(-1px);
-}
-
-.catalogo-card .diseno-prenda-links__row a,
-.productos-populares__card--light .diseno-prenda-links__row a {
-  background: var(--persian-plum-800);
-  color: var(--persian-plum-50);
 }

@@ -1,10 +1,27 @@
+.catalogo-page {
+  min-height: 100vh;
+}
+
+.catalogo-page--estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8.5rem 1.25rem 4rem;
+}
+
 .catalogo-card {
   display: flex;
   flex-direction: column;
-  background-color: var(--persian-plum-100);
-  border-radius: 1rem;
-  padding: 1.25rem;
-  transition: background-color 0.2s ease;
+  background: var(--surface-raised);
+  border: 1px solid var(--persian-plum-200);
+  border-radius: 1.15rem;
+  padding: 1.1rem;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.catalogo-card:hover {
+  border-color: var(--persian-plum-400);
+  transform: translateY(-3px);
 }
 
 .catalogo-card__main {
@@ -14,11 +31,6 @@
   min-height: 0;
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
-}
-
-.catalogo-card:hover {
-  background-color: var(--persian-plum-200);
 }
 
 .catalogo-card__img {
@@ -26,16 +38,131 @@
   align-items: center;
   justify-content: center;
   aspect-ratio: 1;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  background: var(--persian-plum-50);
 }
 
 .catalogo-card__img img {
-  max-height: 10rem;
-  width: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  padding: 0.85rem;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.catalogo-card:hover .catalogo-card__img img {
+  transform: scale(1.06);
+}
+
+.catalogo-card__nombre {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--persian-plum-900);
+}
+
+.catalogo-card__desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  color: var(--persian-plum-700);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.catalogo-card__precio {
+  margin: auto 0 0.35rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--persian-plum-800);
+}
+
+.catalogo-vacio {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--persian-plum-800);
+}
+
+.catalogo-vacio p {
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.catalogo-vacio__cta {
+  display: inline-block;
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  background: var(--persian-plum-700);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.catalogo-vacio__cta:hover {
+  background: var(--persian-plum-600);
+}
+
+.catalogo-mobile {
+  width: min(94vw, 1200px);
+  margin: 0 auto;
+  padding: 6.5rem 0 5rem;
+}
+
+.catalogo-page__header {
+  margin-bottom: 2rem;
+}
+
+.catalogo-page__titulo {
+  margin: 0;
+  font-size: clamp(2.1rem, 4.8vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.08;
+  color: var(--persian-plum-900);
+  text-align: center;
+}
+
+.catalogo-mobile__secciones {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.catalogo-mobile__seccion {
+  scroll-margin-top: 6.5rem;
+}
+
+.catalogo-mobile__categoria {
+  margin: 0 0 1.1rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--persian-plum-900);
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+
+.catalogo-desktop {
+  display: none;
 }
 
 @media (min-width: 1024px) {
+  .catalogo-mobile {
+    display: none;
+  }
+
+  .catalogo-page--estado {
+    padding-top: 8.5rem;
+  }
+
   .catalogo-desktop {
     height: 100vh;
     overflow: hidden;
@@ -155,6 +282,8 @@
   .catalogo-desktop .catalogo-card__img img {
     max-height: 100%;
     max-width: 100%;
+    width: auto;
+    height: auto;
   }
 
   .catalogo-progress {
@@ -181,8 +310,33 @@
   }
 }
 
-@media (max-width: 1023px) {
-  .catalogo-desktop {
-    display: none;
+@media (max-width: 520px) {
+  .catalogo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalogo-mobile {
+    padding-top: 6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .catalogo-card,
+  .catalogo-card__img img,
+  .catalogo-progress__thumb {
+    transition: none;
+  }
+
+  .catalogo-card:hover {
+    transform: none;
+  }
+
+  .catalogo-card:hover .catalogo-card__img img {
+    transform: none;
+  }
+
+  .catalogo-seccion--in,
+  .catalogo-seccion--out {
+    animation: none;
   }
 }

@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { DropDownButton, ButtonWithFunctions, useScrollEffect, UserIcon } from '../index'
 import { HamburgerButton } from './HamburgerButton'
 import { useCart } from '../../context/useCart'
-import { authService, categoriasService, productosService } from '../../services/api'
+import { authService, categoriasService, productosService, resolverUrl } from '../../services/api'
+import { useSitio } from '../../context/SitioContext'
+import { linkWhatsapp } from '../../data/sitioDefaults'
 import logo from '../../assets/images/nonini_logo.png'
 
 import './Navbar.css'
@@ -20,6 +22,7 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
   const { getCartCount } = useCart()
   const cartCount = getCartCount()
   const navigate = useNavigate()
+  const { sitio } = useSitio()
 
   useEffect(() => {
     setUser(authService.getCurrentUser())
@@ -63,11 +66,7 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
       setCategorias(data)
     } catch {
       // Servidor no disponible - usar categorías por defecto
-      setCategorias([
-        { id: 1, nombre: 'Nike', slug: 'nike' },
-        { id: 2, nombre: 'Mascotas', slug: 'mascotas' },
-        { id: 3, nombre: 'Disney/Pixar', slug: 'disney-pixar' }
-      ])
+      setCategorias([])
     }
   }
 
@@ -100,17 +99,26 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
     navigate('/login')
   }
 
-  const opcionesCategorias = categorias.map(cat => ({
-    label: cat.nombre,
-    onClick: () => navigate(`/productos?categoria=${cat.id}`)
-  }))
+  const opcionesCategorias = categorias.length > 0
+    ? categorias.map(cat => ({
+        label: cat.nombre,
+        onClick: () => navigate(`/productos?categoria=${cat.id}`)
+      }))
+    : [{ label: 'Ver catálogo', onClick: () => navigate('/productos') }]
+  const opcionesContacto = [
+    ...(sitio.instagram ? [{ label: 'Instagram', onClick: () => window.open(sitio.instagram, '_blank') }] : []),
+    ...(sitio.facebook ? [{ label: 'Facebook', onClick: () => window.open(sitio.facebook, '_blank') }] : []),
+    ...(linkWhatsapp(sitio.whatsapp) ? [{ label: 'WhatsApp', onClick: () => window.open(linkWhatsapp(sitio.whatsapp), '_blank') }] : []),
+    ...(sitio.email ? [{ label: 'Email', onClick: () => { window.location.href = `mailto:${sitio.email}` } }] : [])
+  ]
 
   return (
     <header className={`main-navbar ${transformed ? 'main-navbar--scrolled' : ''} flex items-center justify-center`}>
       <nav className="main-navbar__content">
         <div className="main-navbar__logo">
-          <Link to='/'>
-            <img src={logo} alt="Logo" className="main-navbar__logo-img" />
+          <Link to='/' className="main-navbar__brand">
+            <img src={logo} alt="" className="main-navbar__logo-img" />
+            <span className="main-navbar__wordmark">Nonini</span>
           </Link>
         </div>
 
@@ -125,20 +133,19 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
             <DropDownButton
               dropDownLabel="Creá tu estilo"
               options={[
-                { label: 'Remeras', onClick: () => navigate('/producto/1') },
-                { label: 'Buzos', onClick: () => navigate('/producto/2') }
+                { label: 'Remeras', onClick: () => navigate('/personalizar?prenda=Remera') },
+                { label: 'Buzos', onClick: () => navigate('/personalizar?prenda=Buzo') }
               ]}
               dropdownId="dropdown-estilo"
             />
 
-            <DropDownButton
-              dropDownLabel="Contactanos"
-              options={[
-                { label: 'Instagram', onClick: () => window.open('https://instagram.com', '_blank') },
-                { label: 'Facebook', onClick: () => window.open('https://facebook.com', '_blank') }
-              ]}
-              dropdownId="dropdown-contacto"
-            />
+            {opcionesContacto.length > 0 && (
+              <DropDownButton
+                dropDownLabel="Contactanos"
+                options={opcionesContacto}
+                dropdownId="dropdown-contacto"
+              />
+            )}
           </div>
 
           <div className="main-navbar__actions">
@@ -201,7 +208,7 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
                             className="flex items-center gap-3 p-3 hover:bg-gray-50 transition-colors"
                           >
                             <img
-                              src={producto.imagenUrl || '/placeholder.png'}
+                              src={resolverUrl(producto.imagenUrl || producto.imagen) || '/placeholder.png'}
                               alt={producto.nombre}
                               className="w-12 h-12 object-cover rounded-lg"
                               onError={(e) => {

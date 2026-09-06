@@ -3,6 +3,7 @@ import { useParams, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { ProductPreview } from '../components/ProductPreview/ProductPreview'
 import { productosService } from '../services/api'
+import { useSitio } from '../context/SitioContext'
 import { useCart } from '../context/useCart'
 import { getProductById, getProductConfig } from '../data/products'
 import buzoFrente from '../assets/images/buzo_frente.png'
@@ -28,11 +29,11 @@ const mapLocalProduct = (local) => ({
 })
 
 const colores = [
-    { name: 'Persian Plum 400', class: 'bg-[var(--persian-plum-400)]' },
-    { name: 'Persian Plum 700', class: 'bg-[var(--persian-plum-700)]' },
-    { name: 'Persian Plum 200', class: 'bg-[var(--persian-plum-200)]' },
-    { name: 'Persian Plum 900', class: 'bg-[var(--persian-plum-900)]' },
-    { name: 'Persian Plum 50', class: 'bg-[var(--persian-plum-50)] border border-[var(--persian-plum-400)]' }
+    { name: 'Blanco', class: 'bg-white border border-[var(--persian-plum-300)]' },
+    { name: 'Hueso', class: 'bg-[#f3ead8] border border-[#e2d4b8]' },
+    { name: 'Gris', class: 'bg-[#6b6b6b]' },
+    { name: 'Negro', class: 'bg-black' },
+    { name: 'Ciruela', class: 'bg-[var(--persian-plum-700)]' }
 ]
 
 const talles = ['S', 'M', 'L', 'XL']
@@ -50,6 +51,7 @@ export const ProductPage = () => {
 
     const { addToCart, updateCartItem } = useCart()
     const navigate = useNavigate()
+    const { sitio } = useSitio()
 
     const [product, setProduct] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -325,7 +327,7 @@ export const ProductPage = () => {
 
     return (
         <>
-            <section className='mt-12 md:mt-20 mb-16 md:mb-24 flex flex-col lg:flex-row gap-8 lg:gap-12 w-full max-w-7xl px-4 md:px-8 lg:px-12 mx-auto'>
+            <section className='pt-28 md:pt-36 mb-16 md:mb-24 flex flex-col lg:flex-row gap-8 lg:gap-12 w-full max-w-7xl px-4 md:px-8 lg:px-12 mx-auto'>
                 <div className='flex flex-col w-full lg:w-2/3'>
                     <div className='w-full'>
                         <div className="w-full max-w-3xl mx-auto rounded-2xl overflow-hidden">
@@ -617,8 +619,18 @@ export const ProductPage = () => {
                                 Materiales y cuidado
                             </span>
                             <p className='text-base md:text-lg mt-2 font-normal leading-relaxed'>
-                                100% algodón de alta calidad. Lavar a máquina con agua fría.
+                                {sitio.materialesTexto}
                             </p>
+                            {sitio.enviosTexto && (
+                                <>
+                                    <span className='text-xl md:text-2xl font-semibold mb-3 md:mb-4 mt-6'>
+                                        Envíos
+                                    </span>
+                                    <p className='text-base md:text-lg mt-2 font-normal leading-relaxed'>
+                                        {sitio.enviosTexto}
+                                    </p>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

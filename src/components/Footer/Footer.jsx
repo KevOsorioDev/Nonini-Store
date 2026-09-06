@@ -1,65 +1,85 @@
 import { Link } from 'react-router-dom'
 import { SuscribeInput } from '../SuscribeInput/SuscribeInput'
 import { ModernAccordion } from '../ModernAccordion/ModernAccordion.jsx'
+import { useSitio } from '../../context/SitioContext'
+import { linkWhatsapp } from '../../data/sitioDefaults'
 import './Footer.css'
 
-const helpLinks = [
-  { id: 1, label: 'Cómo comprar', href: '/productos' },
-  { id: 2, label: 'Envíos', href: '/#why-us' },
-  { id: 3, label: 'Cuidado de prendas', href: '/#why-us' },
-  { id: 4, label: 'Términos y condiciones', href: '/terminos' },
-  { id: 5, label: 'Privacidad', href: '/privacidad' }
-]
+const esExterno = (href) => /^https?:\/\//i.test(href)
 
 export const Footer = () => {
+  const { sitio } = useSitio()
+  const helpLinks = (sitio.helpLinks || []).filter((link) => link.label && link.href)
+  const whatsapp = linkWhatsapp(sitio.whatsapp)
+
   return (
-    <footer className='relative mt-45 footer-container'>
+    <footer className='relative mt-16 footer-container'>
       <div className='absolute top-0 w-[100%] h-auto flex justify-center items-center'>
         <div className="w-[85%] mx-auto border-t-2 border-[var(--persian-plum-300)] mb-8"></div>
       </div>
 
       <div className='footer-column footer-column--centered'>
         <span className='footer-title'>
-          ¡Suscribite para recibir ofertas!
+          {sitio.newsletterTitulo}
         </span>
         <SuscribeInput />
       </div>
 
       <div className='footer-column footer-column--centered'>
         <span className='footer-title'>Contacto</span>
-        <span className='footer-contact'>
-          <i className='fa-regular fa-envelope'></i>
-          <a
-            href='mailto:hola@nonini.com'
-            className='footer-email'
-          >
-            hola@nonini.com
-          </a>
-        </span>
-        <span className='footer-contact'>
-          <a href='https://instagram.com' target='_blank' rel='noreferrer' className='footer-link'>
-            <i className='fa-brands fa-instagram'></i> Instagram
-          </a>
-        </span>
-        <span className='footer-contact'>
-          <a href='https://facebook.com' target='_blank' rel='noreferrer' className='footer-link'>
-            <i className='fa-brands fa-facebook'></i> Facebook
-          </a>
-        </span>
+        {sitio.email && (
+          <span className='footer-contact'>
+            <i className='fa-regular fa-envelope'></i>
+            <a href={`mailto:${sitio.email}`} className='footer-email'>
+              {sitio.email}
+            </a>
+          </span>
+        )}
+        {sitio.telefono && (
+          <span className='footer-contact'>
+            <i className='fa-solid fa-phone'></i>
+            <a href={`tel:${sitio.telefono}`} className='footer-email'>
+              {sitio.telefono}
+            </a>
+          </span>
+        )}
+        {sitio.instagram && (
+          <span className='footer-contact'>
+            <a href={sitio.instagram} target='_blank' rel='noreferrer' className='footer-link'>
+              <i className='fa-brands fa-instagram'></i> Instagram
+            </a>
+          </span>
+        )}
+        {sitio.facebook && (
+          <span className='footer-contact'>
+            <a href={sitio.facebook} target='_blank' rel='noreferrer' className='footer-link'>
+              <i className='fa-brands fa-facebook'></i> Facebook
+            </a>
+          </span>
+        )}
+        {whatsapp && (
+          <span className='footer-contact'>
+            <a href={whatsapp} target='_blank' rel='noreferrer' className='footer-link'>
+              <i className='fa-brands fa-whatsapp'></i> WhatsApp
+            </a>
+          </span>
+        )}
       </div>
 
       <div className='footer-column'>
         <span className='footer-title'>
           Ayudas y links importantes
         </span>
-        {helpLinks.map(link => (
-          <Link
-            key={link.id}
-            to={link.href}
-            className="footer-link"
-          >
-            {link.label}
-          </Link>
+        {helpLinks.map((link) => (
+          esExterno(link.href) ? (
+            <a key={`${link.label}-${link.href}`} href={link.href} target='_blank' rel='noreferrer' className="footer-link">
+              {link.label}
+            </a>
+          ) : (
+            <Link key={`${link.label}-${link.href}`} to={link.href} className="footer-link">
+              {link.label}
+            </Link>
+          )
         ))}
       </div>
 

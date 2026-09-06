@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
-import { productosService, categoriasService } from '../../services/api'
+import { productosService, categoriasService, resolverUrl } from '../../services/api'
 import buzoFrente from '../../assets/images/buzo_frente.png'
 import remeraFrente from '../../assets/images/remera_frente.png'
 import remeraOver from '../../assets/images/remera_over.png'
@@ -455,7 +455,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
               {imagenPreview ? (
                 <div className="space-y-4">
                   <img
-                    src={imagenPreview}
+                    src={resolverUrl(imagenPreview)}
                     alt="Preview"
                     className="max-h-64 mx-auto object-contain rounded-lg"
                   />
@@ -593,7 +593,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                   {/* Diseño superpuesto */}
                   {(disenoPreview || formData.disenoUrl) && (
                     <img
-                      src={disenoPreview || formData.disenoUrl}
+                      src={resolverUrl(disenoPreview || formData.disenoUrl)}
                       alt="Diseño"
                       style={{
                         position: 'absolute',

@@ -81,6 +81,7 @@ export async function afterListen() {
       { default: productosRoutes },
       { default: categoriasRoutes },
       { default: uploadsRoutes },
+      { default: sitioRoutes },
       { prisma, conectarPrisma },
       bcryptMod
     ] = await Promise.all([
@@ -89,6 +90,7 @@ export async function afterListen() {
       import('./routes/productos.js'),
       import('./routes/categorias.js'),
       import('./routes/uploads.js'),
+      import('./routes/sitio.js'),
       import('./config/database.js'),
       import('bcryptjs')
     ])
@@ -99,8 +101,16 @@ export async function afterListen() {
     api.use('/productos', productosRoutes)
     api.use('/categorias', categoriasRoutes)
     api.use('/uploads', uploadsRoutes)
+    api.use('/sitio', sitioRoutes)
     marcarApiLista()
     await conectarPrisma()
+
+    try {
+      const { asegurarTablaAjuste } = await import('./controllers/sitioController.js')
+      await asegurarTablaAjuste()
+    } catch (error) {
+      console.error('No se pudo asegurar la tabla Ajuste:', error.message)
+    }
 
     const hayCategorias = await prisma.categoria.count()
     if (hayCategorias === 0) {

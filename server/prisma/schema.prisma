@@ -91,3 +91,9 @@ model PedidoItem {
   precio     Float
   logoUrl    String? @db.Text
 }
+
+model Ajuste {
+  clave     String   @id @db.VarChar(191)
+  valor     String   @db.LongText
+  updatedAt DateTime @updatedAt
+}

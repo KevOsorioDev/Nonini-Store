@@ -1,4 +1,5 @@
 export * from './MainPage.jsx'
+export * from './PersonalizarPage.jsx'
 export * from './ProductPage.jsx'
 export * from './ErrorPage.jsx'
 export * from './LoginPage.jsx'

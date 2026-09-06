@@ -154,8 +154,44 @@
   min-width: 0;
 }
 
-.catalogo-desktop {
-  display: none;
+.catalogo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0 auto 1.1rem;
+  padding: 0 1.5rem;
+}
+
+.catalogo-tab {
+  padding: 0.45rem 1rem;
+  min-height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: var(--persian-plum-100);
+  color: var(--persian-plum-900);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.catalogo-tab:hover {
+  background: var(--persian-plum-200);
+}
+
+.catalogo-tab.is-active {
+  background: var(--persian-plum-800);
+  color: var(--persian-plum-50);
+}
+
+.catalogo-vacio--seccion {
+  margin: auto;
+  padding: 2rem 1.25rem;
+}
+
+@media (max-width: 1023px) {
+  .catalogo-desktop {
+    display: none;
+  }
 }
 
 @media (min-width: 1024px) {

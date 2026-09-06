@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { productosService, categoriasService, resolverUrl } from '../services/api'
 import { DisenoPrendaLinks } from '../components/DisenoPrendaLinks/DisenoPrendaLinks'
@@ -29,13 +29,9 @@ const ProductoCard = ({ producto }) => (
   </article>
 )
 
-const Vacio = ({ searchQuery }) => (
-  <div className="catalogo-vacio">
-    <p>
-      {searchQuery
-        ? 'No encontramos diseños con esa búsqueda.'
-        : 'Todavía no hay diseños en el catálogo. Mientras tanto podés crear el tuyo.'}
-    </p>
+const Vacio = ({ texto, compacto }) => (
+  <div className={`catalogo-vacio${compacto ? ' catalogo-vacio--seccion' : ''}`}>
+    <p>{texto}</p>
     <Link to="/personalizar" className="catalogo-vacio__cta">
       Crear mi diseño
     </Link>
@@ -88,17 +84,15 @@ const CategoriaPage = () => {
     cargarCatalogo()
   }, [searchQuery])
 
-  const seccionesBase = categorias
-    .map((categoria) => ({
-      ...categoria,
-      productos: productos.filter((producto) =>
-        producto.activo !== false && (
-          String(producto.categoriaId) === String(categoria.id) ||
-          String(producto.categoria?.id) === String(categoria.id)
-        )
+  const seccionesBase = categorias.map((categoria) => ({
+    ...categoria,
+    productos: productos.filter((producto) =>
+      producto.activo !== false && (
+        String(producto.categoriaId) === String(categoria.id) ||
+        String(producto.categoria?.id) === String(categoria.id)
       )
-    }))
-    .filter((seccion) => seccion.productos.length > 0)
+    )
+  }))
 
   const sinCategoria = productos.filter((producto) =>
     producto.activo !== false && !producto.categoriaId && !producto.categoria?.id
@@ -120,10 +114,40 @@ const CategoriaPage = () => {
 
   useEffect(() => {
     if (loading || secciones.length === 0) return
-    if (!categoriaId) return
+    if (!categoriaId) {
+      setSeccionIndex(0)
+      return
+    }
     const idx = secciones.findIndex((s) => String(s.id) === String(categoriaId))
-    if (idx >= 0) setSeccionIndex(idx)
+    setSeccionIndex(idx >= 0 ? idx : 0)
   }, [loading, categoriaId, categorias, productos])
+
+  const irASeccion = useCallback((siguiente) => {
+    const list = seccionesRef.current
+    if (lockRef.current) return
+    if (siguiente < 0 || siguiente >= list.length) return
+    if (siguiente === seccionIndexRef.current) return
+
+    lockRef.current = true
+    setFase('out')
+
+    window.setTimeout(() => {
+      setSeccionIndex(siguiente)
+      seccionIndexRef.current = siguiente
+      setFase('in')
+      const seccion = list[siguiente]
+      if (seccion) {
+        const params = { categoria: String(seccion.id) }
+        if (searchQuery) params.q = searchQuery
+        setSearchParams(params, { replace: true })
+      }
+      if (rowRef.current) rowRef.current.scrollLeft = 0
+      window.scrollTo(0, 0)
+      window.setTimeout(() => {
+        lockRef.current = false
+      }, 480)
+    }, 280)
+  }, [searchQuery, setSearchParams])
 
   const esUltimaSeccion = secciones.length > 0 && seccionIndex >= secciones.length - 1
 
@@ -145,31 +169,6 @@ const CategoriaPage = () => {
 
   useEffect(() => {
     if (!isDesktop || loading || secciones.length === 0) return
-
-    const cambiarSeccion = (siguiente, list) => {
-      if (lockRef.current) return
-      if (siguiente < 0 || siguiente >= list.length) return
-
-      lockRef.current = true
-      setFase('out')
-
-      window.setTimeout(() => {
-        setSeccionIndex(siguiente)
-        seccionIndexRef.current = siguiente
-        setFase('in')
-        const seccion = list[siguiente]
-        if (seccion) {
-          const params = { categoria: String(seccion.id) }
-          if (searchQuery) params.q = searchQuery
-          setSearchParams(params, { replace: true })
-        }
-        if (rowRef.current) rowRef.current.scrollLeft = 0
-        window.scrollTo(0, 0)
-        window.setTimeout(() => {
-          lockRef.current = false
-        }, 480)
-      }, 380)
-    }
 
     const onWheel = (event) => {
       const row = rowRef.current
@@ -201,12 +200,12 @@ const CategoriaPage = () => {
       if (Math.abs(event.deltaY) < 12) return
 
       const siguiente = event.deltaY > 0 ? actual + 1 : actual - 1
-      cambiarSeccion(siguiente, list)
+      irASeccion(siguiente)
     }
 
     window.addEventListener('wheel', onWheel, { passive: false, capture: true })
     return () => window.removeEventListener('wheel', onWheel, { capture: true })
-  }, [isDesktop, loading, secciones.length, searchQuery, setSearchParams])
+  }, [isDesktop, loading, secciones.length, irASeccion])
 
   useEffect(() => {
     if (!isDesktop) return
@@ -278,14 +277,18 @@ const CategoriaPage = () => {
   if (secciones.length === 0) {
     return (
       <div className="catalogo-page catalogo-page--estado">
-        <Vacio searchQuery={searchQuery} />
+        <Vacio
+          texto={searchQuery
+            ? 'No encontramos diseños con esa búsqueda.'
+            : 'Todavía no hay diseños en el catálogo. Mientras tanto podés crear el tuyo.'}
+        />
       </div>
     )
   }
 
   return (
     <div className="catalogo-page">
-      <div className="catalogo-mobile">
+      <div className="catalogo-mobile lg:hidden">
         <header className="catalogo-page__header">
           <h1 className="catalogo-page__titulo">{titulo}</h1>
         </header>
@@ -297,22 +300,40 @@ const CategoriaPage = () => {
               className="catalogo-mobile__seccion"
             >
               <h2 className="catalogo-mobile__categoria">{seccion.nombre}</h2>
-              <div className="catalogo-grid">
-                {seccion.productos.map((producto) => (
-                  <ProductoCard key={producto.id} producto={producto} />
-                ))}
-              </div>
+              {seccion.productos.length === 0 ? (
+                <Vacio compacto texto={`Todavía no hay diseños en ${seccion.nombre}.`} />
+              ) : (
+                <div className="catalogo-grid">
+                  {seccion.productos.map((producto) => (
+                    <ProductoCard key={producto.id} producto={producto} />
+                  ))}
+                </div>
+              )}
             </section>
           ))}
         </div>
       </div>
 
-      <div className="catalogo-desktop">
+      <div className="catalogo-desktop hidden lg:flex">
         {seccionActual && (
           <div className={`catalogo-desktop__viewport catalogo-seccion catalogo-seccion--${fase}`}>
             <h2 className="catalogo-desktop__titulo">
               {searchQuery ? titulo : seccionActual.nombre}
             </h2>
+            {secciones.length > 1 && (
+              <div className="catalogo-tabs">
+                {secciones.map((seccion, index) => (
+                  <button
+                    key={seccion.id}
+                    type="button"
+                    className={`catalogo-tab${index === seccionIndex ? ' is-active' : ''}`}
+                    onClick={() => irASeccion(index)}
+                  >
+                    {seccion.nombre}
+                  </button>
+                ))}
+              </div>
+            )}
             {secciones.length > 1 && (
               <div className="catalogo-progress" aria-hidden="true">
                 <div className="catalogo-progress__track">
@@ -326,18 +347,22 @@ const CategoriaPage = () => {
                 </div>
               </div>
             )}
-            <div
-              ref={rowRef}
-              className="catalogo-row"
-              data-lenis-prevent
-              onPointerDown={onPointerDown}
-              onClickCapture={onRowClickCapture}
-              onDragStart={onRowDragStart}
-            >
-              {seccionActual.productos.map((producto) => (
-                <ProductoCard key={producto.id} producto={producto} />
-              ))}
-            </div>
+            {seccionActual.productos.length === 0 ? (
+              <Vacio compacto texto={`Todavía no hay diseños en ${seccionActual.nombre}.`} />
+            ) : (
+              <div
+                ref={rowRef}
+                className="catalogo-row"
+                data-lenis-prevent
+                onPointerDown={onPointerDown}
+                onClickCapture={onRowClickCapture}
+                onDragStart={onRowDragStart}
+              >
+                {seccionActual.productos.map((producto) => (
+                  <ProductoCard key={producto.id} producto={producto} />
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

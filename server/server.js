@@ -112,17 +112,6 @@ export async function afterListen() {
       console.error('No se pudo asegurar la tabla Ajuste:', error.message)
     }
 
-    const hayCategorias = await prisma.categoria.count()
-    if (hayCategorias === 0) {
-      await prisma.categoria.createMany({
-        data: [
-          { nombre: 'Nike', slug: 'nike' },
-          { nombre: 'Mascotas', slug: 'mascotas' },
-          { nombre: 'Disney/Pixar', slug: 'disney-pixar' }
-        ]
-      })
-    }
-
     const email = (process.env.ADMIN_EMAIL || '').trim().toLowerCase()
     const password = process.env.ADMIN_PASSWORD || ''
     if (!email) return

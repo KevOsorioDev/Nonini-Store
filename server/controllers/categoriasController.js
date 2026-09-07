@@ -12,15 +12,6 @@ const slugify = (texto) =>
 
 export const listarCategorias = async (_req, res) => {
   try {
-    if ((await prisma.categoria.count()) === 0) {
-      await prisma.categoria.createMany({
-        data: [
-          { nombre: 'Nike', slug: 'nike' },
-          { nombre: 'Mascotas', slug: 'mascotas' },
-          { nombre: 'Disney/Pixar', slug: 'disney-pixar' }
-        ]
-      })
-    }
     const categorias = await prisma.categoria.findMany({
       orderBy: { nombre: 'asc' },
       include: { _count: { select: { productos: true } } }
@@ -45,7 +36,7 @@ export const crearCategoria = async (req, res) => {
     res.status(201).json(categoria)
   } catch (error) {
     if (error.code === 'P2002') {
-      return res.status(409).json({ error: 'Ya existe una categoría con ese slug' })
+      return res.status(409).json({ error: 'Ya existe una categoría con ese nombre' })
     }
     res.status(500).json({ error: error.message })
   }
@@ -61,7 +52,7 @@ export const actualizarCategoria = async (req, res) => {
     res.json(categoria)
   } catch (error) {
     if (error.code === 'P2025') return res.status(404).json({ error: 'Categoría no encontrada' })
-    if (error.code === 'P2002') return res.status(409).json({ error: 'Ya existe una categoría con ese slug' })
+    if (error.code === 'P2002') return res.status(409).json({ error: 'Ya existe una categoría con ese nombre' })
     res.status(500).json({ error: error.message })
   }
 }

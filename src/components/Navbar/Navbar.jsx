@@ -102,7 +102,7 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
   const opcionesCategorias = categorias.length > 0
     ? categorias.map(cat => ({
         label: cat.nombre,
-        onClick: () => navigate(`/productos?categoria=${cat.id}`)
+        onClick: () => navigate(`/productos?categoria=${cat.slug || cat.id}`)
       }))
     : [{ label: 'Ver catálogo', onClick: () => navigate('/productos') }]
   const opcionesContacto = [

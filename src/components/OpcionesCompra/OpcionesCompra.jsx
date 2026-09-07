@@ -33,7 +33,7 @@ export const OpcionesCompra = () => {
   }, [])
 
   const elegirCatalogo = () => navigate('/productos')
-  const irACategoria = (id) => navigate(`/productos?categoria=${id}`)
+  const irACategoria = (cat) => navigate(`/productos?categoria=${cat.slug || cat.id}`)
   const elegirCrear = () => navigate('/personalizar')
   const cerrarVentana = () => setActiveLink(null)
 
@@ -72,7 +72,7 @@ export const OpcionesCompra = () => {
                       key={cat.id}
                       type="button"
                       className="opciones-compra__cat"
-                      onClick={() => irACategoria(cat.id)}
+                      onClick={() => irACategoria(cat)}
                     >
                       {cat.nombre}
                     </button>
@@ -105,7 +105,7 @@ export const OpcionesCompra = () => {
                       key={cat.id}
                       type="button"
                       className="opciones-compra__cat"
-                      onClick={() => irACategoria(cat.id)}
+                      onClick={() => irACategoria(cat)}
                     >
                       {cat.nombre}
                     </button>

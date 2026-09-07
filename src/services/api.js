@@ -130,8 +130,10 @@ export const productosService = {
       const response = await api.get('/productos')
       const data = Array.isArray(response.data) ? response.data : response.data?.productos || []
       return data
-    } catch {
-      if (API_ENABLED) throw new Error('No se pudieron cargar los productos')
+    } catch (error) {
+      if (error.response?.status === 503 || API_ENABLED) {
+        throw new Error('No se pudieron cargar los productos')
+      }
       return productsData.map(toCatalogProduct)
     }
   },
@@ -191,7 +193,8 @@ export const categoriasService = {
     try {
       const response = await api.get('/categorias')
       return Array.isArray(response.data) ? response.data : []
-    } catch {
+    } catch (error) {
+      if (error.response?.status === 503) throw error
       return []
     }
   },

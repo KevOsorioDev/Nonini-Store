@@ -45,6 +45,7 @@ const CategoriaPage = () => {
   const [categorias, setCategorias] = useState([])
   const [productos, setProductos] = useState([])
   const [loading, setLoading] = useState(true)
+  const [errorCarga, setErrorCarga] = useState(false)
   const [seccionIndex, setSeccionIndex] = useState(0)
   const [fase, setFase] = useState('in')
   const [isDesktop, setIsDesktop] = useState(
@@ -57,14 +58,19 @@ const CategoriaPage = () => {
     active: false,
     startX: 0,
     startScroll: 0,
-    moved: false
+    moved: false,
+    lastX: 0,
+    vel: 0
   })
   const seccionIndexRef = useRef(0)
   const seccionesRef = useRef([])
+  const filaAnim = useRef({ target: 0, current: 0, raf: 0 })
+  const empujarFila = useRef(() => {})
 
   useEffect(() => {
     const cargarCatalogo = async () => {
       try {
+        setErrorCarga(false)
         const [cats, prods] = await Promise.all([
           categoriasService.obtenerTodas(),
           searchQuery
@@ -74,6 +80,7 @@ const CategoriaPage = () => {
         setCategorias(Array.isArray(cats) ? cats : [])
         setProductos(Array.isArray(prods) ? prods : prods?.productos || [])
       } catch {
+        setErrorCarga(true)
         setCategorias([])
         setProductos([])
       } finally {
@@ -118,7 +125,9 @@ const CategoriaPage = () => {
       setSeccionIndex(0)
       return
     }
-    const idx = secciones.findIndex((s) => String(s.id) === String(categoriaId))
+    const idx = secciones.findIndex((s) =>
+      String(s.slug) === String(categoriaId) || String(s.id) === String(categoriaId)
+    )
     setSeccionIndex(idx >= 0 ? idx : 0)
   }, [loading, categoriaId, categorias, productos])
 
@@ -137,16 +146,20 @@ const CategoriaPage = () => {
       setFase('in')
       const seccion = list[siguiente]
       if (seccion) {
-        const params = { categoria: String(seccion.id) }
+        const params = { categoria: String(seccion.slug || seccion.id) }
         if (searchQuery) params.q = searchQuery
         setSearchParams(params, { replace: true })
       }
-      if (rowRef.current) rowRef.current.scrollLeft = 0
+      if (rowRef.current) {
+        rowRef.current.scrollLeft = 0
+        filaAnim.current.target = 0
+        filaAnim.current.current = 0
+      }
       window.scrollTo(0, 0)
       window.setTimeout(() => {
         lockRef.current = false
-      }, 480)
-    }, 280)
+      }, 320)
+    }, 220)
   }, [searchQuery, setSearchParams])
 
   const esUltimaSeccion = secciones.length > 0 && seccionIndex >= secciones.length - 1
@@ -168,6 +181,41 @@ const CategoriaPage = () => {
   }, [isDesktop, esUltimaSeccion])
 
   useEffect(() => {
+    const anim = filaAnim.current
+    const limitar = (row, valor) => {
+      const max = Math.max(0, row.scrollWidth - row.clientWidth)
+      return Math.min(max, Math.max(0, valor))
+    }
+    const tick = () => {
+      const row = rowRef.current
+      if (!row) {
+        anim.raf = 0
+        return
+      }
+      anim.current += (anim.target - anim.current) * 0.14
+      row.scrollLeft = anim.current
+      if (Math.abs(anim.target - anim.current) > 0.4) {
+        anim.raf = requestAnimationFrame(tick)
+      } else {
+        anim.current = anim.target
+        row.scrollLeft = anim.target
+        anim.raf = 0
+      }
+    }
+    empujarFila.current = (delta) => {
+      const row = rowRef.current
+      if (!row) return
+      if (!anim.raf) anim.current = row.scrollLeft
+      anim.target = limitar(row, (anim.raf ? anim.target : row.scrollLeft) + delta)
+      if (!anim.raf) anim.raf = requestAnimationFrame(tick)
+    }
+    return () => {
+      if (anim.raf) cancelAnimationFrame(anim.raf)
+      anim.raf = 0
+    }
+  }, [isDesktop, seccionIndex])
+
+  useEffect(() => {
     if (!isDesktop || loading || secciones.length === 0) return
 
     const onWheel = (event) => {
@@ -183,7 +231,7 @@ const CategoriaPage = () => {
         if (puedeMover) {
           event.preventDefault()
           event.stopPropagation()
-          row.scrollLeft += delta
+          empujarFila.current(delta * 1.25)
           return
         }
       }
@@ -213,13 +261,25 @@ const CategoriaPage = () => {
     const onMove = (event) => {
       if (!dragRef.current.active || !rowRef.current) return
       const dx = event.clientX - dragRef.current.startX
-      if (Math.abs(dx) <= 8) return
+      if (Math.abs(dx) <= 6) return
       dragRef.current.moved = true
+      dragRef.current.vel = dragRef.current.lastX - event.clientX
+      dragRef.current.lastX = event.clientX
+      if (filaAnim.current.raf) {
+        cancelAnimationFrame(filaAnim.current.raf)
+        filaAnim.current.raf = 0
+      }
       rowRef.current.scrollLeft = dragRef.current.startScroll - dx
+      filaAnim.current.current = rowRef.current.scrollLeft
+      filaAnim.current.target = rowRef.current.scrollLeft
     }
 
     const onUp = () => {
+      if (!dragRef.current.active) return
       dragRef.current.active = false
+      const inercia = dragRef.current.vel * 14
+      dragRef.current.vel = 0
+      if (Math.abs(inercia) > 4) empujarFila.current(inercia)
     }
 
     window.addEventListener('pointermove', onMove)
@@ -247,8 +307,12 @@ const CategoriaPage = () => {
       active: true,
       startX: event.clientX,
       startScroll: rowRef.current.scrollLeft,
-      moved: false
+      moved: false,
+      lastX: event.clientX,
+      vel: 0
     }
+    filaAnim.current.current = rowRef.current.scrollLeft
+    filaAnim.current.target = rowRef.current.scrollLeft
   }
 
   const onRowClickCapture = (event) => {
@@ -270,6 +334,14 @@ const CategoriaPage = () => {
     return (
       <div className="catalogo-page catalogo-page--estado">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--persian-plum-900)]" />
+      </div>
+    )
+  }
+
+  if (errorCarga) {
+    return (
+      <div className="catalogo-page catalogo-page--estado">
+        <Vacio texto="No se pudo cargar el catálogo. La base de datos no respondió. Probá de nuevo en unos segundos." />
       </div>
     )
   }

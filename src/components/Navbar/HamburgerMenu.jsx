@@ -53,7 +53,7 @@ export const HamburgerMenu = ({ categorias, onCartOpen, isOpen, onClose }) => {
   const opcionesCategorias = (categorias || []).length > 0
     ? categorias.map(cat => ({
         label: cat.nombre,
-        onClick: () => handleNavigate(`/productos?categoria=${cat.id}`)
+        onClick: () => handleNavigate(`/productos?categoria=${cat.slug || cat.id}`)
       }))
     : [{ label: 'Ver catálogo', onClick: () => handleNavigate('/productos') }]
 

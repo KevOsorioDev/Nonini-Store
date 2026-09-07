@@ -239,11 +239,11 @@
   }
 
   .catalogo-seccion--in {
-    animation: catalogoFadeIn 0.55s ease both;
+    animation: catalogoFadeIn 0.38s ease both;
   }
 
   .catalogo-seccion--out {
-    animation: catalogoFadeOut 0.4s ease both;
+    animation: catalogoFadeOut 0.22s ease both;
   }
 
   @keyframes catalogoFadeIn {
@@ -281,6 +281,8 @@
     user-select: none;
     touch-action: pan-x;
     overscroll-behavior-x: contain;
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--persian-plum-500) var(--persian-plum-200);
   }

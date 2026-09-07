@@ -189,7 +189,7 @@ const conectarAhora = async () => {
 
 export const conectarPrisma = () => {
   if (conexion) return conexion
-  if (ultimoError && Date.now() - ultimoFallo < 8000) {
+  if (ultimoError && Date.now() - ultimoFallo < 1500) {
     return Promise.reject(ultimoError)
   }
   conexion = conectarAhora().then((ok) => {

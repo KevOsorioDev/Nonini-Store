@@ -8,8 +8,7 @@ const GestionCategorias = () => {
   const [modalAbierto, setModalAbierto] = useState(false)
   const [categoriaEditando, setCategoriaEditando] = useState(null)
   const [formData, setFormData] = useState({
-    nombre: '',
-    slug: ''
+    nombre: ''
   })
 
   useEffect(() => {
@@ -29,41 +28,33 @@ const GestionCategorias = () => {
     }
   }
 
+  const slugDesdeNombre = (value) =>
+    value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim()
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }))
-
-    // Auto-generar slug si se está escribiendo el nombre
-    if (name === 'nombre' && !categoriaEditando) {
-      const slugGenerado = value
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') // Quitar acentos
-        .replace(/[^a-z0-9\s-]/g, '') // Quitar caracteres especiales
-        .replace(/\s+/g, '-') // Espacios a guiones
-        .replace(/-+/g, '-') // Múltiples guiones a uno solo
-        .trim()
-      
-      setFormData(prev => ({
-        ...prev,
-        slug: slugGenerado
-      }))
-    }
   }
 
   const abrirModal = (categoria = null) => {
     if (categoria) {
       setCategoriaEditando(categoria)
       setFormData({
-        nombre: categoria.nombre,
-        slug: categoria.slug
+        nombre: categoria.nombre
       })
     } else {
       setCategoriaEditando(null)
-      setFormData({ nombre: '', slug: '' })
+      setFormData({ nombre: '' })
     }
     setModalAbierto(true)
   }
@@ -71,24 +62,26 @@ const GestionCategorias = () => {
   const cerrarModal = () => {
     setModalAbierto(false)
     setCategoriaEditando(null)
-    setFormData({ nombre: '', slug: '' })
+    setFormData({ nombre: '' })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!formData.nombre.trim() || !formData.slug.trim()) {
-      toast.error('Nombre y slug son obligatorios')
+    const nombre = formData.nombre.trim()
+    if (!nombre) {
+      toast.error('El nombre es obligatorio')
       return
     }
 
     try {
+      const payload = { nombre, slug: slugDesdeNombre(nombre) }
       if (categoriaEditando) {
-        await categoriasService.actualizar(categoriaEditando.id, formData)
-        toast.success('Categoría actualizada exitosamente')
+        await categoriasService.actualizar(categoriaEditando.id, payload)
+        toast.success('Categoría actualizada')
       } else {
-        await categoriasService.crear(formData)
-        toast.success('Categoría creada exitosamente')
+        await categoriasService.crear(payload)
+        toast.success('Categoría creada')
       }
 
       cerrarModal()
@@ -142,13 +135,7 @@ const GestionCategorias = () => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                ID
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Nombre
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Slug
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Productos
@@ -161,24 +148,18 @@ const GestionCategorias = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {categorias.length === 0 ? (
               <tr>
-                <td colSpan="5" className="px-6 py-4 text-center text-gray-500">
+                <td colSpan="3" className="px-6 py-4 text-center text-gray-500">
                   No hay categorías creadas
                 </td>
               </tr>
             ) : (
               categorias.map((categoria) => (
                 <tr key={categoria.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {categoria.id}
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                     {categoria.nombre}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {categoria.slug}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {categoria._count?.productos || 0}
+                    {categoria.productos || categoria._count?.productos || 0}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                     <button
@@ -225,26 +206,6 @@ const GestionCategorias = () => {
                   placeholder="Ej: Remeras"
                   required
                 />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Slug (URL amigable) *
-                </label>
-                <input
-                  type="text"
-                  name="slug"
-                  value={formData.slug}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--persian-plum-500)]"
-                  placeholder="Ej: remeras"
-                  pattern="[a-z0-9-]+"
-                  title="Solo letras minúsculas, números y guiones"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Solo letras minúsculas, números y guiones
-                </p>
               </div>
 
               <div className="flex gap-3">

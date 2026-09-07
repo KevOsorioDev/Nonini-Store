@@ -55,7 +55,7 @@ const CampoImagen = ({ label, value, onChange }) => {
               Quitar
             </button>
           )}
-          <p className="text-xs text-gray-500">PNG o JPG hasta 5MB. Si no subís nada, el sitio usa la imagen de respaldo.</p>
+          <p className="text-xs text-gray-500">Foto PNG o JPG, hasta 5 MB. Si no subís ninguna, se deja la que ya está.</p>
         </div>
       </div>
     </div>
@@ -147,15 +147,15 @@ const GestionSitio = () => {
           </label>
           <label className="block text-sm font-medium text-gray-700">
             Instagram
-            <input className={`${inputClass} mt-1`} value={form.instagram} onChange={(e) => setCampo('instagram', e.target.value)} placeholder="https://instagram.com/tuusuario" />
+            <input className={`${inputClass} mt-1`} value={form.instagram} onChange={(e) => setCampo('instagram', e.target.value)} placeholder="Link de tu Instagram" />
           </label>
           <label className="block text-sm font-medium text-gray-700">
             Facebook
-            <input className={`${inputClass} mt-1`} value={form.facebook} onChange={(e) => setCampo('facebook', e.target.value)} placeholder="https://facebook.com/tuusuario" />
+            <input className={`${inputClass} mt-1`} value={form.facebook} onChange={(e) => setCampo('facebook', e.target.value)} placeholder="Link de tu Facebook" />
           </label>
           <label className="block text-sm font-medium text-gray-700 md:col-span-2">
-            WhatsApp (número o link)
-            <input className={`${inputClass} mt-1`} value={form.whatsapp} onChange={(e) => setCampo('whatsapp', e.target.value)} placeholder="54911… o https://wa.me/54911…" />
+            WhatsApp
+            <input className={`${inputClass} mt-1`} value={form.whatsapp} onChange={(e) => setCampo('whatsapp', e.target.value)} placeholder="Ej: 11 1234-5678" />
           </label>
         </div>
       </section>
@@ -227,7 +227,7 @@ const GestionSitio = () => {
 
       <section className="bg-white rounded-lg shadow-lg p-6 space-y-4">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold text-[var(--persian-plum-900)]">Links de ayuda (footer)</h3>
+          <h3 className="text-lg font-semibold text-[var(--persian-plum-900)]">Enlaces del pie de página</h3>
           <button
             type="button"
             onClick={() => agregarItem('helpLinks', { label: '', href: '/' })}
@@ -238,8 +238,8 @@ const GestionSitio = () => {
         </div>
         {(form.helpLinks || []).map((link, index) => (
           <div key={index} className="grid md:grid-cols-5 gap-3 items-center">
-            <input className={`${inputClass} md:col-span-2`} value={link.label} onChange={(e) => setListaItem('helpLinks', index, 'label', e.target.value)} placeholder="Etiqueta" />
-            <input className={`${inputClass} md:col-span-2`} value={link.href} onChange={(e) => setListaItem('helpLinks', index, 'href', e.target.value)} placeholder="/productos o https://…" />
+            <input className={`${inputClass} md:col-span-2`} value={link.label} onChange={(e) => setListaItem('helpLinks', index, 'label', e.target.value)} placeholder="Texto del enlace" />
+            <input className={`${inputClass} md:col-span-2`} value={link.href} onChange={(e) => setListaItem('helpLinks', index, 'href', e.target.value)} placeholder="Link de la página" />
             <button type="button" onClick={() => quitarItem('helpLinks', index)} className="text-sm text-red-600">Quitar</button>
           </div>
         ))}

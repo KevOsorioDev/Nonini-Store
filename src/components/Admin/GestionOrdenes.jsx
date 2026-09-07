@@ -122,14 +122,16 @@ const GestionOrdenes = () => {
                       </p>
                     </div>
                     <span className={`px-3 py-1 text-xs font-medium rounded-full bg-${getColorEstado(orden.estado)}-100 text-${getColorEstado(orden.estado)}-800`}>
-                      {orden.estado.toUpperCase()}
+                      {estadosDisponibles.find((e) => e.value === orden.estado)?.label || orden.estado}
                     </span>
                   </div>
                   <div className="text-right">
                     <p className="text-2xl font-bold text-[var(--persian-plum-900)]">
                       ${orden.total.toLocaleString()}
                     </p>
-                    <p className="text-sm text-gray-600">{orden.metodoPago}</p>
+                    <p className="text-sm text-gray-600">
+                      {orden.metodoPago === 'mercadopago' ? 'Mercado Pago' : orden.metodoPago === 'transferencia' ? 'Transferencia' : (orden.metodoPago || 'Pago')}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -216,10 +218,33 @@ const GestionOrdenes = () => {
                 </button>
               </div>
             </div>
-            <div className="p-6">
-              <pre className="text-sm bg-gray-50 p-4 rounded overflow-auto">
-                {JSON.stringify(ordenSeleccionada, null, 2)}
-              </pre>
+            <div className="p-6 space-y-4 text-sm text-gray-800">
+              <p><span className="text-gray-500">Cliente:</span> {ordenSeleccionada.clienteNombre || ordenSeleccionada.usuario?.nombre || '—'}</p>
+              <p><span className="text-gray-500">Email:</span> {ordenSeleccionada.clienteEmail || ordenSeleccionada.usuario?.email || '—'}</p>
+              {(ordenSeleccionada.clienteTelefono || ordenSeleccionada.usuario?.telefono) && (
+                <p><span className="text-gray-500">Teléfono:</span> {ordenSeleccionada.clienteTelefono || ordenSeleccionada.usuario?.telefono}</p>
+              )}
+              {(ordenSeleccionada.direccion || ordenSeleccionada.ciudad) && (
+                <p>
+                  <span className="text-gray-500">Envío:</span>{' '}
+                  {[ordenSeleccionada.direccion, ordenSeleccionada.ciudad, ordenSeleccionada.provincia, ordenSeleccionada.codigoPostal].filter(Boolean).join(', ')}
+                </p>
+              )}
+              {ordenSeleccionada.items?.length > 0 && (
+                <div>
+                  <p className="text-gray-500 mb-2">Prendas</p>
+                  <ul className="space-y-1">
+                    {ordenSeleccionada.items.map((item, index) => (
+                      <li key={index}>
+                        {item.cantidad}× {item.nombre || item.producto?.nombre}
+                        {item.talle ? ` · talle ${item.talle}` : ''}
+                        {item.prenda ? ` · ${item.prenda}` : ''}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <p className="font-semibold text-lg">Total: ${Number(ordenSeleccionada.total || 0).toLocaleString('es-AR')}</p>
             </div>
           </div>
         </div>

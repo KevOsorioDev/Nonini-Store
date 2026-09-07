@@ -216,7 +216,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
         }
       }
     }))
-    toast.success('Configuración de diseño guardada para ' + previewPrenda + ' (' + positionPreset + ')')
+    toast.success('Posición guardada')
   }
 
   const handleResetDisenoConfig = (prenda = previewPrenda, preset = positionPreset) => {
@@ -233,7 +233,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
     }))
     setTempPos({ top: defaults.top, left: defaults.left })
     setTempSize(defaults.size)
-    toast.success('Restablecido a valores por defecto para ' + prenda + ' (' + preset + ')')
+    toast.success('Posición restablecida')
   }
 
   const handleSubmit = async (e) => {
@@ -397,7 +397,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
               </select>
               {categorias.length === 0 && (
                 <p className="text-sm text-amber-700 mt-2">
-                  No hay categorías. Andá a la pestaña Categorías del admin y creá una (botón + Nueva Categoría).
+                  Todavía no hay categorías. Creá una en la pestaña Categorías.
                 </p>
               )}
             </div>
@@ -498,7 +498,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                     />
                   </label>
                   <p className="text-xs text-gray-500">
-                    PNG, JPG, GIF hasta 5MB
+                    Foto PNG o JPG, hasta 5 MB
                   </p>
                 </div>
               )}
@@ -566,7 +566,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                   />
                 </label>
                 <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF hasta 5MB (Logo o diseño a aplicar en el producto)
+                  PNG o JPG, hasta 5 MB
                 </p>
               </div>
             )}
@@ -724,7 +724,7 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                         onChange={(e) => setTempSize(parseInt(e.target.value) || 40)}
                         className="w-16 px-2 py-1 text-center border border-gray-300 rounded text-[var(--persian-plum-600)] font-bold"
                       />
-                      <span className="text-sm text-gray-500">px</span>
+                      <span className="text-sm text-gray-500">tamaño</span>
                     </label>
                     <input 
                       type="range" 
@@ -744,14 +744,14 @@ const FormularioProducto = ({ producto, onGuardar, onCancelar }) => {
                     onClick={handleSaveDisenoConfig} 
                     className="flex-1 px-4 py-2 bg-[var(--persian-plum-600)] text-white rounded-lg hover:bg-[var(--persian-plum-700)] transition-colors font-medium"
                   >
-                    💾 Guardar configuración
+                    Guardar posición
                   </button>
                   <button 
                     type="button" 
                     onClick={() => handleResetDisenoConfig(previewPrenda)} 
                     className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
                   >
-                    ↩ Restablecer
+                    Restablecer
                   </button>
                 </div>
 

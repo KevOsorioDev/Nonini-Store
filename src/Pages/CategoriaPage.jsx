@@ -341,7 +341,7 @@ const CategoriaPage = () => {
   if (errorCarga) {
     return (
       <div className="catalogo-page catalogo-page--estado">
-        <Vacio texto="No se pudo cargar el catálogo. La base de datos no respondió. Probá de nuevo en unos segundos." />
+        <Vacio texto="No se pudo cargar el catálogo. Probá de nuevo en unos segundos." />
       </div>
     )
   }

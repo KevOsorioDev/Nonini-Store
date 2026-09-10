@@ -16,7 +16,9 @@ const itemSignature = (item) => JSON.stringify({
   logoUrl: item.logoUrl || '',
   top: roundValue(item.logoPosition?.top ?? 0),
   left: roundValue(item.logoPosition?.left ?? 0),
-  size: roundValue(item.logoSize ?? 0)
+  size: roundValue(item.logoSize ?? 0),
+  anchoCm: roundValue(item.logoAnchoCm ?? 0),
+  altoCm: roundValue(item.logoAltoCm ?? 0)
 })
 
 const isSameCartItem = (a, b) => itemSignature(a) === itemSignature(b)

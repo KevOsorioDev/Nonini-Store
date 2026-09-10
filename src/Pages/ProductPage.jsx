@@ -9,6 +9,14 @@ import { getProductById, getProductConfig } from '../data/products'
 import buzoFrente from '../assets/images/buzo_frente.png'
 import remeraFrente from '../assets/images/remera_frente.png'
 import remeraOver from '../assets/images/remera_over.png'
+import {
+  anchoEnPreviewPct,
+  cmAPx,
+  largoMaximo,
+  largoMinimo,
+  leerMedidasImagen,
+  medidasDesdeLargo
+} from '../utils/disenoMedidas'
 
 const getBasePlaceholder = (prenda) => {
   if (prenda === 'Remera') return remeraFrente
@@ -41,7 +49,6 @@ const prendas = ['Remera', 'Buzo', 'Remera Oversize']
 const posicionesLogo = ['Izquierda', 'Centro', 'Derecha']
 
 export const ProductPage = () => {
-    // Obtener el ID del producto desde la URL
     const { id } = useParams()
     const productId = parseInt(id, 10)
     const location = useLocation()
@@ -64,7 +71,8 @@ export const ProductPage = () => {
     const [sideSelected, setSideSelected] = useState(cartEdit?.sideSelected || 'custom')
     const [cantidad, setCantidad] = useState(cartEdit?.cantidad || 1)
     const [logoPosition, setLogoPosition] = useState(cartEdit?.logoPosition || { top: 15, left: 50 })
-    const [logoSize, setLogoSize] = useState(cartEdit?.logoSize || 120)
+    const [largoCm, setLargoCm] = useState(cartEdit?.logoAnchoCm || 8)
+    const [imagenPx, setImagenPx] = useState({ w: 1, h: 1 })
 
     const aplicarConfigLocal = (local, prenda, lado = 'centro') => {
         const config = getProductConfig(local.id, prenda)
@@ -76,9 +84,7 @@ export const ProductPage = () => {
                 left: parseFloat(pos.left)
             })
         }
-        if (config.tamaño?.width) {
-            setLogoSize(parseInt(config.tamaño.width, 10) || 120)
-        }
+
     }
 
     useEffect(() => {
@@ -128,7 +134,6 @@ export const ProductPage = () => {
                     const savedConfig = data.disenoConfig[selectedPrenda]?.[sideSelected] || data.disenoConfig.Buzo?.centro
                     if (savedConfig) {
                         setLogoPosition({ top: savedConfig.top, left: savedConfig.left })
-                        setLogoSize(savedConfig.size || 120)
                     }
                 }
             } catch {
@@ -177,21 +182,33 @@ export const ProductPage = () => {
             const savedConfig = product.disenoConfig[selectedPrenda]?.[sideSelected]
             if (savedConfig) {
                 setLogoPosition({ top: savedConfig.top, left: savedConfig.left })
-                setLogoSize(savedConfig.size || 120)
             } else {
-                // Valores por defecto si no hay configuración guardada
                 const defaults = {
-                    izquierda: { top: 15, left: 25, size: 120 },
-                    centro: { top: 15, left: 50, size: 120 },
-                    derecha: { top: 15, left: 75, size: 120 },
-                    custom: { top: 15, left: 50, size: 120 }
+                    izquierda: { top: 15, left: 25 },
+                    centro: { top: 15, left: 50 },
+                    derecha: { top: 15, left: 75 },
+                    custom: { top: 15, left: 50 }
                 }
                 const defaultConfig = defaults[sideSelected] || defaults.centro
                 setLogoPosition({ top: defaultConfig.top, left: defaultConfig.left })
-                setLogoSize(defaultConfig.size)
+
             }
         }
     }, [selectedPrenda, sideSelected, product?.disenoConfig])
+
+    useEffect(() => {
+        const src = cartEdit?.logoUrl || product?.disenoUrl || product?.imagen || product?.imagenUrl
+        if (!src) return
+        let cancelado = false
+        leerMedidasImagen(src).then((medidas) => {
+            if (cancelado) return
+            setImagenPx(medidas)
+            const max = largoMaximo(medidas.w, medidas.h)
+            const min = largoMinimo(medidas.w, medidas.h)
+            setLargoCm((actual) => Math.min(max, Math.max(min, actual)))
+        })
+        return () => { cancelado = true }
+    }, [product?.disenoUrl, product?.imagen, product?.imagenUrl, cartEdit?.logoUrl])
 
     if (loading) {
         return (
@@ -205,14 +222,19 @@ export const ProductPage = () => {
         return <Navigate to="/404" replace />
     }
 
-    // Valores derivados
     const itsFirstButtonSelected = selectedID === 1
     const logoUrl = product.disenoUrl || product.imagen || null
 
+    const minLargo = largoMinimo(imagenPx.w, imagenPx.h)
+    const maxLargo = largoMaximo(imagenPx.w, imagenPx.h)
+    const { altoCm, anchoCm } = medidasDesdeLargo(largoCm, imagenPx.w, imagenPx.h)
+    const anchoLogoPct = anchoEnPreviewPct(anchoCm)
+
     const productConfig = {
         tamaño: {
-            width: `${logoSize}px`,
-            height: `${logoSize}px`
+            width: anchoLogoPct,
+            height: 'auto',
+            aspectRatio: `${imagenPx.w} / ${imagenPx.h}`
         },
         posiciones: {
             izquierda: { top: `${logoPosition.top}%`, left: `${logoPosition.left}%` },
@@ -222,7 +244,6 @@ export const ProductPage = () => {
         }
     }
 
-    // Función para actualizar posición predefinida
     const handlePosicionPredefinida = (posicion) => {
         setSideSelected(posicion)
 
@@ -232,15 +253,12 @@ export const ProductPage = () => {
 
         if (savedConfig) {
             setLogoPosition({ top: savedConfig.top, left: savedConfig.left })
-            setLogoSize(savedConfig.size || 120)
         } else if (localPos) {
             setLogoPosition({
                 top: parseFloat(localPos.top),
                 left: parseFloat(localPos.left)
             })
-            if (localConfig.tamaño?.width) {
-                setLogoSize(parseInt(localConfig.tamaño.width, 10) || 120)
-            }
+
         } else {
             const defaults = {
                 izquierda: { top: 15, left: 25 },
@@ -272,7 +290,10 @@ export const ProductPage = () => {
             prendaImagen,
             logoUrl: logo,
             logoPosition: { top: Number(logoPosition.top), left: Number(logoPosition.left) },
-            logoSize: Number(logoSize),
+            logoSize: cmAPx(anchoCm),
+            logoAltoCm: altoCm,
+            logoAnchoCm: anchoCm,
+            logoWidthPct: anchoLogoPct,
             sideSelected,
             prenda: selectedPrenda,
             color: selectedColor,
@@ -534,25 +555,24 @@ export const ProductPage = () => {
 
                                     <div>
                                         <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
-                                            <span>Tamaño del diseño</span>
-                                            <input
-                                                type="number"
-                                                min="16"
-                                                max="250"
-                                                value={logoSize}
-                                                onChange={(e) => setLogoSize(parseInt(e.target.value) || 16)}
-                                                className="w-16 px-2 py-1 text-center border border-gray-300 rounded text-[var(--persian-plum-900)] font-bold"
-                                            />
-                                            <span className="text-sm text-gray-500">px</span>
+                                            <span>Largo del diseño</span>
+                                            <span className="font-bold text-[var(--persian-plum-900)]">{anchoCm} cm</span>
                                         </label>
                                         <input
                                             type="range"
-                                            min="16"
-                                            max="250"
-                                            value={logoSize}
-                                            onChange={(e) => setLogoSize(parseInt(e.target.value))}
+                                            min={minLargo}
+                                            max={maxLargo}
+                                            step="0.1"
+                                            value={anchoCm}
+                                            onChange={(e) => setLargoCm(parseFloat(e.target.value))}
                                             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[var(--persian-plum-600)]"
                                         />
+                                        <p className="mt-2 text-sm text-[var(--persian-plum-800)]">
+                                            Alto: <strong>{altoCm} cm</strong> (se calcula solo, sin deformar).
+                                        </p>
+                                        <p className="text-xs text-[var(--persian-plum-700)] mt-1">
+                                            Máximo: 18 cm de largo × 13 cm de alto. Mínimo: {minLargo} cm de largo.
+                                        </p>
                                     </div>
                                 </div>
                             </div>

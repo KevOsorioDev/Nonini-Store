@@ -147,6 +147,13 @@ h1, h2, h3, .section-title, .font-display {
   margin: 0 0 2.4rem;
 }
 
+@media (max-width: 900px) {
+  .home-section-title {
+    font-size: clamp(1.4rem, 6.2vw, 1.85rem);
+    margin: 0 0 0.95rem;
+  }
+}
+
 /* Contenedor de sección estándar */
 .section-container {
   width: 100%;
@@ -184,13 +191,75 @@ button:disabled, .btn:disabled, [role="button"]:disabled {
   cursor: not-allowed;
 }
 
+:is(
+  button,
+  .btn,
+  .btn-fill,
+  input[type="submit"],
+  input[type="button"],
+  .overlay-cta,
+  .opciones-compra__cat,
+  .opciones-compra__mobile-cta,
+  .opciones-compra__link,
+  .productos-populares__cta,
+  .catalogo-vacio__cta,
+  .diseno-prenda-links__row a,
+  .Subscribe-btn,
+  .hamburger-action-btn,
+  a.rounded-lg,
+  a.rounded-xl,
+  a.rounded-2xl,
+  a.rounded-full
+):not(.btn-plain):not(.hamburger-btn):not(.dropdown__button) {
+  --btn-fade-text: var(--persian-plum-900);
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+:is(
+  button,
+  .btn,
+  .btn-fill,
+  input[type="submit"],
+  input[type="button"],
+  .overlay-cta,
+  .opciones-compra__cat,
+  .opciones-compra__mobile-cta,
+  .opciones-compra__link,
+  .productos-populares__cta,
+  .catalogo-vacio__cta,
+  .diseno-prenda-links__row a,
+  .Subscribe-btn,
+  .hamburger-action-btn,
+  a.rounded-lg,
+  a.rounded-xl,
+  a.rounded-2xl,
+  a.rounded-full
+):not(.btn-plain):not(.hamburger-btn):not(.dropdown__button):is(:hover, :focus-visible) {
+  color: var(--btn-fade-text);
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.home-stack__panel--2,
+.home-stack__panel--3,
+.right-overlay {
+  --btn-fade-text: var(--persian-plum-50);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(button, .btn, .overlay-cta) {
+    transition: none;
+  }
+}
+
 .btn-primary {
   background-color: var(--accent);
   color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: var(--accent-hover);
   transform: translateY(-2px);
 }
 
@@ -199,9 +268,7 @@ button:disabled, .btn:disabled, [role="button"]:disabled {
   color: var(--persian-plum-900);
 }
 
-.btn-secondary:hover {
-  background-color: var(--persian-plum-300);
-}
+
 
 /* ==============================================
    RESPONSIVE UTILITIES

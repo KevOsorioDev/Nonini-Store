@@ -5,7 +5,10 @@ export const CartItemPreview = ({ item, width = 96 }) => {
   const productConfig = {
     tamaño: {
       width: item.logoWidthPct || `${item.logoSize ?? 80}px`,
-      height: item.logoWidthPct || `${item.logoSize ?? 80}px`
+      height: 'auto',
+      aspectRatio: item.logoAnchoCm && item.logoAltoCm
+        ? `${item.logoAnchoCm} / ${item.logoAltoCm}`
+        : '1 / 1'
     },
     posiciones: {
       custom: {

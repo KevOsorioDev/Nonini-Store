@@ -90,6 +90,8 @@ model PedidoItem {
   cantidad   Int     @default(1)
   precio     Float
   logoUrl    String? @db.Text
+  anchoCm    Float?
+  altoCm     Float?
 }
 
 model Ajuste {

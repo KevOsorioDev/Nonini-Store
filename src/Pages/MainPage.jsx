@@ -13,6 +13,7 @@ export const MainPage = () => {
         <OpcionesCompra />
         <ProductosPopulares />
         <PorQueElegirnos />
+        <div className="home-stack__end" aria-hidden="true" />
       </div>
     </>
   )

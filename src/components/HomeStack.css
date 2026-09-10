@@ -2,16 +2,38 @@
   position: relative;
 }
 
+.home-stack__end {
+  height: 56vh;
+  pointer-events: none;
+}
+
 .home-stack__panel {
   --cover: 0;
   --rise: 0;
+  --fade: 0;
+  --near: 0;
+  --leave: 0;
+  --gutter: 3.5vw;
+  --shrink: 0.08;
+  --nudge: 4vh;
+  --inset: 2.5vw;
   position: sticky;
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  padding: 0 3.2vw;
+  padding: 0 calc(var(--gutter) + (1 - var(--near)) * 5vw + var(--leave) * var(--inset));
   background: transparent;
   overflow: visible;
+  opacity: calc(var(--fade) * (1 - var(--leave) * 0.08));
+  transform: translate3d(0, calc((1 - var(--near)) * 3.2rem + var(--leave) * var(--nudge)), 0)
+    scale(calc(0.86 + var(--near) * 0.14 - var(--leave) * var(--shrink)));
+  transform-origin: center center;
+  will-change: opacity, transform, padding;
+  pointer-events: none;
+}
+
+.home-stack__panel--on {
+  pointer-events: auto;
 }
 
 .home-stack__sheet {
@@ -22,11 +44,14 @@
   width: 100%;
   min-height: 100vh;
   padding: 4.25rem 4.5vw 5rem;
-  border-radius: 2.75rem 2.75rem 0 0;
+  border-radius: calc(2.75rem * (1 - var(--near) * 0.28));
   overflow: hidden;
   transform: scale(calc(1 - var(--cover) * 0.045));
   transform-origin: top center;
   filter: brightness(calc(1 - var(--cover) * 0.18));
+  box-shadow:
+    0 calc(-18px - var(--near) * 22px) calc(36px + var(--near) * 40px)
+      rgba(63, 16, 16, calc(0.08 + var(--near) * 0.16));
 }
 
 .home-stack__sheet::after {
@@ -61,16 +86,22 @@
 }
 
 .home-stack__panel--1 {
+  --shrink: 0.02;
+  --nudge: 8vh;
+  --inset: 1vw;
   top: 26vh;
   z-index: 1;
   margin-top: 4rem;
 }
 
 .home-stack__panel--1 .home-stack__sheet {
-  background: var(--persian-plum-50);
+  background: color-mix(in srgb, var(--persian-plum-100) 58%, var(--persian-plum-50));
 }
 
 .home-stack__panel--2 {
+  --shrink: 0.12;
+  --nudge: 5vh;
+  --inset: 5vw;
   top: 32vh;
   z-index: 2;
 }
@@ -92,6 +123,9 @@
 }
 
 .home-stack__panel--3 {
+  --shrink: 0.2;
+  --nudge: 2.2vh;
+  --inset: 8.5vw;
   top: 38vh;
   z-index: 3;
 }
@@ -115,41 +149,97 @@
 }
 
 @media (max-width: 900px) {
+  .home-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 0.15rem 0 2.4rem;
+    perspective: none;
+  }
+
   .home-stack__panel {
+    --fade: 1;
+    --near: 1;
+    --leave: 0;
+    --cover: 0;
+    --rise: 1;
     position: relative;
     top: auto;
-    min-height: auto;
-    padding: 0 4vw;
+    z-index: 1;
+    min-height: 0;
     margin-top: 0;
+    padding: 0 3.5vw;
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+    pointer-events: auto;
   }
 
-  .home-stack__sheet {
-    min-height: auto;
-    padding: 3rem 5vw 3.5rem;
-    border-radius: 1.75rem;
-    transform: none;
-    filter: none;
-  }
-
-  .home-stack__inner {
-    transform: none;
+  .home-stack__end {
+    display: none;
   }
 
   .home-stack__panel--1,
   .home-stack__panel--2,
   .home-stack__panel--3 {
     top: auto;
+    margin-top: 0;
+  }
+
+  .home-stack__sheet {
+    min-height: 0;
+    width: 100%;
+    padding: 1.85rem 5vw 1.6rem;
+    border-radius: 1.35rem;
+    transform: none;
+    filter: none;
+    box-shadow: 0 16px 36px rgba(63, 16, 16, 0.12);
+  }
+
+  .home-stack__inner {
+    transform: none;
+    will-change: auto;
+  }
+
+  .home-stack__index {
+    top: 0.8rem;
+    left: 0.95rem;
+    font-size: 0.64rem;
   }
 
   .home-stack__sheet::after {
-    opacity: 0;
+    display: none;
+  }
+
+  .home-stack__panel--1 .home-stack__sheet {
+    overflow: hidden;
+  }
+
+  .home-stack__panel--2 .home-stack__sheet,
+  .home-stack__panel--3 .home-stack__sheet {
+    box-shadow: 0 16px 36px rgba(63, 16, 16, 0.22);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .home-stack {
+    perspective: none;
+  }
+
+  .home-stack__panel {
+    --fade: 1;
+    --near: 1;
+    opacity: 1;
+    transform: none;
+    padding: 0 3.5vw;
+    pointer-events: auto;
+    will-change: auto;
+  }
+
   .home-stack__sheet {
     transform: none;
     filter: none;
+    border-radius: 2.75rem;
   }
 
   .home-stack__inner {

@@ -16,7 +16,7 @@ export const enviarAvisoPedido = async (pedido) => {
       <td style="padding:8px 0;border-bottom:1px solid #f0d5d5;">
         ${escapeHtml(item.nombre)}<br />
         <span style="color:#8b2929;font-size:13px;">
-          ${escapeHtml(item.prenda)} · talle ${escapeHtml(item.talle)} · x${escapeHtml(item.cantidad)}
+          ${escapeHtml(item.prenda)} · talle ${escapeHtml(item.talle)} · x${escapeHtml(item.cantidad)}${item.anchoCm && item.altoCm ? ` · ${escapeHtml(item.anchoCm)} × ${escapeHtml(item.altoCm)} cm` : ''}
         </span>
       </td>
       <td style="padding:8px 0;border-bottom:1px solid #f0d5d5;text-align:right;">
@@ -65,7 +65,7 @@ export const enviarConfirmacionCliente = async (pedido) => {
       <td style="padding:8px 0;border-bottom:1px solid #f0d5d5;">
         ${escapeHtml(item.nombre)}<br />
         <span style="color:#8b2929;font-size:13px;">
-          ${escapeHtml(item.prenda)} · talle ${escapeHtml(item.talle)} · x${escapeHtml(item.cantidad)}
+          ${escapeHtml(item.prenda)} · talle ${escapeHtml(item.talle)} · x${escapeHtml(item.cantidad)}${item.anchoCm && item.altoCm ? ` · ${escapeHtml(item.anchoCm)} × ${escapeHtml(item.altoCm)} cm` : ''}
         </span>
       </td>
       <td style="padding:8px 0;border-bottom:1px solid #f0d5d5;text-align:right;">

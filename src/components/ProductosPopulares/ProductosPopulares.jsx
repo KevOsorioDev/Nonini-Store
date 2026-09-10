@@ -19,7 +19,7 @@ export const ProductosPopulares = () => {
   }, [])
 
   return (
-    <section className="productos-populares home-stack__panel home-stack__panel--2">
+    <section id="disenos-populares" className="productos-populares home-stack__panel home-stack__panel--2">
       <div className="home-stack__sheet">
       <span className="home-stack__index">02</span>
       <div className="home-stack__inner">

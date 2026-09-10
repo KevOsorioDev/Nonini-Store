@@ -38,6 +38,8 @@ const serializarPedido = (pedido) => {
       cantidad: item.cantidad,
       precio: item.precio,
       precioUnitario: item.precio,
+      anchoCm: item.anchoCm,
+      altoCm: item.altoCm,
       producto: {
         nombre: item.nombre,
         imagenUrl: item.logoUrl
@@ -146,7 +148,9 @@ export const pagarMercadoPago = async (req, res) => {
             color: item.color || null,
             cantidad: Number(item.cantidad) || 1,
             precio: Number(item.precio) || 0,
-            logoUrl: logoSeguro(item.logoUrl)
+            logoUrl: logoSeguro(item.logoUrl),
+            anchoCm: item.anchoCm != null ? Number(item.anchoCm) : null,
+            altoCm: item.altoCm != null ? Number(item.altoCm) : null
           }))
         }
       },

@@ -53,6 +53,34 @@
 @media (max-width: 900px) {
   .why-us__grid {
     grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .why-us__card {
+    display: grid;
+    grid-template-columns: 5.75rem 1fr;
+    grid-template-rows: auto 1fr;
+    align-items: start;
+  }
+
+  .why-us__media {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    height: 100%;
+    min-height: 5.75rem;
+  }
+
+  .why-us__card h3 {
+    grid-column: 2;
+    margin: 0.65rem 0.8rem 0.12rem;
+    font-size: 0.98rem;
+  }
+
+  .why-us__card p {
+    grid-column: 2;
+    margin: 0 0.8rem 0.65rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
   }
 
   .why-us__grid:hover .why-us__card {

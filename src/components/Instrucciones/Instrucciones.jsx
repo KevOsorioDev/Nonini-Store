@@ -12,7 +12,7 @@ export const Instrucciones = () => {
         <img src={NoniniLogo} alt="" className="instructions__logo" />
         <div>
           <p className="instructions__eyebrow">Nonini</p>
-          <h2 id="como-trabajamos" className="instructions__title">Cómo trabajamos</h2>
+          <h2 id="como-trabajamos" className="instructions__title">¿Cómo trabajamos?</h2>
         </div>
       </div>
       <ol className="instructions__steps">

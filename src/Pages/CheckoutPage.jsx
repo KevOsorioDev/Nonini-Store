@@ -203,7 +203,10 @@ export const CheckoutPage = () => {
           precio: item.precio,
           talle: item.talle,
           color: item.color,
-          prenda: item.prenda
+          prenda: item.prenda,
+          logoUrl: item.logoUrl,
+          anchoCm: item.logoAnchoCm,
+          altoCm: item.logoAltoCm
         })),
         cliente: {
           nombre: envio.nombre.trim(),

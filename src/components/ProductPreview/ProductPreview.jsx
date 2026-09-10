@@ -34,6 +34,7 @@ export const ProductPreview = ({
   const { tamaño, posiciones } = productConfig
   const posicion = posiciones[sideSelected] || posiciones.centro || posiciones.custom
   const logoWidth = toBoxPercent(tamaño?.width)
+  const logoAspect = tamaño?.aspectRatio || '1 / 1'
 
   return (
     <div className="relative w-full aspect-[3/4] overflow-hidden">
@@ -54,6 +55,7 @@ export const ProductPreview = ({
             transform: 'translateX(-50%)',
             width: logoWidth,
             height: 'auto',
+            aspectRatio: logoAspect,
             objectFit: 'contain',
             pointerEvents: 'none'
           }}
@@ -67,11 +69,13 @@ export const ProductPreview = ({
             left: posicion.left,
             transform: 'translateX(-50%)',
             width: logoWidth,
-            aspectRatio: '1',
+            height: 'auto',
+            aspectRatio: logoAspect,
+            boxSizing: 'border-box',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '0.4rem',
+            padding: '0.25rem',
             border: '2px dashed var(--persian-plum-700)',
             background: 'rgba(253, 243, 243, 0.92)',
             color: 'var(--persian-plum-900)',

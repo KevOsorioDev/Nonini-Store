@@ -172,7 +172,7 @@ export const Navbar = ({ hamburgerOpen, onHamburgerToggle, onCartOpen }) => {
                       />
                       <button
                         type="submit"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--persian-plum-600)] transition-colors"
+                        className="btn-plain absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[var(--persian-plum-600)] transition-colors"
                       >
                         <i className="fa-solid fa-magnifying-glass"></i>
                       </button>

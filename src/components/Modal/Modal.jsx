@@ -51,7 +51,7 @@ export const Modal = ({ isOpen, onClose, children }) => {
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-3xl cursor-pointer"
+            className="btn-plain absolute top-4 right-4 text-3xl cursor-pointer"
             aria-label="Cerrar"
           >
             ×

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { ProductPreview } from '../components/ProductPreview/ProductPreview'
@@ -6,11 +6,15 @@ import { useCart } from '../context/useCart'
 import { useSitio } from '../context/SitioContext'
 import buzoFrente from '../assets/images/buzo_frente.png'
 import remeraFrente from '../assets/images/remera_frente.png'
+import {
+  anchoEnPreviewPct,
+  cmAPx,
+  largoMaximo,
+  largoMinimo,
+  leerMedidasImagen,
+  medidasDesdeLargo
+} from '../utils/disenoMedidas'
 
-const CM_MIN = 6
-const CM_MAX = 20
-const PECHO_CM = 58
-const PRENDA_ANCHO_PCT = 75
 const prendas = ['Remera', 'Buzo']
 const talles = ['S', 'M', 'L', 'XL']
 const posicionesLogo = ['Izquierda', 'Centro', 'Derecha']
@@ -42,18 +46,25 @@ export const PersonalizarPage = () => {
   const [cantidad, setCantidad] = useState(1)
   const [sideSelected, setSideSelected] = useState('centro')
   const [logoPosition, setLogoPosition] = useState(defaultsPos.centro)
-  const [tamanoCm, setTamanoCm] = useState(12)
+  const [largoCm, setLargoCm] = useState(8)
   const [disenoUrl, setDisenoUrl] = useState(null)
+  const [imagenPx, setImagenPx] = useState({ w: 1, h: 1 })
 
   useEffect(() => {
     const siguiente = searchParams.get('prenda')
     if (siguiente === 'Remera' || siguiente === 'Buzo') setPrenda(siguiente)
   }, [searchParams])
 
-  const anchoLogoPct = `${((tamanoCm / PECHO_CM) * PRENDA_ANCHO_PCT).toFixed(2)}%`
+  const minLargo = largoMinimo(imagenPx.w, imagenPx.h)
+  const maxLargo = largoMaximo(imagenPx.w, imagenPx.h)
+  const { altoCm, anchoCm } = useMemo(
+    () => medidasDesdeLargo(largoCm, imagenPx.w, imagenPx.h),
+    [largoCm, imagenPx]
+  )
+  const anchoLogoPct = anchoEnPreviewPct(anchoCm)
   const selectedImage = { id: 1, url: prendaImagen(prenda), alt: prenda }
   const productConfig = {
-    tamaño: { width: anchoLogoPct, height: anchoLogoPct },
+    tamaño: { width: anchoLogoPct, height: 'auto', aspectRatio: `${imagenPx.w} / ${imagenPx.h}` },
     posiciones: {
       izquierda: { top: `${logoPosition.top}%`, left: `${logoPosition.left}%` },
       centro: { top: `${logoPosition.top}%`, left: `${logoPosition.left}%` },
@@ -76,7 +87,15 @@ export const PersonalizarPage = () => {
       return
     }
     const reader = new FileReader()
-    reader.onload = () => setDisenoUrl(reader.result)
+    reader.onload = async () => {
+      const url = reader.result
+      setDisenoUrl(url)
+      const medidas = await leerMedidasImagen(url)
+      setImagenPx(medidas)
+      const max = largoMaximo(medidas.w, medidas.h)
+      const min = largoMinimo(medidas.w, medidas.h)
+      setLargoCm((actual) => Math.min(max, Math.max(min, actual)))
+    }
     reader.readAsDataURL(file)
   }
 
@@ -93,9 +112,10 @@ export const PersonalizarPage = () => {
       prendaImagen: selectedImage.url,
       logoUrl: disenoUrl,
       logoPosition: { top: Number(logoPosition.top), left: Number(logoPosition.left) },
-      logoSizeCm: tamanoCm,
+      logoAltoCm: altoCm,
+      logoAnchoCm: anchoCm,
       logoWidthPct: anchoLogoPct,
-      logoSize: (tamanoCm / PECHO_CM) * 400,
+      logoSize: cmAPx(anchoCm),
       sideSelected,
       prenda,
       color,
@@ -243,18 +263,24 @@ export const PersonalizarPage = () => {
             </div>
             <div>
               <label className="flex items-center justify-between text-sm font-medium text-gray-700 mb-2">
-                <span>Tamaño del diseño</span>
-                <span className="font-bold text-[var(--persian-plum-900)]">{tamanoCm} cm</span>
+                <span>Largo del diseño</span>
+                <span className="font-bold text-[var(--persian-plum-900)]">{anchoCm} cm</span>
               </label>
               <input
                 type="range"
-                min={CM_MIN}
-                max={CM_MAX}
-                step="0.5"
-                value={tamanoCm}
-                onChange={(e) => setTamanoCm(parseFloat(e.target.value))}
+                min={minLargo}
+                max={maxLargo}
+                step="0.1"
+                value={anchoCm}
+                onChange={(e) => setLargoCm(parseFloat(e.target.value))}
                 className="w-full accent-[var(--persian-plum-600)]"
               />
+              <p className="mt-2 text-sm text-[var(--persian-plum-800)]">
+                Alto: <strong>{altoCm} cm</strong> (se calcula solo, sin deformar).
+              </p>
+              <p className="text-xs text-[var(--persian-plum-700)] mt-1">
+                Máximo: 18 cm de largo × 13 cm de alto. Mínimo: {minLargo} cm de largo.
+              </p>
             </div>
           </div>
         </div>
